@@ -1,0 +1,499 @@
+[
+  {
+    "id": "noun.tisch",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Tisch",
+    "icon": "tisch.svg",
+    "gender": "der",
+    "plural": "Tische",
+    "declension": {
+      "nom_sg": "der Tisch", "akk_sg": "den Tisch", "dat_sg": "dem Tisch", "gen_sg": "des Tisches",
+      "nom_pl": "die Tische", "akk_pl": "die Tische", "dat_pl": "den Tischen", "gen_pl": "der Tische"
+    }
+  },
+  {
+    "id": "noun.stuhl",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Stuhl",
+    "icon": "stuhl.svg",
+    "gender": "der",
+    "plural": "Stühle",
+    "declension": {
+      "nom_sg": "der Stuhl", "akk_sg": "den Stuhl", "dat_sg": "dem Stuhl", "gen_sg": "des Stuhls",
+      "nom_pl": "die Stühle", "akk_pl": "die Stühle", "dat_pl": "den Stühlen", "gen_pl": "der Stühle"
+    }
+  },
+  {
+    "id": "noun.buch",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Buch",
+    "icon": "buch.svg",
+    "gender": "das",
+    "plural": "Bücher",
+    "declension": {
+      "nom_sg": "das Buch", "akk_sg": "das Buch", "dat_sg": "dem Buch", "gen_sg": "des Buches",
+      "nom_pl": "die Bücher", "akk_pl": "die Bücher", "dat_pl": "den Büchern", "gen_pl": "der Bücher"
+    }
+  },
+  {
+    "id": "noun.haus",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Haus",
+    "icon": "haus.svg",
+    "gender": "das",
+    "plural": "Häuser",
+    "declension": {
+      "nom_sg": "das Haus", "akk_sg": "das Haus", "dat_sg": "dem Haus", "gen_sg": "des Hauses",
+      "nom_pl": "die Häuser", "akk_pl": "die Häuser", "dat_pl": "den Häusern", "gen_pl": "der Häuser"
+    }
+  },
+  {
+    "id": "noun.frau",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Frau",
+    "icon": "frau.svg",
+    "gender": "die",
+    "plural": "Frauen",
+    "declension": {
+      "nom_sg": "die Frau", "akk_sg": "die Frau", "dat_sg": "der Frau", "gen_sg": "der Frau",
+      "nom_pl": "die Frauen", "akk_pl": "die Frauen", "dat_pl": "den Frauen", "gen_pl": "der Frauen"
+    }
+  },
+  {
+    "id": "noun.mann",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Mann",
+    "icon": "mann.svg",
+    "gender": "der",
+    "plural": "Männer",
+    "declension": {
+      "nom_sg": "der Mann", "akk_sg": "den Mann", "dat_sg": "dem Mann", "gen_sg": "des Mannes",
+      "nom_pl": "die Männer", "akk_pl": "die Männer", "dat_pl": "den Männern", "gen_pl": "der Männer"
+    }
+  },
+  {
+    "id": "noun.kind",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Kind",
+    "icon": "kind.svg",
+    "gender": "das",
+    "plural": "Kinder",
+    "declension": {
+      "nom_sg": "das Kind", "akk_sg": "das Kind", "dat_sg": "dem Kind", "gen_sg": "des Kindes",
+      "nom_pl": "die Kinder", "akk_pl": "die Kinder", "dat_pl": "den Kindern", "gen_pl": "der Kinder"
+    }
+  },
+  {
+    "id": "noun.wasser",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Wasser",
+    "icon": "wasser.svg",
+    "gender": "das",
+    "plural": "Wässer",
+    "declension": {
+      "nom_sg": "das Wasser", "akk_sg": "das Wasser", "dat_sg": "dem Wasser", "gen_sg": "des Wassers",
+      "nom_pl": "die Wässer", "akk_pl": "die Wässer", "dat_pl": "den Wässern", "gen_pl": "der Wässer"
+    }
+  },
+  {
+    "id": "noun.apfel",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Apfel",
+    "icon": "apfel.svg",
+    "gender": "der",
+    "plural": "Äpfel",
+    "declension": {
+      "nom_sg": "der Apfel", "akk_sg": "den Apfel", "dat_sg": "dem Apfel", "gen_sg": "des Apfels",
+      "nom_pl": "die Äpfel", "akk_pl": "die Äpfel", "dat_pl": "den Äpfeln", "gen_pl": "der Äpfel"
+    }
+  },
+  {
+    "id": "noun.lampe",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Lampe",
+    "icon": "lampe.svg",
+    "gender": "die",
+    "plural": "Lampen",
+    "declension": {
+      "nom_sg": "die Lampe", "akk_sg": "die Lampe", "dat_sg": "der Lampe", "gen_sg": "der Lampe",
+      "nom_pl": "die Lampen", "akk_pl": "die Lampen", "dat_pl": "den Lampen", "gen_pl": "der Lampen"
+    }
+  },
+  {
+    "id": "noun.schule",
+    "type": "noun",
+    "rarity": "common",
+    "word": "Schule",
+    "icon": "schule.svg",
+    "gender": "die",
+    "plural": "Schulen",
+    "declension": {
+      "nom_sg": "die Schule", "akk_sg": "die Schule", "dat_sg": "der Schule", "gen_sg": "der Schule",
+      "nom_pl": "die Schulen", "akk_pl": "die Schulen", "dat_pl": "den Schulen", "gen_pl": "der Schulen"
+    }
+  },
+  {
+    "id": "noun.freund",
+    "type": "noun",
+    "rarity": "uncommon",
+    "word": "Freund",
+    "icon": "freund.svg",
+    "gender": "der",
+    "plural": "Freunde",
+    "declension": {
+      "nom_sg": "der Freund", "akk_sg": "den Freund", "dat_sg": "dem Freund", "gen_sg": "des Freundes",
+      "nom_pl": "die Freunde", "akk_pl": "die Freunde", "dat_pl": "den Freunden", "gen_pl": "der Freunde"
+    }
+  },
+  {
+    "id": "verb.sein",
+    "type": "verb",
+    "rarity": "common",
+    "word": "sein",
+    "icon": "sein.svg",
+    "canBeAuxiliary": true,
+    "conjugation": {
+      "praesens": { "ich": "bin", "du": "bist", "er": "ist", "wir": "sind", "ihr": "seid", "sie": "sind" },
+      "partizip1": "seiend",
+      "partizip2": "gewesen",
+      "aux": "sein"
+    }
+  },
+  {
+    "id": "verb.haben",
+    "type": "verb",
+    "rarity": "common",
+    "word": "haben",
+    "icon": "haben.svg",
+    "canBeAuxiliary": true,
+    "conjugation": {
+      "praesens": { "ich": "habe", "du": "hast", "er": "hat", "wir": "haben", "ihr": "habt", "sie": "haben" },
+      "partizip1": "habend",
+      "partizip2": "gehabt",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "verb.heissen",
+    "type": "verb",
+    "rarity": "common",
+    "word": "heißen",
+    "icon": "heissen.svg",
+    "conjugation": {
+      "praesens": { "ich": "heiße", "du": "heißt", "er": "heißt", "wir": "heißen", "ihr": "heißt", "sie": "heißen" },
+      "partizip1": "heißend",
+      "partizip2": "geheißen",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "verb.kommen",
+    "type": "verb",
+    "rarity": "common",
+    "word": "kommen",
+    "icon": "kommen.svg",
+    "conjugation": {
+      "praesens": { "ich": "komme", "du": "kommst", "er": "kommt", "wir": "kommen", "ihr": "kommt", "sie": "kommen" },
+      "partizip1": "kommend",
+      "partizip2": "gekommen",
+      "aux": "sein"
+    }
+  },
+  {
+    "id": "verb.gehen",
+    "type": "verb",
+    "rarity": "common",
+    "word": "gehen",
+    "icon": "gehen.svg",
+    "conjugation": {
+      "praesens": { "ich": "gehe", "du": "gehst", "er": "geht", "wir": "gehen", "ihr": "geht", "sie": "gehen" },
+      "partizip1": "gehend",
+      "partizip2": "gegangen",
+      "aux": "sein"
+    }
+  },
+  {
+    "id": "verb.machen",
+    "type": "verb",
+    "rarity": "common",
+    "word": "machen",
+    "icon": "machen.svg",
+    "conjugation": {
+      "praesens": { "ich": "mache", "du": "machst", "er": "macht", "wir": "machen", "ihr": "macht", "sie": "machen" },
+      "partizip1": "machend",
+      "partizip2": "gemacht",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "verb.spielen",
+    "type": "verb",
+    "rarity": "uncommon",
+    "word": "spielen",
+    "icon": "spielen.svg",
+    "conjugation": {
+      "praesens": { "ich": "spiele", "du": "spielst", "er": "spielt", "wir": "spielen", "ihr": "spielt", "sie": "spielen" },
+      "partizip1": "spielend",
+      "partizip2": "gespielt",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "verb.lernen",
+    "type": "verb",
+    "rarity": "common",
+    "word": "lernen",
+    "icon": "lernen.svg",
+    "conjugation": {
+      "praesens": { "ich": "lerne", "du": "lernst", "er": "lernt", "wir": "lernen", "ihr": "lernt", "sie": "lernen" },
+      "partizip1": "lernend",
+      "partizip2": "gelernt",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "verb.wohnen",
+    "type": "verb",
+    "rarity": "common",
+    "word": "wohnen",
+    "icon": "wohnen.svg",
+    "conjugation": {
+      "praesens": { "ich": "wohne", "du": "wohnst", "er": "wohnt", "wir": "wohnen", "ihr": "wohnt", "sie": "wohnen" },
+      "partizip1": "wohnend",
+      "partizip2": "gewohnt",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "verb.essen",
+    "type": "verb",
+    "rarity": "uncommon",
+    "word": "essen",
+    "icon": "essen.svg",
+    "conjugation": {
+      "praesens": { "ich": "esse", "du": "isst", "er": "isst", "wir": "essen", "ihr": "esst", "sie": "essen" },
+      "partizip1": "essend",
+      "partizip2": "gegessen",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "modal.koennen",
+    "type": "modal",
+    "rarity": "uncommon",
+    "word": "können",
+    "icon": "koennen.svg",
+    "conjugation": {
+      "praesens": { "ich": "kann", "du": "kannst", "er": "kann", "wir": "können", "ihr": "könnt", "sie": "können" },
+      "partizip1": "könnend",
+      "partizip2": "gekonnt",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "modal.muessen",
+    "type": "modal",
+    "rarity": "uncommon",
+    "word": "müssen",
+    "icon": "muessen.svg",
+    "conjugation": {
+      "praesens": { "ich": "muss", "du": "musst", "er": "muss", "wir": "müssen", "ihr": "müsst", "sie": "müssen" },
+      "partizip1": "müssend",
+      "partizip2": "gemusst",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "modal.wollen",
+    "type": "modal",
+    "rarity": "uncommon",
+    "word": "wollen",
+    "icon": "wollen.svg",
+    "conjugation": {
+      "praesens": { "ich": "will", "du": "willst", "er": "will", "wir": "wollen", "ihr": "wollt", "sie": "wollen" },
+      "partizip1": "wollend",
+      "partizip2": "gewollt",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "pron.ich",
+    "type": "pronoun",
+    "rarity": "common",
+    "word": "ich",
+    "icon": "ich.svg",
+    "forms": ["ich"]
+  },
+  {
+    "id": "pron.du",
+    "type": "pronoun",
+    "rarity": "common",
+    "word": "du",
+    "icon": "du.svg",
+    "forms": ["du"]
+  },
+  {
+    "id": "pron.er_sie_es",
+    "type": "pronoun",
+    "rarity": "common",
+    "word": "er/sie/es",
+    "icon": "er_sie_es.svg",
+    "forms": ["er", "sie", "es"]
+  },
+  {
+    "id": "pron.wir",
+    "type": "pronoun",
+    "rarity": "common",
+    "word": "wir",
+    "icon": "wir.svg",
+    "forms": ["wir"]
+  },
+  {
+    "id": "pron.sie_pl",
+    "type": "pronoun",
+    "rarity": "common",
+    "word": "sie",
+    "icon": "sie_pl.svg",
+    "forms": ["sie"]
+  },
+  {
+    "id": "question.wie",
+    "type": "question",
+    "rarity": "common",
+    "word": "wie",
+    "icon": "wie.svg",
+    "explanation": "Fragt nach Art und Weise oder nach dem Namen. Beispiel: „Wie heißt du?“"
+  },
+  {
+    "id": "question.woher",
+    "type": "question",
+    "rarity": "uncommon",
+    "word": "woher",
+    "icon": "woher.svg",
+    "explanation": "Fragt nach Herkunft oder Richtung. Beispiel: „Woher kommst du?“"
+  },
+  {
+    "id": "question.wo",
+    "type": "question",
+    "rarity": "uncommon",
+    "word": "wo",
+    "icon": "wo.svg",
+    "explanation": "Fragt nach einem Ort oder einer Position. Beispiel: „Wo wohnst du?“"
+  },
+  {
+    "id": "question.was",
+    "type": "question",
+    "rarity": "common",
+    "word": "was",
+    "icon": "was.svg",
+    "explanation": "Fragt nach einer Sache oder Tätigkeit. Beispiel: „Was machst du?“"
+  },
+  {
+    "id": "question.wer",
+    "type": "question",
+    "rarity": "common",
+    "word": "wer",
+    "icon": "wer.svg",
+    "explanation": "Fragt nach einer Person. Beispiel: „Wer bist du?“"
+  },
+  {
+    "id": "prep.in",
+    "type": "preposition",
+    "rarity": "common",
+    "word": "in",
+    "icon": "in.svg",
+    "case": "Wechselpräposition"
+  },
+  {
+    "id": "prep.auf",
+    "type": "preposition",
+    "rarity": "common",
+    "word": "auf",
+    "icon": "auf.svg",
+    "case": "Wechselpräposition"
+  },
+  {
+    "id": "prep.unter",
+    "type": "preposition",
+    "rarity": "rare",
+    "word": "unter",
+    "icon": "unter.svg",
+    "case": "Wechselpräposition"
+  },
+  {
+    "id": "prep.neben",
+    "type": "preposition",
+    "rarity": "rare",
+    "word": "neben",
+    "icon": "neben.svg",
+    "case": "Wechselpräposition"
+  },
+  {
+    "id": "prep.aus",
+    "type": "preposition",
+    "rarity": "uncommon",
+    "word": "aus",
+    "icon": "aus.svg",
+    "case": "Dativ"
+  },
+  {
+    "id": "prep.mit",
+    "type": "preposition",
+    "rarity": "common",
+    "word": "mit",
+    "icon": "mit.svg",
+    "case": "Dativ"
+  },
+  {
+    "id": "adj.hoch",
+    "type": "adjective",
+    "rarity": "common",
+    "word": "hoch",
+    "icon": "hoch.svg"
+  },
+  {
+    "id": "adj.gross",
+    "type": "adjective",
+    "rarity": "common",
+    "word": "groß",
+    "icon": "gross.svg"
+  },
+  {
+    "id": "adj.klein",
+    "type": "adjective",
+    "rarity": "common",
+    "word": "klein",
+    "icon": "klein.svg"
+  },
+  {
+    "id": "adj.schoen",
+    "type": "adjective",
+    "rarity": "common",
+    "word": "schön",
+    "icon": "schoen.svg"
+  },
+  {
+    "id": "adj.neu",
+    "type": "adjective",
+    "rarity": "uncommon",
+    "word": "neu",
+    "icon": "neu.svg"
+  },
+  {
+    "id": "adj.alt",
+    "type": "adjective",
+    "rarity": "common",
+    "word": "alt",
+    "icon": "alt.svg"
+  }
+]

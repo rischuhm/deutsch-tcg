@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SatzMeister — Masterlayout für Karten (750 x 1050)
+
+  Wiederverwendbares TCG-Kartenlayout. Alle wichtigen Elemente sind als
+  benannte Gruppen (<g id="...">) angelegt und können in einem Grafikprogramm
+  (z. B. PhotoCraft, Inkscape, Figma) gezielt nachbearbeitet werden.
+
+  Typ-Farben (Hintergrund):
+    Nomen:   der = #3b82f6 (blau) / die = #ef4444 (rot) / das = #10b981 (grün)
+    Verb:    #8b5cf6   Modalverb: #f59e0b   Pronomen: #06b6d4
+    Fragewort: #ec4899   Präposition: #84cc16   Adjektiv: #f97316
+
+  Gruppen:
+    #card-frame     — äußerer Kartenrahmen (abgerundet, weiße Kontur)
+    #background     — farbiger Kartenhintergrund (Typ-/Genus-Farbe)
+    #name-banner    — Namensbanner oben (Kartenname, bei Nomen mit Artikel)
+    #rarity-star    — Seltenheits-Stern oben rechts (common=grau, uncommon=silber, rare=gold)
+    #type-badge     — Typ-Badge links unter dem Banner (z. B. "Nomen", "Verb")
+    #icon-area      — mittige Icon-Fläche; das Karten-Icon aus assets/icons/ einsetzen
+    #text-area      — großer Textbereich unten (Deklination/Konjugation/Erklärung)
+    #footer-strip   — Fußleiste mit Platz für ID/Satzangaben
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" width="750" height="1050">
+
+  <!-- #card-frame: äußerer Rahmen der Karte -->
+  <g id="card-frame">
+    <rect x="5" y="5" width="740" height="1040" rx="36" ry="36"
+          fill="#ffffff" stroke="#1f2937" stroke-width="10"/>
+  </g>
+
+  <!-- #background: Typ-Farbe; hier Beispiel Nomen "der" (#3b82f6) -->
+  <g id="background">
+    <rect x="22" y="22" width="706" height="1006" rx="26" ry="26" fill="#3b82f6"/>
+    <!-- dezenter Diagonal-Glanz -->
+    <path d="M22 300 L728 22 L728 200 L22 480 Z" fill="#ffffff" opacity="0.08"/>
+  </g>
+
+  <!-- #name-banner: Banner mit Kartenname (Nomen: inkl. Artikel, z. B. "der Tisch") -->
+  <g id="name-banner">
+    <rect x="45" y="45" width="660" height="100" rx="20" ry="20"
+          fill="#ffffff" stroke="#1f2937" stroke-width="6"/>
+    <text x="375" y="112" text-anchor="middle"
+          font-family="DejaVu Sans, Helvetica, Arial, sans-serif"
+          font-size="52" font-weight="bold" fill="#1f2937">KARTENNAME</text>
+  </g>
+
+  <!-- #rarity-star: Seltenheits-Stern oben rechts (Farbe je nach Rarity tauschen) -->
+  <g id="rarity-star">
+    <circle cx="672" cy="62" r="34" fill="#ffd700" stroke="#1f2937" stroke-width="5"/>
+    <path d="M672 40 L679 55 L695 56 L682 66 L686 82 L672 73 L658 82 L662 66 L649 56 L665 55 Z"
+          fill="#ffffff" stroke="#1f2937" stroke-width="3"
+          stroke-linejoin="round"/>
+  </g>
+
+  <!-- #type-badge: Typ-Badge unter dem Banner, links -->
+  <g id="type-badge">
+    <rect x="45" y="165" width="180" height="46" rx="23" ry="23"
+          fill="#1f2937"/>
+    <text x="135" y="196" text-anchor="middle"
+          font-family="DejaVu Sans, Helvetica, Arial, sans-serif"
+          font-size="26" font-weight="bold" fill="#ffffff">TYP</text>
+  </g>
+
+  <!-- #icon-area: mittige Fläche für das Karten-Icon (Quelle: assets/icons/*.svg) -->
+  <g id="icon-area">
+    <rect x="195" y="235" width="360" height="360" rx="28" ry="28"
+          fill="#ffffff" stroke="#1f2937" stroke-width="6"/>
+    <!-- Platzhalter-Icon: hier Inhalt der Icon-SVG einsetzen,
+         transform="translate(225 265) scale(1.5)" für 200er-viewBox -->
+    <g id="icon-placeholder" transform="translate(225 265) scale(1.5)">
+      <circle cx="100" cy="100" r="70" fill="#e5e7eb" stroke="#1f2937" stroke-width="6"/>
+      <text x="100" y="122" text-anchor="middle"
+            font-family="DejaVu Sans, Helvetica, Arial, sans-serif"
+            font-size="72" font-weight="bold" fill="#1f2937" stroke="none">?</text>
+    </g>
+  </g>
+
+  <!-- #text-area: großer Textbereich für Tabellen/Erklärungen
+       Nomen: Deklinationstabelle (Sg/Pl x Nom/Akk/Dat/Gen)
+       Verb/Modal: Konjugationstabelle + Partizip I/II
+       Fragewort: Erklärung; Präposition: Kasus; Adjektiv: Steigerung; Pronomen: Formen -->
+  <g id="text-area">
+    <rect x="45" y="625" width="660" height="360" rx="24" ry="24"
+          fill="#ffffff" stroke="#1f2937" stroke-width="6"/>
+    <text x="75" y="685"
+          font-family="DejaVu Sans, Helvetica, Arial, sans-serif"
+          font-size="30" fill="#1f2937">TEXTZEILE 1</text>
+    <text x="75" y="745"
+          font-family="DejaVu Sans, Helvetica, Arial, sans-serif"
+          font-size="30" fill="#1f2937">TEXTZEILE 2</text>
+    <text x="75" y="805"
+          font-family="DejaVu Sans, Helvetica, Arial, sans-serif"
+          font-size="30" fill="#1f2937">TEXTZEILE 3</text>
+    <text x="75" y="865"
+          font-family="DejaVu Sans, Helvetica, Arial, sans-serif"
+          font-size="30" fill="#1f2937">TEXTZEILE 4</text>
+    <text x="75" y="925"
+          font-family="DejaVu Sans, Helvetica, Arial, sans-serif"
+          font-size="30" fill="#1f2937">TEXTZEILE 5</text>
+  </g>
+
+  <!-- #footer-strip: Fußleiste für Karten-ID / Copyright -->
+  <g id="footer-strip">
+    <text x="375" y="1012" text-anchor="middle"
+          font-family="DejaVu Sans, Helvetica, Arial, sans-serif"
+          font-size="20" fill="#ffffff" opacity="0.9">SatzMeister · Karten-ID</text>
+  </g>
+
+</svg>
