@@ -9,3 +9,4 @@ export * from './collection';
 export * from './booster';
 export * from './validator';
 export * from './scoring';
+export * from './suggest';

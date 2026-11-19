@@ -12,6 +12,8 @@ interface PlayingCardProps {
   baseRotation: [number, number, number];
   /** Wie weit sich die Karte bei Hover/Berührung hebt (Welt-Y). */
   hoverLift?: number;
+  /** Karte wird als „jetzt sinnvoll spielbar" hervorgehoben. */
+  suggested?: boolean;
   onTap: (instance: CardInstance) => void;
 }
 
@@ -25,13 +27,15 @@ export function PlayingCard({
   basePosition,
   baseRotation,
   hoverLift = 0.25,
+  suggested = false,
   onTap,
 }: PlayingCardProps) {
   const group = useRef<THREE.Group>(null);
+  const glowMat = useRef<THREE.MeshBasicMaterial>(null);
   const [hovered, setHovered] = useState(false);
   const texture = useCardTexture(instance.defId);
 
-  useFrame((_, delta) => {
+  useFrame(({ clock }, delta) => {
     const g = group.current;
     if (!g) {
       return;
@@ -53,6 +57,9 @@ export function PlayingCard({
     g.rotation.z = THREE.MathUtils.lerp(g.rotation.z, baseRotation[2], k);
     const targetScale = hovered ? 1.09 : 1;
     g.scale.setScalar(THREE.MathUtils.lerp(g.scale.x, targetScale, k));
+    if (glowMat.current) {
+      glowMat.current.opacity = 0.35 + 0.25 * Math.sin(clock.elapsedTime * 3);
+    }
   });
 
   return (
@@ -80,6 +87,19 @@ export function PlayingCard({
           roughness={0.55}
         />
       </RoundedBox>
+      {suggested && (
+        <mesh position={[0, 0, -0.02]}>
+          <planeGeometry args={[CARD_W + 0.09, CARD_H + 0.09]} />
+          <meshBasicMaterial
+            ref={glowMat}
+            color="#34d399"
+            transparent
+            opacity={0.4}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+          />
+        </mesh>
+      )}
       <mesh position={[0, 0, 0.018]}>
         <planeGeometry args={[CARD_W - 0.02, CARD_H - 0.02]} />
         {texture ? (

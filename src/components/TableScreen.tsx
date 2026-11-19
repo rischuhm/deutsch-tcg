@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Collection } from '../game';
 import type { CardInstance, ScoreResult, ValidationResult } from '../game';
-import { getCard, scoreSentence, validateSentence } from '../game';
+import { getCard, scoreSentence, suggestNext, validateSentence } from '../game';
 import {
   MAX_HAND,
   MAX_SENTENCE,
@@ -84,6 +84,7 @@ export function TableScreen({
   };
 
   const sentencePreview = played.map(displayWord).join(' ');
+  const hint = suggestNext(played);
 
   return (
     <div className="table-screen">
@@ -91,9 +92,14 @@ export function TableScreen({
         <TableScene
           hand={hand}
           played={played}
+          suggestedTypes={hint.types}
           onPlayCard={(instance) => setInspect({ instance, source: 'hand' })}
           onReturnCard={(instance) => setInspect({ instance, source: 'played' })}
         />
+      </div>
+
+      <div className="hint-bar" title="Lernhilfe: Diese Kartentypen passen als Nächstes">
+        💡 {hint.text}
       </div>
 
       {played.length > 0 && (

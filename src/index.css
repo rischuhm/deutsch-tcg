@@ -559,3 +559,22 @@ button {
 .inspect-card .btn {
   width: 100%;
 }
+
+/* Lernhilfe-Hinweis als Overlay über dem 3D-Tisch */
+.hint-bar {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 92vw;
+  z-index: 5;
+  pointer-events: none;
+  padding: 8px 14px;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #a7f3d0;
+  text-align: center;
+}

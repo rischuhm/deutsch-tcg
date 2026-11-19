@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import type { CardInstance } from '../../game';
+import type { CardInstance, CardType } from '../../game';
+import { getCard } from '../../game';
 import { CARD_H, CARD_W, MAX_SENTENCE } from '../../lib/ui';
 import { PlayingCard } from './PlayingCard';
 
@@ -72,6 +73,8 @@ function SentenceStrip() {
 interface TableSceneProps {
   hand: CardInstance[];
   played: CardInstance[];
+  /** Kartentypen, die laut Hinweis-Engine als Nächstes passen. */
+  suggestedTypes?: CardType[];
   onPlayCard: (instance: CardInstance) => void;
   onReturnCard: (instance: CardInstance) => void;
 }
@@ -79,6 +82,7 @@ interface TableSceneProps {
 export function TableScene({
   hand,
   played,
+  suggestedTypes = [],
   onPlayCard,
   onReturnCard,
 }: TableSceneProps) {
@@ -116,6 +120,7 @@ export function TableScene({
         const n = hand.length;
         const off = i - (n - 1) / 2;
         const spread = Math.min(0.62, 6 / Math.max(n, 1));
+        const def = getCard(instance.defId);
         return (
           <PlayingCard
             key={instance.instanceId}
@@ -127,6 +132,7 @@ export function TableScene({
             ]}
             baseRotation={[-0.38, 0, off * -0.055]}
             hoverLift={0.32}
+            suggested={def !== undefined && suggestedTypes.includes(def.type)}
             onTap={onPlayCard}
           />
         );
