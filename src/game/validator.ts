@@ -5,11 +5,12 @@
  * formuliert (Lernkontext).
  */
 
-import type { CardDef, CardInstance, Feature, ValidationResult } from './types';
+import type { CardDef, CardInstance, Feature, GermanCase, Person, ValidationResult } from './types';
 import { POOL_BY_ID } from './cards';
 
 interface PlayedCard {
   def: CardDef;
+  instance: CardInstance;
   isPlural: boolean;
 }
 
@@ -29,6 +30,38 @@ function isVerbLike(def: CardDef): boolean {
   return def.type === 'verb' || def.type === 'modal';
 }
 
+/** Bewegungsverben im A1-Pool: steuern bei Wechselpräpositionen den Akkusativ. */
+const MOVEMENT_VERBS = new Set(['gehen', 'kommen']);
+
+/** Welche Person verlangt ein Subjekt am Verb? */
+function subjectPerson(subject: PlayedCard): Person {
+  if (subject.def.type === 'pronoun') {
+    const id = subject.def.id;
+    if (id.endsWith('ich')) return 'ich';
+    if (id.endsWith('du')) return 'du';
+    if (id.endsWith('wir')) return 'wir';
+    if (id.endsWith('sie_pl')) return 'sie';
+    return 'er'; // er/sie/es
+  }
+  // Nomen als Subjekt: 3. Person, Plural ⇒ 'sie'
+  return subject.isPlural ? 'sie' : 'er';
+}
+
+const CASE_KEY: Record<GermanCase, 'nom' | 'akk' | 'dat' | 'gen'> = {
+  Nominativ: 'nom',
+  Akkusativ: 'akk',
+  Dativ: 'dat',
+  Genitiv: 'gen',
+};
+
+/** Deklinierte Form für Fehlermeldungen, z. B. „den Tisch“. */
+function declinedForm(card: PlayedCard, germanCase: GermanCase): string {
+  const decl = card.def.declension;
+  if (!decl) return card.def.word;
+  const key = `${CASE_KEY[germanCase]}_${card.isPlural ? 'pl' : 'sg'}` as const;
+  return decl[key] ?? card.def.word;
+}
+
 /**
  * Validiert die auf der Satzleiste liegenden Karten.
  * @param played Karten in Spielreihenfolge.
@@ -40,11 +73,13 @@ export function validateSentence(
 ): ValidationResult {
   const errors: string[] = [];
   const features = new Set<Feature>();
+  let correctChips = 0;
 
   const finish = (): ValidationResult => ({
     valid: errors.length === 0,
     errors,
     features: FEATURE_ORDER.filter((f) => features.has(f)),
+    correctChips,
   });
 
   if (played.length === 0) {
@@ -60,7 +95,7 @@ export function validateSentence(
       errors.push('Eine dieser Karten kenne ich noch nicht.');
       return finish();
     }
-    cards.push({ def, isPlural: instance.isPlural === true });
+    cards.push({ def, instance, isPlural: instance.isPlural === true });
   }
 
   const lastIndex = cards.length - 1;
@@ -163,11 +198,11 @@ export function validateSentence(
   }
 
   // Regel 6: Subjekt vorhanden (vor dem finiten Verb; bei Fragen auch dahinter)
+  const subjectIndex = cards.findIndex(
+    (card) => card.def.type === 'pronoun' || card.def.type === 'noun',
+  );
   if (finiteIndex >= 0) {
     const isQuestion = hasQuestionAtStart || finiteIndex === 0;
-    const subjectIndex = cards.findIndex(
-      (card) => card.def.type === 'pronoun' || card.def.type === 'noun',
-    );
     const hasSubject =
       subjectIndex >= 0 && (subjectIndex < finiteIndex || isQuestion);
     if (!hasSubject) {
@@ -187,6 +222,79 @@ export function validateSentence(
   if (cards.some((card) => card.def.type === 'noun' && card.isPlural)) {
     features.add('plural');
   }
+
+  // Regel 8: Steinchen — richtige Formen wählen
+  // 8a) Person-Steinchen am finiten Verb (nur wenn ein Subjekt im Satz liegt)
+  const subject = subjectIndex >= 0 ? cards[subjectIndex] : undefined;
+  if (finiteIndex >= 0 && subject !== undefined) {
+    const finiteCard = cards[finiteIndex] as PlayedCard;
+    const required = subjectPerson(subject);
+    const chosen = finiteCard.instance.chosenPerson;
+    const forms = finiteCard.def.conjugation?.praesens;
+    const subjectWord = subject.def.word;
+    if (chosen === undefined) {
+      errors.push(
+        `Lege ein Person-Steinchen auf das Verb „${finiteCard.def.word}“: Welche Form passt zu „${subjectWord}“?`,
+      );
+    } else if (chosen !== required) {
+      const expected = forms?.[required] ?? required;
+      const chosenForm = forms?.[chosen] ?? chosen;
+      errors.push(
+        `Zu „${subjectWord}“ passt die Form „${expected}“ – nicht „${chosenForm}“. Verschiebe das Steinchen!`,
+      );
+    } else {
+      correctChips += 1;
+    }
+  }
+
+  // 8b) Kasus-Steinchen an Nomen
+  cards.forEach((card, index) => {
+    if (card.def.type !== 'noun') {
+      return;
+    }
+    let expected: GermanCase;
+    if (index === subjectIndex && finiteIndex >= 0) {
+      expected = 'Nominativ';
+    } else {
+      // Steht das Nomen (ggf. nach Adjektiven) hinter einer Präposition?
+      let prep: CardDef | undefined;
+      for (let j = index - 1; j >= 0; j--) {
+        const t = cards[j]?.def.type;
+        if (t === 'preposition') {
+          prep = cards[j]?.def;
+          break;
+        }
+        if (t !== 'adjective') {
+          break;
+        }
+      }
+      if (prep !== undefined) {
+        if (prep.case === 'Wechselpräposition') {
+          const movement = cards.some(
+            (c) => isVerbLike(c.def) && MOVEMENT_VERBS.has(c.def.word),
+          );
+          expected = movement ? 'Akkusativ' : 'Dativ';
+        } else {
+          expected = prep.case ?? 'Akkusativ';
+        }
+      } else {
+        // Objekt hinter dem Verb: A1-lenient Akkusativ
+        expected = 'Akkusativ';
+      }
+    }
+    const chosen = card.instance.chosenCase;
+    if (chosen === undefined) {
+      errors.push(
+        `Lege ein Kasus-Steinchen auf „${card.def.word}“: Welcher Fall passt hier (z. B. Nominativ „${declinedForm(card, 'Nominativ')}“ oder Akkusativ „${declinedForm(card, 'Akkusativ')}“)?`,
+      );
+    } else if (chosen !== expected) {
+      errors.push(
+        `„${card.def.word}“ braucht hier den ${expected} (z. B. „${declinedForm(card, expected)}“) – nicht den ${chosen}. Verschiebe das Steinchen!`,
+      );
+    } else {
+      correctChips += 1;
+    }
+  });
 
   return finish();
 }

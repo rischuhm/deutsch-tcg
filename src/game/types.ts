@@ -69,7 +69,24 @@ export interface CardInstance {
   defId: string;
   /** true, wenn die Karte über die Plural-Schmiede als Pluralform gespielt wird. */
   isPlural?: boolean;
+  /**
+   * Person-Steinchen auf einer Verb-/Modalverbkarte: die gewählte
+   * konjugierte Form (z. B. 'ich' ⇒ „komme“). Pflicht für das finite
+   * Verb, wenn ein Subjekt im Satz liegt.
+   */
+  chosenPerson?: Person;
+  /**
+   * Kasus-Steinchen auf einer Nomenkarte: der gewählte Fall
+   * (z. B. Akkusativ ⇒ „den Tisch“).
+   */
+  chosenCase?: GermanCase;
 }
+
+/** Personen für das Person-Steinchen (Verbkonjugation). */
+export type Person = 'ich' | 'du' | 'er' | 'wir' | 'ihr' | 'sie';
+
+/** Fälle für das Kasus-Steinchen (Nomendeklination). */
+export type GermanCase = 'Nominativ' | 'Akkusativ' | 'Dativ' | 'Genitiv';
 
 export type Feature =
   | 'aussagesatz'
@@ -85,4 +102,9 @@ export interface ValidationResult {
   valid: boolean;
   errors: string[];
   features: Feature[];
+  /**
+   * Anzahl korrekt platzierter Steinchen (Person am finiten Verb,
+   * Kasus an Nomen). Grundlage für den Steinchen-Bonus im Scoring.
+   */
+  correctChips: number;
 }

@@ -1,4 +1,13 @@
-import type { CardInstance, CardType, Collection, Rarity } from '../game';
+import type {
+  CardDeclension,
+  CardDef,
+  CardInstance,
+  CardType,
+  Collection,
+  GermanCase,
+  Person,
+  Rarity,
+} from '../game';
 import { getCard } from '../game';
 
 /** 3D-Kartenmaße (Seitenverhältnis 750×1050). */
@@ -134,4 +143,57 @@ export function displayWord(instance: CardInstance): string {
 /** Textur-URL für ein Kartenface. */
 export function cardFaceUrl(defId: string): string {
   return `${import.meta.env.BASE_URL}cards/png/${defId}.png`;
+}
+
+/* ---------- Steinchen (Person am Verb, Kasus am Nomen) ---------- */
+
+/** Reihenfolge der Person-Steinchen im Auswahl-Grid (2×3). */
+export const PERSON_ORDER: Person[] = ['ich', 'du', 'er', 'wir', 'ihr', 'sie'];
+
+/** Anzeigename der Person auf dem Chip. */
+export const PERSON_LABELS: Record<Person, string> = {
+  ich: 'ich',
+  du: 'du',
+  er: 'er/sie/es',
+  wir: 'wir',
+  ihr: 'ihr',
+  sie: 'sie',
+};
+
+/** Reihenfolge der Kasus-Steinchen im Auswahl-Grid. */
+export const CASE_ORDER: GermanCase[] = [
+  'Nominativ',
+  'Akkusativ',
+  'Dativ',
+  'Genitiv',
+];
+
+const CASE_PREFIX: Record<GermanCase, 'nom' | 'akk' | 'dat' | 'gen'> = {
+  Nominativ: 'nom',
+  Akkusativ: 'akk',
+  Dativ: 'dat',
+  Genitiv: 'gen',
+};
+
+/** Konjugierte Präsens-Form für ein Person-Steinchen, z. B. „kommst“. */
+export function personFormLabel(def: CardDef, person: Person): string {
+  return def.conjugation?.praesens[person] ?? def.word;
+}
+
+/**
+ * Deklinierte Form für ein Kasus-Steinchen, z. B. „den Tisch“.
+ * Nutzt bei Plural-Karten die _pl-Varianten der Deklination.
+ */
+export function declinedFormLabel(
+  def: CardDef,
+  germanCase: GermanCase,
+  isPlural: boolean,
+): string {
+  const decl = def.declension;
+  if (!decl) {
+    return def.word;
+  }
+  const key =
+    `${CASE_PREFIX[germanCase]}_${isPlural ? 'pl' : 'sg'}` as keyof CardDeclension;
+  return decl[key] ?? def.word;
 }

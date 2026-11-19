@@ -172,9 +172,13 @@ const FIXTURE_POOL: ReadonlyMap<string, CardDef> = new Map(
 );
 
 let instanceCounter = 0;
-function inst(defId: string, isPlural = false): CardInstance {
+function inst(
+  defId: string,
+  isPlural = false,
+  chips: Pick<CardInstance, 'chosenPerson' | 'chosenCase'> = {},
+): CardInstance {
   instanceCounter += 1;
-  return { instanceId: `test-${instanceCounter}`, defId, isPlural };
+  return { instanceId: `test-${instanceCounter}`, defId, isPlural, ...chips };
 }
 
 function sentence(...defIds: string[]): CardInstance[] {
@@ -188,7 +192,11 @@ function sentence(...defIds: string[]): CardInstance[] {
 describe('validateSentence', () => {
   it('akzeptiert „Tisch ist hoch“ (Nomen ohne Artikel, A1-lenient)', () => {
     const result = validateSentence(
-      sentence('noun.tisch', 'verb.sein', 'adj.hoch'),
+      [
+        inst('noun.tisch', false, { chosenCase: 'Nominativ' }),
+        inst('verb.sein', false, { chosenPerson: 'er' }),
+        inst('adj.hoch'),
+      ],
       FIXTURE_POOL,
     );
     expect(result.valid).toBe(true);
@@ -199,7 +207,11 @@ describe('validateSentence', () => {
 
   it('akzeptiert „Wie heißt du“ mit Features frage + pronomen', () => {
     const result = validateSentence(
-      sentence('question.wie', 'verb.heissen', 'pron.du'),
+      [
+        inst('question.wie'),
+        inst('verb.heissen', false, { chosenPerson: 'du' }),
+        inst('pron.du'),
+      ],
       FIXTURE_POOL,
     );
     expect(result.valid).toBe(true);
@@ -209,7 +221,11 @@ describe('validateSentence', () => {
 
   it('akzeptiert „Woher kommst du“', () => {
     const result = validateSentence(
-      sentence('question.woher', 'verb.kommen', 'pron.du'),
+      [
+        inst('question.woher'),
+        inst('verb.kommen', false, { chosenPerson: 'du' }),
+        inst('pron.du'),
+      ],
       FIXTURE_POOL,
     );
     expect(result.valid).toBe(true);
@@ -237,7 +253,11 @@ describe('validateSentence', () => {
 
   it('akzeptiert „Ich kann kommen“ mit Feature modal', () => {
     const result = validateSentence(
-      sentence('pron.ich', 'modal.koennen', 'verb.kommen'),
+      [
+        inst('pron.ich'),
+        inst('modal.koennen', false, { chosenPerson: 'ich' }),
+        inst('verb.kommen'),
+      ],
       FIXTURE_POOL,
     );
     expect(result.valid).toBe(true);
@@ -247,7 +267,11 @@ describe('validateSentence', () => {
 
   it('akzeptiert „Ich bin gekommen“ mit Feature perfekt (sein + Partizip II)', () => {
     const result = validateSentence(
-      sentence('pron.ich', 'verb.sein', 'verb.kommen'),
+      [
+        inst('pron.ich'),
+        inst('verb.sein', false, { chosenPerson: 'ich' }),
+        inst('verb.kommen'),
+      ],
       FIXTURE_POOL,
     );
     expect(result.valid).toBe(true);
@@ -257,7 +281,11 @@ describe('validateSentence', () => {
   it('gibt kein perfekt, wenn das Hilfsverb nicht zum Partizip passt', () => {
     // „Ich habe gekommen“ — kommen braucht sein, nicht haben
     const result = validateSentence(
-      sentence('pron.ich', 'verb.haben', 'verb.kommen'),
+      [
+        inst('pron.ich'),
+        inst('verb.haben', false, { chosenPerson: 'ich' }),
+        inst('verb.kommen'),
+      ],
       FIXTURE_POOL,
     );
     expect(result.valid).toBe(true);
@@ -275,7 +303,12 @@ describe('validateSentence', () => {
 
   it('akzeptiert Präposition mit Nomen und setzt Feature praeposition', () => {
     const result = validateSentence(
-      sentence('pron.ich', 'verb.sein', 'prep.in', 'noun.buch'),
+      [
+        inst('pron.ich'),
+        inst('verb.sein', false, { chosenPerson: 'ich' }),
+        inst('prep.in'),
+        inst('noun.buch', false, { chosenCase: 'Dativ' }),
+      ],
       FIXTURE_POOL,
     );
     expect(result.valid).toBe(true);
@@ -284,7 +317,11 @@ describe('validateSentence', () => {
 
   it('setzt Feature plural bei gecrafteter Pluralkarte', () => {
     const result = validateSentence(
-      [inst('noun.tisch', true), inst('verb.sein'), inst('adj.hoch')],
+      [
+        inst('noun.tisch', true, { chosenCase: 'Nominativ' }),
+        inst('verb.sein', false, { chosenPerson: 'sie' }),
+        inst('adj.hoch'),
+      ],
       FIXTURE_POOL,
     );
     expect(result.valid).toBe(true);
@@ -306,6 +343,105 @@ describe('validateSentence', () => {
       FIXTURE_POOL,
     );
     expect(result.valid).toBe(false);
+  });
+
+  it('verlangt ein Person-Steinchen am finiten Verb', () => {
+    const result = validateSentence(
+      sentence('pron.ich', 'verb.kommen'),
+      FIXTURE_POOL,
+    );
+    expect(result.valid).toBe(false);
+    expect(result.errors.some((e) => e.includes('Person-Steinchen'))).toBe(true);
+  });
+
+  it('erkennt falsche Verbform am Steinchen und nennt die richtige', () => {
+    // „Ich kommst“ — falsch, richtig: „komme"
+    const result = validateSentence(
+      [
+        inst('pron.ich'),
+        inst('verb.kommen', false, { chosenPerson: 'du' }),
+      ],
+      FIXTURE_POOL,
+    );
+    expect(result.valid).toBe(false);
+    expect(result.errors.some((e) => e.includes('„komme“'))).toBe(true);
+  });
+
+  it('verlangt ein Kasus-Steinchen an Nomen', () => {
+    const result = validateSentence(
+      [
+        inst('noun.tisch'),
+        inst('verb.sein', false, { chosenPerson: 'er' }),
+        inst('adj.hoch'),
+      ],
+      FIXTURE_POOL,
+    );
+    expect(result.valid).toBe(false);
+    expect(result.errors.some((e) => e.includes('Kasus-Steinchen'))).toBe(true);
+  });
+
+  it('verlangt Nominativ am Subjekt-Nomen', () => {
+    const result = validateSentence(
+      [
+        inst('noun.tisch', false, { chosenCase: 'Akkusativ' }),
+        inst('verb.sein', false, { chosenPerson: 'er' }),
+        inst('adj.hoch'),
+      ],
+      FIXTURE_POOL,
+    );
+    expect(result.valid).toBe(false);
+    expect(result.errors.some((e) => e.includes('Nominativ'))).toBe(true);
+  });
+
+  it('Wechselpräposition ohne Bewegung ⇒ Dativ, mit Bewegung ⇒ Akkusativ', () => {
+    const dativ = validateSentence(
+      [
+        inst('pron.ich'),
+        inst('verb.sein', false, { chosenPerson: 'ich' }),
+        inst('prep.in'),
+        inst('noun.buch', false, { chosenCase: 'Dativ' }),
+      ],
+      FIXTURE_POOL,
+    );
+    expect(dativ.valid, JSON.stringify(dativ.errors)).toBe(true);
+
+    // „Ich komme in das Buch“ — Bewegung ⇒ Akkusativ nötig
+    const akkusativ = validateSentence(
+      [
+        inst('pron.ich'),
+        inst('verb.kommen', false, { chosenPerson: 'ich' }),
+        inst('prep.in'),
+        inst('noun.buch', false, { chosenCase: 'Akkusativ' }),
+      ],
+      FIXTURE_POOL,
+    );
+    expect(akkusativ.valid, JSON.stringify(akkusativ.errors)).toBe(true);
+
+    // Dativ trotz Bewegung ⇒ Fehler
+    const falsch = validateSentence(
+      [
+        inst('pron.ich'),
+        inst('verb.kommen', false, { chosenPerson: 'ich' }),
+        inst('prep.in'),
+        inst('noun.buch', false, { chosenCase: 'Dativ' }),
+      ],
+      FIXTURE_POOL,
+    );
+    expect(falsch.valid).toBe(false);
+    expect(falsch.errors.some((e) => e.includes('Akkusativ'))).toBe(true);
+  });
+
+  it('zählt korrekte Steinchen in correctChips', () => {
+    const result = validateSentence(
+      [
+        inst('pron.ich'),
+        inst('verb.sein', false, { chosenPerson: 'ich' }),
+        inst('prep.in'),
+        inst('noun.buch', false, { chosenCase: 'Dativ' }),
+      ],
+      FIXTURE_POOL,
+    );
+    expect(result.correctChips).toBe(2);
   });
 
   it('lehnt leere Satzleiste ab', () => {
@@ -459,27 +595,43 @@ describe('scoreSentence', () => {
   });
 
   it('bewertet einfachen Satz: Basis + Länge + Adjektiv', () => {
-    // „Tisch ist hoch“: Basis 10 + Länge 2 + adjektiv 3 = 15
+    // „Tisch ist hoch“: Basis 10 + Länge 2 + adjektiv 3 + 2 Steinchen × 3 = 21
     const result = validateSentence(
-      sentence('noun.tisch', 'verb.sein', 'adj.hoch'),
+      [
+        inst('noun.tisch', false, { chosenCase: 'Nominativ' }),
+        inst('verb.sein', false, { chosenPerson: 'er' }),
+        inst('adj.hoch'),
+      ],
       FIXTURE_POOL,
     );
     const score = scoreSentence(result, 3);
-    expect(score.total).toBe(15);
+    expect(score.total).toBe(21);
     expect(score.breakdown.map((b) => b.label)).toContain('Basis');
   });
 
   it('komplexer Satz gibt mehr Punkte als einfacher Satz', () => {
     const simple = validateSentence(
-      sentence('noun.tisch', 'verb.sein', 'adj.hoch'),
+      [
+        inst('noun.tisch', false, { chosenCase: 'Nominativ' }),
+        inst('verb.sein', false, { chosenPerson: 'er' }),
+        inst('adj.hoch'),
+      ],
       FIXTURE_POOL,
     );
     const modalSentence = validateSentence(
-      sentence('pron.ich', 'modal.koennen', 'verb.kommen'),
+      [
+        inst('pron.ich'),
+        inst('modal.koennen', false, { chosenPerson: 'ich' }),
+        inst('verb.kommen'),
+      ],
       FIXTURE_POOL,
     );
     const question = validateSentence(
-      sentence('question.wie', 'verb.heissen', 'pron.du'),
+      [
+        inst('question.wie'),
+        inst('verb.heissen', false, { chosenPerson: 'du' }),
+        inst('pron.du'),
+      ],
       FIXTURE_POOL,
     );
     const simpleScore = scoreSentence(simple, 3).total;
@@ -489,19 +641,28 @@ describe('scoreSentence', () => {
 
   it('belohnt Perfekt am stärksten', () => {
     const perfekt = validateSentence(
-      sentence('pron.ich', 'verb.sein', 'verb.kommen'),
+      [
+        inst('pron.ich'),
+        inst('verb.sein', false, { chosenPerson: 'ich' }),
+        inst('verb.kommen'),
+      ],
       FIXTURE_POOL,
     );
-    // Basis 10 + Länge 2 + perfekt 10 + pronomen 2 = 24
-    expect(scoreSentence(perfekt, 3).total).toBe(24);
+    // Basis 10 + Länge 2 + perfekt 10 + pronomen 2 + 1 Steinchen × 3 = 27
+    expect(scoreSentence(perfekt, 3).total).toBe(27);
   });
 
   it('Längenbonus wächst ab der 3. Karte um 2 pro Karte', () => {
     const result = validateSentence(
-      sentence('pron.ich', 'verb.sein', 'prep.in', 'noun.buch'),
+      [
+        inst('pron.ich'),
+        inst('verb.sein', false, { chosenPerson: 'ich' }),
+        inst('prep.in'),
+        inst('noun.buch', false, { chosenCase: 'Dativ' }),
+      ],
       FIXTURE_POOL,
     );
-    // Basis 10 + Länge 4 (2 Karten × 2) + praeposition 6 + pronomen 2 = 22
-    expect(scoreSentence(result, 4).total).toBe(22);
+    // Basis 10 + Länge 4 (2 Karten × 2) + praeposition 6 + pronomen 2 + 2 Steinchen × 3 = 28
+    expect(scoreSentence(result, 4).total).toBe(28);
   });
 });

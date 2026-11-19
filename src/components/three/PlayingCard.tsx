@@ -3,8 +3,15 @@ import { useFrame } from '@react-three/fiber';
 import { RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 import type { CardInstance } from '../../game';
-import { CARD_H, CARD_W } from '../../lib/ui';
+import { getCard } from '../../game';
+import {
+  CARD_H,
+  CARD_W,
+  declinedFormLabel,
+  personFormLabel,
+} from '../../lib/ui';
 import { useCardTexture } from '../../hooks/useCardTexture';
+import { useChipTexture } from '../../hooks/useChipTexture';
 
 interface PlayingCardProps {
   instance: CardInstance;
@@ -34,6 +41,21 @@ export function PlayingCard({
   const glowMat = useRef<THREE.MeshBasicMaterial>(null);
   const [hovered, setHovered] = useState(false);
   const texture = useCardTexture(instance.defId);
+
+  // Steinchen-Label: Person am Verb → konkrete Verbform („kommst"),
+  // Kasus am Nomen → deklinierte Form („den Tisch").
+  const def = getCard(instance.defId);
+  let chipLabel: string | null = null;
+  if (instance.chosenPerson !== undefined && def?.conjugation) {
+    chipLabel = personFormLabel(def, instance.chosenPerson);
+  } else if (instance.chosenCase !== undefined && def) {
+    chipLabel = declinedFormLabel(
+      def,
+      instance.chosenCase,
+      instance.isPlural === true,
+    );
+  }
+  const chipTexture = useChipTexture(chipLabel);
 
   useFrame(({ clock }, delta) => {
     const g = group.current;
@@ -117,6 +139,32 @@ export function PlayingCard({
           <boxGeometry args={[CARD_W * 0.55, 0.055, 0.055]} />
           <meshBasicMaterial color="#fbbf24" />
         </mesh>
+      )}
+      {chipTexture && (
+        <group
+          position={[CARD_W / 2 - 0.14, CARD_H / 2 - 0.17, 0.05]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <mesh>
+            <cylinderGeometry args={[0.09, 0.09, 0.025, 28]} />
+            {/* Seite + Unterseite: dunkler Rand, Oberseite: Stein mit Label */}
+            <meshStandardMaterial
+              attach="material-0"
+              color="#8a7a55"
+              roughness={0.85}
+            />
+            <meshBasicMaterial
+              attach="material-1"
+              map={chipTexture}
+              toneMapped={false}
+            />
+            <meshStandardMaterial
+              attach="material-2"
+              color="#8a7a55"
+              roughness={0.85}
+            />
+          </mesh>
+        </group>
       )}
     </group>
   );

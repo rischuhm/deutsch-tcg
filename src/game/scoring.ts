@@ -21,6 +21,8 @@ export interface ScoreResult {
 const BASE_POINTS = 10;
 const LENGTH_BONUS_PER_CARD = 2;
 const LENGTH_BONUS_FROM_CARD = 3;
+/** Bonus pro korrekt platziertem Steinchen (Person am Verb, Kasus am Nomen). */
+const CHIP_BONUS = 3;
 
 const FEATURE_BONUS: Record<Feature, { label: string; points: number }> = {
   aussagesatz: { label: 'Aussagesatz', points: 0 },
@@ -66,6 +68,15 @@ export function scoreSentence(
       breakdown.push({ label: bonus.label, points: bonus.points });
       total += bonus.points;
     }
+  }
+
+  if (validation.correctChips > 0) {
+    const chipPoints = CHIP_BONUS * validation.correctChips;
+    breakdown.push({
+      label: `Steinchen (${validation.correctChips}× richtige Form)`,
+      points: chipPoints,
+    });
+    total += chipPoints;
   }
 
   return { total, breakdown };

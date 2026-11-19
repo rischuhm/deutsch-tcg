@@ -26,6 +26,12 @@ export function Onboarding({ onClose }: OnboardingProps) {
           </li>
           <li>Jeden Tag gibt es einen neuen Booster mit 5 Karten.</li>
         </ul>
+        <p className="chips-info">
+          Lege <strong>Steinchen</strong> auf deine Karten: Am Verb wählst du
+          die Form, die zum Subjekt passt (ich → komme). Am Nomen wählst du den
+          Fall (der Tisch → Nominativ, den Tisch → Akkusativ). Richtige
+          Steinchen geben Bonuspunkte!
+        </p>
         <button className="btn" onClick={onClose}>
           Los geht&apos;s!
         </button>

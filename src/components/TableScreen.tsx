@@ -1,13 +1,24 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Collection } from '../game';
-import type { CardInstance, ScoreResult, ValidationResult } from '../game';
+import type {
+  CardInstance,
+  GermanCase,
+  Person,
+  ScoreResult,
+  ValidationResult,
+} from '../game';
 import { getCard, scoreSentence, suggestNext, validateSentence } from '../game';
 import {
+  CASE_ORDER,
   MAX_HAND,
   MAX_SENTENCE,
+  PERSON_LABELS,
+  PERSON_ORDER,
   TYPE_LABELS,
   buildInstances,
+  declinedFormLabel,
   displayWord,
+  personFormLabel,
   selectHand,
 } from '../lib/ui';
 import { CardImage } from './CardImage';
@@ -74,6 +85,50 @@ export function TableScreen({
     setResult(null);
   };
 
+  /**
+   * Steinchen setzen/entfernen: aktualisiert die Instanz in `played`
+   * immutable (gleiche instanceId) und spiegelt sie ins Inspect-Overlay.
+   */
+  const updatePlayedInstance = (updated: CardInstance) => {
+    setPlayed((p) =>
+      p.map((c) => (c.instanceId === updated.instanceId ? updated : c)),
+    );
+    setInspect((current) =>
+      current && current.instance.instanceId === updated.instanceId
+        ? { ...current, instance: updated }
+        : current,
+    );
+    setResult(null);
+  };
+
+  const togglePersonChip = (person: Person) => {
+    if (!inspect || inspect.source !== 'played') {
+      return;
+    }
+    const instance = inspect.instance;
+    const updated: CardInstance = { ...instance };
+    if (instance.chosenPerson === person) {
+      delete updated.chosenPerson;
+    } else {
+      updated.chosenPerson = person;
+    }
+    updatePlayedInstance(updated);
+  };
+
+  const toggleCaseChip = (germanCase: GermanCase) => {
+    if (!inspect || inspect.source !== 'played') {
+      return;
+    }
+    const instance = inspect.instance;
+    const updated: CardInstance = { ...instance };
+    if (instance.chosenCase === germanCase) {
+      delete updated.chosenCase;
+    } else {
+      updated.chosenCase = germanCase;
+    }
+    updatePlayedInstance(updated);
+  };
+
   const checkSentence = () => {
     const validation = validateSentence(played);
     const score = scoreSentence(validation, played.length);
@@ -85,6 +140,13 @@ export function TableScreen({
 
   const sentencePreview = played.map(displayWord).join(' ');
   const hint = suggestNext(played);
+  const inspectDef = inspect ? getCard(inspect.instance.defId) : undefined;
+  const showPersonChips =
+    inspect?.source === 'played' &&
+    (inspectDef?.type === 'verb' || inspectDef?.type === 'modal') &&
+    inspectDef.conjugation !== undefined;
+  const showCaseChips =
+    inspect?.source === 'played' && inspectDef?.type === 'noun';
 
   return (
     <div className="table-screen">
@@ -153,6 +215,62 @@ export function TableScreen({
                 {inspect.instance.isPlural === true ? ' · Plural' : ''}
               </span>
             </div>
+            {showPersonChips && inspectDef && (
+              <div className="chip-section">
+                <p className="chip-title">
+                  Person-Steinchen: Welche Form passt zum Subjekt?
+                </p>
+                <div className="chip-grid">
+                  {PERSON_ORDER.map((person) => (
+                    <button
+                      key={person}
+                      className={`chip-btn ${
+                        inspect.instance.chosenPerson === person
+                          ? 'chip-active'
+                          : ''
+                      }`}
+                      onClick={() => togglePersonChip(person)}
+                    >
+                      <span className="chip-btn-label">
+                        {PERSON_LABELS[person]}
+                      </span>
+                      <span className="chip-btn-sub">
+                        {personFormLabel(inspectDef, person)}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {showCaseChips && inspectDef && (
+              <div className="chip-section">
+                <p className="chip-title">
+                  Kasus-Steinchen: Welcher Fall passt hier?
+                </p>
+                <div className="chip-grid chip-grid-cases">
+                  {CASE_ORDER.map((germanCase) => (
+                    <button
+                      key={germanCase}
+                      className={`chip-btn ${
+                        inspect.instance.chosenCase === germanCase
+                          ? 'chip-active'
+                          : ''
+                      }`}
+                      onClick={() => toggleCaseChip(germanCase)}
+                    >
+                      <span className="chip-btn-label">{germanCase}</span>
+                      <span className="chip-btn-sub">
+                        {declinedFormLabel(
+                          inspectDef,
+                          germanCase,
+                          inspect.instance.isPlural === true,
+                        )}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             {inspect.source === 'hand' ? (
               <button
                 className="btn"
