@@ -516,3 +516,46 @@ button {
 .onboarding-card .btn {
   width: 100%;
 }
+
+/* Karten-Detailansicht (vor dem Spielen) */
+.inspect-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  max-width: min(88vw, 340px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.inspect-image {
+  width: min(70vw, 260px);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.inspect-image img {
+  width: 100%;
+  display: block;
+}
+
+.inspect-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.inspect-type {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.inspect-card .btn {
+  width: 100%;
+}

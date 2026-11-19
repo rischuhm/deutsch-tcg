@@ -83,9 +83,13 @@ function BoosterCard({ def, index }: BoosterCardProps) {
       <mesh position={[0, 0, 0.02]}>
         <planeGeometry args={[CARD_W - 0.02, CARD_H - 0.02]} />
         {texture ? (
-          <meshBasicMaterial map={texture} toneMapped={false} />
+          <meshBasicMaterial
+            key={texture.uuid}
+            map={texture}
+            toneMapped={false}
+          />
         ) : (
-          <meshBasicMaterial color="#1e293b" />
+          <meshBasicMaterial key="placeholder" color="#1e293b" />
         )}
       </mesh>
       {/* Rückseite */}
