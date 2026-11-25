@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { AdvancedLevel, CourseLesson } from '../game/curriculum';
 import { matchesExercise, orderedOptions } from '../game/exercises';
 import type { Exercise } from '../game/exercises';
+import { CourseCardStep } from './CourseCardStep';
 
 interface Props {
   level: AdvancedLevel;
@@ -107,63 +108,45 @@ function AudioSource({ source }: { source: string }) {
 
 function ExerciseStep({ exercise, onNext }: { exercise: Exercise; onNext: () => void }) {
   if (exercise.kind === 'practice') return <PracticeStep exercise={exercise} onNext={onNext} />;
+  if (exercise.kind === 'cards') return <CourseCardStep exercise={exercise} onNext={onNext} />;
   return <CheckedStep exercise={exercise} onNext={onNext} />;
 }
 
 function CheckedStep({ exercise, onNext }: {
-  exercise: Exclude<Exercise, { kind: 'practice' }>;
+  exercise: Extract<Exercise, { kind: 'choice' }>;
   onNext: () => void;
 }) {
-  const [answer, setAnswer] = useState<number[]>([]);
+  const [answer, setAnswer] = useState<string | null>(null);
   const [checked, setChecked] = useState<boolean | null>(null);
-  const isOrder = exercise.kind === 'order';
-  const options = orderedOptions(isOrder ? exercise.answer : [exercise.answer, ...exercise.alternatives], exercise.question);
-  const change = (next: number[]) => {
-    setAnswer(next);
-    setChecked(null);
-  };
+  const options = orderedOptions([exercise.answer, ...exercise.alternatives], exercise.question);
 
   return (
     <section className="course-panel">
       <h2>{exercise.question}</h2>
-      {exercise.kind === 'choice' && exercise.source && (exercise.listen
+      {exercise.source && (exercise.listen
         ? <AudioSource source={exercise.source} />
         : <blockquote>{exercise.source}</blockquote>)}
-      {isOrder && (
-        <div className="course-order">
-          <p>Tippe die Bausteine in der Reihenfolge des Mustersatzes an. Tippe einen gelegten Baustein an, um ihn zurückzunehmen.</p>
-          <div className="course-tiles" aria-label="Gelegte Bausteine">
-            {answer.map((index) => (
-              <button key={index} className="course-option" disabled={checked === true}
-                aria-label={`${options[index]} zurücknehmen`}
-                onClick={() => change(answer.filter((item) => index !== item))}>{options[index]}</button>
-            ))}
-          </div>
-        </div>
-      )}
-      <div className={isOrder ? 'course-tiles' : 'course-choices'} aria-label={isOrder ? 'Verfügbare Bausteine' : 'Antworten'}>
-        {options.map((option, index) => isOrder && answer.includes(index) ? null : (
-          <button key={index} className="course-option" disabled={checked === true}
-            aria-pressed={isOrder ? undefined : answer.includes(index)}
-            onClick={() => change(isOrder ? [...answer, index] : [index])}>{option}</button>
+      <div className="course-choices" aria-label="Antworten">
+        {options.map((option) => (
+          <button key={option} className="course-option" disabled={checked === true}
+            aria-pressed={answer === option}
+            onClick={() => { setAnswer(option); setChecked(null); }}>{option}</button>
         ))}
       </div>
       <div className="course-feedback" role="status">
         {checked === true && <p><strong>Richtig.</strong> {exercise.feedback}</p>}
-        {checked === false && <p>{isOrder ? 'Die Reihenfolge weicht vom Mustersatz ab.' : 'Diese Antwort passt hier noch nicht.'} Prüfe deine Auswahl.</p>}
+        {checked === false && <p>Diese Antwort passt hier noch nicht. Prüfe deine Auswahl.</p>}
       </div>
       {checked !== true && <details className="lesson-help">
         <summary>Lösungshilfe</summary>
-        <p>{isOrder ? exercise.answer.join(' ') : exercise.answer}</p>
+        <p>{exercise.answer}</p>
         <p>{exercise.feedback}</p>
       </details>}
       <div className="course-actions">
         {checked === true
           ? <button className="btn" onClick={onNext}>Weiter</button>
-          : <button className="btn" disabled={isOrder ? answer.length !== options.length : answer.length !== 1}
-            onClick={() => setChecked(matchesExercise(exercise, answer.map((index) => options[index]!)))}>Antwort prüfen</button>}
-        {isOrder && checked !== true && answer.length > 0
-          && <button className="btn btn-secondary" onClick={() => change([])}>Neu legen</button>}
+          : <button className="btn" disabled={!answer}
+            onClick={() => setChecked(matchesExercise(exercise, answer))}>Antwort prüfen</button>}
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react';
 import type { PointerEvent, ReactNode } from 'react';
-import type { CardInstance, CardType } from '../game';
+import type { CardDef, CardInstance, CardType } from '../game';
 import { getCard, hasFormChip } from '../game';
 import type { useSentenceCards } from '../hooks/useSentenceCards';
 import { displayWord, iconUrl, MAX_SENTENCE, sentenceText, TYPE_COLORS, TYPE_LABELS } from '../lib/ui';
@@ -11,12 +11,14 @@ const TableScene = lazy(() => import('./three/TableScene').then(({ TableScene })
 interface SentenceBoardProps {
   cards: ReturnType<typeof useSentenceCards>;
   actions: ReactNode;
+  definitions?: ReadonlyMap<string, CardDef>;
+  endMark?: string;
   hint?: { text: string; types: CardType[] };
   isSentence?: boolean;
   enable3D?: boolean;
 }
 
-export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3D = false }: SentenceBoardProps) {
+export function SentenceBoard({ cards, actions, definitions, endMark, hint, isSentence = true, enable3D = false }: SentenceBoardProps) {
   const [show3D, setShow3D] = useState(false);
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dropTarget, setDropTarget] = useState<string | null>(null);
@@ -54,7 +56,7 @@ export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3
   };
 
   const renderCard = (instance: CardInstance, source: 'hand' | 'played') => {
-    const def = getCard(instance.defId);
+    const def = definitions?.get(instance.defId) ?? getCard(instance.defId);
     if (!def) return null;
     const marked = hasFormChip(instance);
     const helpful = source === 'hand' && hint?.types.includes(def.type);
@@ -64,8 +66,8 @@ export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3
         style={{ '--card-accent': TYPE_COLORS[def.type] } as React.CSSProperties}
         onClick={() => setInspect({ source, instance })}>
         <span className="board-card-type">{TYPE_LABELS[def.type]}</span>
-        {source === 'hand' && <img src={iconUrl(def.icon)} alt="" />}
-        <strong>{displayWord(instance)}</strong>
+        {source === 'hand' && def.icon && <img src={iconUrl(def.icon)} alt="" />}
+        <strong>{displayWord(instance, definitions)}</strong>
         {source === 'hand' && def.translation && <span className="board-card-translation" lang="en">{def.translation}</span>}
         {marked && <span className="form-stone" aria-label="Steinchen gesetzt" />}
       </button>
@@ -80,12 +82,12 @@ export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3
             {show3D ? 'Kartenansicht' : '3D-Ansicht'}
           </button>}
         </div>
-        <p className="board-preview" aria-live="polite">{sentenceText(played, isSentence) || 'Wähle eine Karte aus deiner Hand.'}</p>
+        <p className="board-preview" aria-live="polite">{sentenceText(played, isSentence, definitions, endMark) || 'Wähle eine Karte aus deiner Hand.'}</p>
         {played.length > 0 && (
           <ol className="board-row played-cards" aria-label="Gelegte Karten">
             {played.map((instance, index) => {
               const id = instance.instanceId;
-              const word = displayWord(instance);
+              const word = displayWord(instance, definitions);
               return (
                 <li key={id} className="played-card-slot" data-card-id={id}
                   data-drop-target={dropTarget === id || undefined} data-dragging={draggedId === id || undefined}
@@ -190,6 +192,7 @@ export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3
       {inspect && <InspectOverlay
         key={`${inspect.source}:${inspect.instance.instanceId}`}
         {...inspect}
+        definitions={definitions}
         playedFull={played.length >= MAX_SENTENCE}
         onPlay={cards.play}
         onReturn={cards.returnToHand}

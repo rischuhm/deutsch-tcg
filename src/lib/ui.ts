@@ -1,4 +1,5 @@
 import type {
+  CardDef,
   CardInstance,
   CardType,
   Collection,
@@ -32,6 +33,7 @@ export const TYPE_LABELS: Record<CardType, string> = {
   adjective: 'Adjektiv',
   adverb: 'Adverb',
   particle: 'Verbzusatz',
+  phrase: 'Satzbaustein',
 };
 
 export const TYPE_COLORS: Record<CardType, string> = {
@@ -44,6 +46,7 @@ export const TYPE_COLORS: Record<CardType, string> = {
   adjective: '#ec4899',
   adverb: '#818cf8',
   particle: '#f97316',
+  phrase: '#8795ac',
 };
 
 export const RARITY_LABELS: Record<Rarity, string> = {
@@ -133,12 +136,12 @@ export function selectHand(
 }
 
 /** Aktuell gewählte Wortform einer Karteninstanz. */
-export function displayWord(instance: CardInstance): string {
-  const def = getCard(instance.defId);
+export function displayWord(instance: CardInstance, definitions?: ReadonlyMap<string, CardDef>): string {
+  const def = definitions?.get(instance.defId) ?? getCard(instance.defId);
   if (!def) {
     return instance.defId;
   }
-  return cardWord(def, instance);
+  return cardWord(def, instance) + (def.punctuation ?? '');
 }
 
 /** Textur-URL für ein Kartenface. */
@@ -147,13 +150,13 @@ export function cardFaceUrl(defId: string): string {
 }
 
 
-export function sentenceText(played: CardInstance[], isSentence = true): string {
-  const words = played.map(displayWord);
+export function sentenceText(played: CardInstance[], isSentence = true, definitions?: ReadonlyMap<string, CardDef>, endMark?: string): string {
+  const words = played.map((instance) => displayWord(instance, definitions));
   const text = words.join(' ');
   if (!isSentence || !text) return text;
   const firstType = getCard(played[0]!.defId)?.type;
   const question = firstType === 'question' || firstType === 'verb' || firstType === 'modal';
-  return text[0]!.toLocaleUpperCase('de') + text.slice(1) + (question ? '?' : '.');
+  return text[0]!.toLocaleUpperCase('de') + text.slice(1) + (endMark ?? (question ? '?' : '.'));
 }
 
 export function iconUrl(icon: string): string {

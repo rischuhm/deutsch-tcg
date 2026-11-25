@@ -36,6 +36,7 @@ export function adjectiveWord(def: CardDef, degree: AdjectiveDegree): string {
 
 /** Die tatsächlich gelegte Form, für Satzleiste, Steinchen und Rückmeldung. */
 export function cardWord(def: CardDef, instance: CardInstance): string {
+  if (instance.chosenLessonForm && def.lessonForms) return def.lessonForms[instance.chosenLessonForm] ?? def.word;
   if (def.type === 'noun') return nounForm(def, instance.chosenCase ?? 'Nominativ', !!instance.isPlural);
   if (def.type === 'pronoun' && instance.chosenCase) {
     return pronounForm(def, instance.chosenCase, instance.chosenPronoun);
@@ -49,5 +50,6 @@ export function cardWord(def: CardDef, instance: CardInstance): string {
 }
 
 export function hasFormChip(instance: CardInstance): boolean {
-  return !!(instance.chosenCase || instance.chosenPerson || instance.chosenVerbForm || instance.chosenAdjectiveDegree);
+  return !!(instance.chosenCase || instance.chosenPerson || instance.chosenVerbForm || instance.chosenAdjectiveDegree
+    || instance.chosenLessonForm);
 }

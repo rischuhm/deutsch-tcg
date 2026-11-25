@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { AdjectiveDegree, CardInstance, GermanCase, Person, VerbForm } from '../game';
+import type { AdjectiveDegree, CardDef, CardInstance, GermanCase, Person, VerbForm } from '../game';
 import {
   ADJECTIVE_DEGREES, adjectiveWord, CASE_ORDER, PERSON_LABELS, PERSON_ORDER, VERB_FORMS, getCard, nounForm, pronounForm, verbWord,
 } from '../game';
@@ -8,6 +8,7 @@ import { TYPE_COLORS, TYPE_LABELS, displayWord, iconUrl } from '../lib/ui';
 
 interface InspectOverlayProps {
   instance: CardInstance;
+  definitions?: ReadonlyMap<string, CardDef>;
   source: 'hand' | 'played' | 'collection';
   playedFull?: boolean;
   onPlay?: (instance: CardInstance) => void;
@@ -31,7 +32,7 @@ function FormOption({ label, word, active, select }: {
     : <div className="chip-btn">{content}</div>;
 }
 
-export function InspectOverlay({ instance, source, playedFull, onPlay, onReturn, onChange, onClose }: InspectOverlayProps) {
+export function InspectOverlay({ instance, definitions, source, playedFull, onPlay, onReturn, onChange, onClose }: InspectOverlayProps) {
   const [draft, setDraft] = useState(instance);
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -40,7 +41,7 @@ export function InspectOverlay({ instance, source, playedFull, onPlay, onReturn,
     return () => element?.close();
   }, []);
 
-  const def = getCard(instance.defId);
+  const def = definitions?.get(instance.defId) ?? getCard(instance.defId);
   if (!def) return null;
   const { conjugation } = def;
   const isReference = source === 'collection';
@@ -66,7 +67,17 @@ export function InspectOverlay({ instance, source, playedFull, onPlay, onReturn,
   );
   let details: ReactNode;
 
-  if (def.type === 'noun') {
+  if (def.lessonForms) {
+    details = <>
+      <h3>Form-Steinchen</h3>
+      <div className="chip-grid chip-grid-cases">
+        {Object.entries(def.lessonForms).map(([label, word]) => showForm(label, word,
+          draft.chosenLessonForm === label, () => update({
+            chosenLessonForm: draft.chosenLessonForm === label ? undefined : label,
+          })))}
+      </div>
+    </>;
+  } else if (def.type === 'noun') {
     const plural = !!draft.isPlural;
     details = <>
       <h3>{isReference ? 'Deklination' : 'Kasus-Steinchen'} · {plural ? 'Plural' : 'Singular'}</h3>
@@ -129,7 +140,7 @@ export function InspectOverlay({ instance, source, playedFull, onPlay, onReturn,
             })))}
       </div>
     </>;
-  } else {
+  } else if (def.explanation) {
     details = <p className="form-note">{def.explanation}</p>;
   }
 
@@ -141,10 +152,10 @@ export function InspectOverlay({ instance, source, playedFull, onPlay, onReturn,
         <header className="inspect-heading" style={{ borderColor: TYPE_COLORS[def.type] }}>
           <div>
             <p className="inspect-type">{TYPE_LABELS[def.type]}{instance.isPlural && ' · Plural'}</p>
-            <h2 id="inspect-word">{displayWord(draft)}</h2>
+            <h2 id="inspect-word">{displayWord(draft, definitions)}</h2>
             {def.translation && <p className="form-note" lang="en">{def.translation}</p>}
           </div>
-          <img src={iconUrl(def.icon)} alt="" />
+          {def.icon && <img src={iconUrl(def.icon)} alt="" />}
         </header>
         <div className="inspect-forms">{details}</div>
         <footer className="inspect-actions">

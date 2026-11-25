@@ -991,16 +991,11 @@ button.chip-btn:hover { border-color: #9edacd; }
 .course-panel fieldset { display: grid; gap: 8px; border: 1px solid #55757e; padding: 10px; border-radius: 8px; }
 .course-panel fieldset label { display: flex; align-items: flex-start; gap: 8px; }
 .course-panel fieldset input { margin-top: 5px; }
-.course-actions, .course-tiles { display: flex; flex-wrap: wrap; gap: 8px; }
+.course-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .course-choices { display: grid; gap: 8px; }
-.course-order { display: grid; gap: 6px; }
-.course-order p { color: #b8d2d9; font-size: .9rem; }
-.course-order .course-tiles {
-  min-height: 68px;
-  padding: 8px;
-  border: 1px dashed #60a69b;
-  border-radius: 10px;
-}
+.course-card-step { min-width: 0; }
+.course-card-step .sentence-board { min-width: 0; padding: 4px 0 0; }
+.course-card-step .board-actions { position: static; margin: 0; }
 .course-option {
   padding: 9px 12px;
   border: 1px solid #55757e;

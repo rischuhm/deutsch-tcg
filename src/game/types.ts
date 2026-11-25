@@ -12,7 +12,8 @@ export type CardType =
   | 'preposition'
   | 'adjective'
   | 'adverb'
-  | 'particle';
+  | 'particle'
+  | 'phrase';
 
 export type Rarity = 'common' | 'uncommon' | 'rare';
 
@@ -55,7 +56,7 @@ export interface CardDef {
   type: CardType;
   rarity: Rarity;
   word: string; // Lemma, z. B. "Tisch"
-  icon: string; // Dateiname in assets/icons/, z. B. "tisch.svg"
+  icon?: string; // Dateiname in assets/icons/, z. B. "tisch.svg"
   gender?: Gender; // noun
   plural?: string; // noun, z. B. "Tische"
   declension?: CardDeclension; // noun: bestimmter Artikel
@@ -70,6 +71,8 @@ export interface CardDef {
   comparison?: [string, string];
   objectCase?: 'Akkusativ' | 'Dativ';
   direction?: boolean;
+  lessonForms?: Record<string, string>;
+  punctuation?: string;
 }
 
 export interface CardInstance {
@@ -91,6 +94,7 @@ export interface CardInstance {
   chosenPronoun?: string;
   chosenVerbForm?: VerbForm;
   chosenAdjectiveDegree?: AdjectiveDegree;
+  chosenLessonForm?: string;
 }
 
 export type AdjectiveDegree = 'positive' | 'comparative' | 'superlative';
