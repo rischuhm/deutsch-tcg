@@ -10,6 +10,7 @@ import {
   nextLesson,
 } from '../story';
 import { POOL_BY_ID } from '../cards';
+import { sentenceText } from '../../lib/ui';
 
 /** Baut die perfekte Lösung einer Lektion als CardInstance-Liste. */
 function solvedPlayed(lessonId: string): CardInstance[] {
@@ -20,6 +21,9 @@ function solvedPlayed(lessonId: string): CardInstance[] {
     return {
       instanceId: `t${i}`,
       defId,
+      isPlural: lesson.pluralCards?.includes(defId),
+      chosenPronoun: chip?.pronoun,
+      chosenVerbForm: chip?.verbForm,
       ...(chip?.person ? { chosenPerson: chip.person } : {}),
       ...(chip?.case ? { chosenCase: chip.case } : {}),
     };
@@ -27,9 +31,9 @@ function solvedPlayed(lessonId: string): CardInstance[] {
 }
 
 describe('story data', () => {
-  it('enthält Lektionen in 3 Kapiteln', () => {
-    expect(STORY_CHAPTERS).toHaveLength(3);
-    expect(STORY_LESSONS.length).toBeGreaterThanOrEqual(8);
+  it('enthält Lektionen in 5 Kapiteln', () => {
+    expect(STORY_CHAPTERS).toHaveLength(5);
+    expect(STORY_LESSONS).toHaveLength(23);
   });
 
   it('jede Lektion nutzt nur existierende Pool-Karten', () => {
@@ -60,6 +64,7 @@ describe('checkLesson', () => {
       const result = checkLesson(lesson, solvedPlayed(lessonId));
       expect(result.problems, result.problems.join(' | ')).toHaveLength(0);
       expect(result.complete).toBe(true);
+      expect(sentenceText(solvedPlayed(lessonId), lesson.requireValidSentence)).toBe(lesson.targetSentence);
     },
   );
 
@@ -77,7 +82,7 @@ describe('checkLesson', () => {
     played[1] = { ...played[1]!, chosenPerson: 'du' };
     const result = checkLesson(lesson, played);
     expect(result.complete).toBe(false);
-    expect(result.problems.join(' ')).toMatch(/chip/i);
+    expect(result.problems.join(' ')).toMatch(/Person-Steinchen/i);
   });
 
   it('falscher Kasus → nicht komplett', () => {
@@ -122,6 +127,16 @@ describe('Fortschritt', () => {
   it('zweite Lektion erst nach Abschluss der ersten', () => {
     expect(isLessonUnlocked(second!.id, new Set())).toBe(false);
     expect(isLessonUnlocked(second!.id, new Set([first!.id]))).toBe(true);
+  });
+
+  it('erhält vorhandenen Fortschritt und führt durch neu eingefügte Lektionen', () => {
+    const completed = new Set([
+      'l01-nouns', 'l02-verbs', 'l03-pronouns', 'l04-subject-verb', 'l05-cases',
+      'l06-questions', 'l07-prepositions', 'l08-wechselpraepositionen', 'l09-adjectives', 'l10-modals',
+    ]);
+    expect(isLessonUnlocked('l09-adjectives', completed)).toBe(true);
+    expect(isLessonUnlocked('l12-plural', completed)).toBe(false);
+    expect(nextLesson(completed)?.id).toBe('l11-location');
   });
 
   it('nextLesson gibt die älteste ungelöste Lektion', () => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { CardDef } from '../game';
-import { CARD_POOL, canOpenBoosterToday, dailyBooster } from '../game';
+import { CARD_POOL, canOpenBoosterToday, dailyBooster, nounForm } from '../game';
 import {
   RARITY_LABELS,
   formatCountdown,
@@ -19,6 +19,7 @@ type Phase = 'idle' | 'revealing' | 'done';
 export function BoosterScreen({ lastBooster, onCollect }: BoosterScreenProps) {
   const [phase, setPhase] = useState<Phase>('idle');
   const [booster, setBooster] = useState<CardDef[]>([]);
+  const [openedOn, setOpenedOn] = useState<string | null>(null);
   const [now, setNow] = useState(() => Date.now());
 
   const canOpen = canOpenBoosterToday(lastBooster, todayLocalISO());
@@ -32,15 +33,22 @@ export function BoosterScreen({ lastBooster, onCollect }: BoosterScreenProps) {
     return () => window.clearInterval(id);
   }, [canOpen]);
 
+  useEffect(() => {
+    if (phase !== 'revealing') return;
+    const timeout = window.setTimeout(() => setPhase('done'), 5 * 350 + 900 + 400);
+    return () => window.clearTimeout(timeout);
+  }, [phase]);
+
   const openBooster = () => {
-    const cards = dailyBooster(todayLocalISO(), CARD_POOL);
-    setBooster(cards);
+    const today = todayLocalISO();
+    setOpenedOn(today);
+    setBooster(dailyBooster(today, CARD_POOL));
     setPhase('revealing');
-    window.setTimeout(() => setPhase('done'), 5 * 350 + 900 + 400);
   };
 
   const collect = () => {
-    onCollect(booster.map((c) => c.id), new Date().toISOString());
+    if (!openedOn) return;
+    onCollect(booster.map((c) => c.id), openedOn);
     setBooster([]);
     setPhase('idle');
   };
@@ -54,7 +62,7 @@ export function BoosterScreen({ lastBooster, onCollect }: BoosterScreenProps) {
         <div className="booster-names">
           {booster.map((def, i) => (
             <span key={`${def.id}#${i}`} className={`name-chip ${def.rarity}`}>
-              {def.word}
+              {def.type === 'noun' ? nounForm(def, 'Nominativ', false) : def.word}
             </span>
           ))}
         </div>

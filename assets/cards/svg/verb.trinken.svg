@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" width="750" height="1050">
+  <rect id="card-frame" width="750" height="1050" rx="38" fill="#18263b"/>
+  <rect x="12" y="12" width="726" height="1026" rx="28" fill="#f7f6ee"/>
+  <g id="card-heading" font-family="Helvetica, Arial, sans-serif">
+    <rect x="27" y="27" width="696" height="280" rx="22" fill="#edf0ec"/>
+    <rect x="43" y="47" width="8" height="236" rx="4" fill="#ef4444"/>
+    <text x="68" y="91" font-size="28" font-weight="bold" fill="#3d4b60">Verb</text>
+    <text x="68" y="174" font-size="60" font-weight="bold" fill="#17233a">trinken</text>
+    <text x="68" y="227" font-size="31" fill="#41526a">drink</text>
+    <g id="icon" transform="translate(500 69)" fill="none" stroke="#1f2937" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M100 28 C100 28 54 94 54 126 A46 46 0 0 0 146 126 C146 94 100 28 100 28 Z" fill="#60a5fa"/>
+<path d="M78 130 A26 26 0 0 0 100 150" stroke="#ffffff" stroke-width="7"/>
+</g>
+  </g>
+  <g id="grammar" font-family="Helvetica, Arial, sans-serif">
+    <text x="52" y="379" font-size="35" font-weight="bold" fill="#17233a">Konjugation · Präsens</text>
+    <rect x="38" y="399" width="674" height="58" rx="11" fill="#e9ede9"/><text x="52" y="438" font-size="30" font-weight="normal" fill="#26354b">ich  trinke</text><text x="408" y="438" font-size="30" font-weight="normal" fill="#26354b">wir  trinken</text><text x="52" y="504" font-size="30" font-weight="normal" fill="#26354b">du  trinkst</text><text x="408" y="504" font-size="30" font-weight="normal" fill="#26354b">ihr  trinkt</text><rect x="38" y="531" width="674" height="58" rx="11" fill="#e9ede9"/><text x="52" y="570" font-size="30" font-weight="normal" fill="#26354b">er/sie/es  trinkt</text><text x="408" y="570" font-size="30" font-weight="normal" fill="#26354b">sie/Sie  trinken</text><text x="52" y="636" font-size="30" font-weight="normal" fill="#26354b">Infinitiv</text><text x="408" y="636" font-size="30" font-weight="normal" fill="#26354b">trinken</text><rect x="38" y="663" width="674" height="58" rx="11" fill="#e9ede9"/><text x="52" y="702" font-size="30" font-weight="normal" fill="#26354b">Partizip I</text><text x="408" y="702" font-size="30" font-weight="normal" fill="#26354b">trinkend</text><text x="52" y="768" font-size="30" font-weight="normal" fill="#26354b">Partizip II</text><text x="408" y="768" font-size="30" font-weight="normal" fill="#26354b">getrunken</text><rect x="38" y="795" width="674" height="58" rx="11" fill="#e9ede9"/><text x="52" y="834" font-size="30" font-weight="normal" fill="#26354b">Perfekt mit</text><text x="408" y="834" font-size="30" font-weight="normal" fill="#26354b">haben</text>
+  </g>
+  <path d="M52 960H698" stroke="#d3dbda" stroke-width="2"/>
+  <g id="footer" font-family="Helvetica, Arial, sans-serif" font-size="25" fill="#41526a">
+    <text x="52" y="1006" font-weight="bold">SatzMeister</text>
+    <circle cx="679" cy="997" r="13" fill="#8796a7"/>
+  </g>
+</svg>

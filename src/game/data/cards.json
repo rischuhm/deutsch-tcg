@@ -8,9 +8,16 @@
     "gender": "der",
     "plural": "Tische",
     "declension": {
-      "nom_sg": "der Tisch", "akk_sg": "den Tisch", "dat_sg": "dem Tisch", "gen_sg": "des Tisches",
-      "nom_pl": "die Tische", "akk_pl": "die Tische", "dat_pl": "den Tischen", "gen_pl": "der Tische"
-    }
+      "nom_sg": "der Tisch",
+      "akk_sg": "den Tisch",
+      "dat_sg": "dem Tisch",
+      "gen_sg": "des Tisches",
+      "nom_pl": "die Tische",
+      "akk_pl": "die Tische",
+      "dat_pl": "den Tischen",
+      "gen_pl": "der Tische"
+    },
+    "translation": "table"
   },
   {
     "id": "noun.stuhl",
@@ -21,9 +28,16 @@
     "gender": "der",
     "plural": "Stühle",
     "declension": {
-      "nom_sg": "der Stuhl", "akk_sg": "den Stuhl", "dat_sg": "dem Stuhl", "gen_sg": "des Stuhls",
-      "nom_pl": "die Stühle", "akk_pl": "die Stühle", "dat_pl": "den Stühlen", "gen_pl": "der Stühle"
-    }
+      "nom_sg": "der Stuhl",
+      "akk_sg": "den Stuhl",
+      "dat_sg": "dem Stuhl",
+      "gen_sg": "des Stuhls",
+      "nom_pl": "die Stühle",
+      "akk_pl": "die Stühle",
+      "dat_pl": "den Stühlen",
+      "gen_pl": "der Stühle"
+    },
+    "translation": "chair"
   },
   {
     "id": "noun.buch",
@@ -34,9 +48,16 @@
     "gender": "das",
     "plural": "Bücher",
     "declension": {
-      "nom_sg": "das Buch", "akk_sg": "das Buch", "dat_sg": "dem Buch", "gen_sg": "des Buches",
-      "nom_pl": "die Bücher", "akk_pl": "die Bücher", "dat_pl": "den Büchern", "gen_pl": "der Bücher"
-    }
+      "nom_sg": "das Buch",
+      "akk_sg": "das Buch",
+      "dat_sg": "dem Buch",
+      "gen_sg": "des Buches",
+      "nom_pl": "die Bücher",
+      "akk_pl": "die Bücher",
+      "dat_pl": "den Büchern",
+      "gen_pl": "der Bücher"
+    },
+    "translation": "book"
   },
   {
     "id": "noun.haus",
@@ -47,9 +68,16 @@
     "gender": "das",
     "plural": "Häuser",
     "declension": {
-      "nom_sg": "das Haus", "akk_sg": "das Haus", "dat_sg": "dem Haus", "gen_sg": "des Hauses",
-      "nom_pl": "die Häuser", "akk_pl": "die Häuser", "dat_pl": "den Häusern", "gen_pl": "der Häuser"
-    }
+      "nom_sg": "das Haus",
+      "akk_sg": "das Haus",
+      "dat_sg": "dem Haus",
+      "gen_sg": "des Hauses",
+      "nom_pl": "die Häuser",
+      "akk_pl": "die Häuser",
+      "dat_pl": "den Häusern",
+      "gen_pl": "der Häuser"
+    },
+    "translation": "house"
   },
   {
     "id": "noun.frau",
@@ -60,9 +88,16 @@
     "gender": "die",
     "plural": "Frauen",
     "declension": {
-      "nom_sg": "die Frau", "akk_sg": "die Frau", "dat_sg": "der Frau", "gen_sg": "der Frau",
-      "nom_pl": "die Frauen", "akk_pl": "die Frauen", "dat_pl": "den Frauen", "gen_pl": "der Frauen"
-    }
+      "nom_sg": "die Frau",
+      "akk_sg": "die Frau",
+      "dat_sg": "der Frau",
+      "gen_sg": "der Frau",
+      "nom_pl": "die Frauen",
+      "akk_pl": "die Frauen",
+      "dat_pl": "den Frauen",
+      "gen_pl": "der Frauen"
+    },
+    "translation": "woman"
   },
   {
     "id": "noun.mann",
@@ -73,9 +108,16 @@
     "gender": "der",
     "plural": "Männer",
     "declension": {
-      "nom_sg": "der Mann", "akk_sg": "den Mann", "dat_sg": "dem Mann", "gen_sg": "des Mannes",
-      "nom_pl": "die Männer", "akk_pl": "die Männer", "dat_pl": "den Männern", "gen_pl": "der Männer"
-    }
+      "nom_sg": "der Mann",
+      "akk_sg": "den Mann",
+      "dat_sg": "dem Mann",
+      "gen_sg": "des Mannes",
+      "nom_pl": "die Männer",
+      "akk_pl": "die Männer",
+      "dat_pl": "den Männern",
+      "gen_pl": "der Männer"
+    },
+    "translation": "man"
   },
   {
     "id": "noun.kind",
@@ -86,9 +128,16 @@
     "gender": "das",
     "plural": "Kinder",
     "declension": {
-      "nom_sg": "das Kind", "akk_sg": "das Kind", "dat_sg": "dem Kind", "gen_sg": "des Kindes",
-      "nom_pl": "die Kinder", "akk_pl": "die Kinder", "dat_pl": "den Kindern", "gen_pl": "der Kinder"
-    }
+      "nom_sg": "das Kind",
+      "akk_sg": "das Kind",
+      "dat_sg": "dem Kind",
+      "gen_sg": "des Kindes",
+      "nom_pl": "die Kinder",
+      "akk_pl": "die Kinder",
+      "dat_pl": "den Kindern",
+      "gen_pl": "der Kinder"
+    },
+    "translation": "child"
   },
   {
     "id": "noun.wasser",
@@ -99,9 +148,16 @@
     "gender": "das",
     "plural": "Wässer",
     "declension": {
-      "nom_sg": "das Wasser", "akk_sg": "das Wasser", "dat_sg": "dem Wasser", "gen_sg": "des Wassers",
-      "nom_pl": "die Wässer", "akk_pl": "die Wässer", "dat_pl": "den Wässern", "gen_pl": "der Wässer"
-    }
+      "nom_sg": "das Wasser",
+      "akk_sg": "das Wasser",
+      "dat_sg": "dem Wasser",
+      "gen_sg": "des Wassers",
+      "nom_pl": "die Wässer",
+      "akk_pl": "die Wässer",
+      "dat_pl": "den Wässern",
+      "gen_pl": "der Wässer"
+    },
+    "translation": "water"
   },
   {
     "id": "noun.apfel",
@@ -112,9 +168,16 @@
     "gender": "der",
     "plural": "Äpfel",
     "declension": {
-      "nom_sg": "der Apfel", "akk_sg": "den Apfel", "dat_sg": "dem Apfel", "gen_sg": "des Apfels",
-      "nom_pl": "die Äpfel", "akk_pl": "die Äpfel", "dat_pl": "den Äpfeln", "gen_pl": "der Äpfel"
-    }
+      "nom_sg": "der Apfel",
+      "akk_sg": "den Apfel",
+      "dat_sg": "dem Apfel",
+      "gen_sg": "des Apfels",
+      "nom_pl": "die Äpfel",
+      "akk_pl": "die Äpfel",
+      "dat_pl": "den Äpfeln",
+      "gen_pl": "der Äpfel"
+    },
+    "translation": "apple"
   },
   {
     "id": "noun.lampe",
@@ -125,9 +188,16 @@
     "gender": "die",
     "plural": "Lampen",
     "declension": {
-      "nom_sg": "die Lampe", "akk_sg": "die Lampe", "dat_sg": "der Lampe", "gen_sg": "der Lampe",
-      "nom_pl": "die Lampen", "akk_pl": "die Lampen", "dat_pl": "den Lampen", "gen_pl": "der Lampen"
-    }
+      "nom_sg": "die Lampe",
+      "akk_sg": "die Lampe",
+      "dat_sg": "der Lampe",
+      "gen_sg": "der Lampe",
+      "nom_pl": "die Lampen",
+      "akk_pl": "die Lampen",
+      "dat_pl": "den Lampen",
+      "gen_pl": "der Lampen"
+    },
+    "translation": "lamp"
   },
   {
     "id": "noun.schule",
@@ -138,9 +208,16 @@
     "gender": "die",
     "plural": "Schulen",
     "declension": {
-      "nom_sg": "die Schule", "akk_sg": "die Schule", "dat_sg": "der Schule", "gen_sg": "der Schule",
-      "nom_pl": "die Schulen", "akk_pl": "die Schulen", "dat_pl": "den Schulen", "gen_pl": "der Schulen"
-    }
+      "nom_sg": "die Schule",
+      "akk_sg": "die Schule",
+      "dat_sg": "der Schule",
+      "gen_sg": "der Schule",
+      "nom_pl": "die Schulen",
+      "akk_pl": "die Schulen",
+      "dat_pl": "den Schulen",
+      "gen_pl": "der Schulen"
+    },
+    "translation": "school"
   },
   {
     "id": "noun.freund",
@@ -151,9 +228,16 @@
     "gender": "der",
     "plural": "Freunde",
     "declension": {
-      "nom_sg": "der Freund", "akk_sg": "den Freund", "dat_sg": "dem Freund", "gen_sg": "des Freundes",
-      "nom_pl": "die Freunde", "akk_pl": "die Freunde", "dat_pl": "den Freunden", "gen_pl": "der Freunde"
-    }
+      "nom_sg": "der Freund",
+      "akk_sg": "den Freund",
+      "dat_sg": "dem Freund",
+      "gen_sg": "des Freundes",
+      "nom_pl": "die Freunde",
+      "akk_pl": "die Freunde",
+      "dat_pl": "den Freunden",
+      "gen_pl": "der Freunde"
+    },
+    "translation": "friend"
   },
   {
     "id": "verb.sein",
@@ -163,11 +247,19 @@
     "icon": "sein.svg",
     "canBeAuxiliary": true,
     "conjugation": {
-      "praesens": { "ich": "bin", "du": "bist", "er": "ist", "wir": "sind", "ihr": "seid", "sie": "sind" },
+      "praesens": {
+        "ich": "bin",
+        "du": "bist",
+        "er": "ist",
+        "wir": "sind",
+        "ihr": "seid",
+        "sie": "sind"
+      },
       "partizip1": "seiend",
       "partizip2": "gewesen",
       "aux": "sein"
-    }
+    },
+    "translation": "be"
   },
   {
     "id": "verb.haben",
@@ -177,11 +269,19 @@
     "icon": "haben.svg",
     "canBeAuxiliary": true,
     "conjugation": {
-      "praesens": { "ich": "habe", "du": "hast", "er": "hat", "wir": "haben", "ihr": "habt", "sie": "haben" },
+      "praesens": {
+        "ich": "habe",
+        "du": "hast",
+        "er": "hat",
+        "wir": "haben",
+        "ihr": "habt",
+        "sie": "haben"
+      },
       "partizip1": "habend",
       "partizip2": "gehabt",
       "aux": "haben"
-    }
+    },
+    "translation": "have"
   },
   {
     "id": "verb.heissen",
@@ -190,11 +290,19 @@
     "word": "heißen",
     "icon": "heissen.svg",
     "conjugation": {
-      "praesens": { "ich": "heiße", "du": "heißt", "er": "heißt", "wir": "heißen", "ihr": "heißt", "sie": "heißen" },
+      "praesens": {
+        "ich": "heiße",
+        "du": "heißt",
+        "er": "heißt",
+        "wir": "heißen",
+        "ihr": "heißt",
+        "sie": "heißen"
+      },
       "partizip1": "heißend",
       "partizip2": "geheißen",
       "aux": "haben"
-    }
+    },
+    "translation": "be called"
   },
   {
     "id": "verb.kommen",
@@ -203,11 +311,20 @@
     "word": "kommen",
     "icon": "kommen.svg",
     "conjugation": {
-      "praesens": { "ich": "komme", "du": "kommst", "er": "kommt", "wir": "kommen", "ihr": "kommt", "sie": "kommen" },
+      "praesens": {
+        "ich": "komme",
+        "du": "kommst",
+        "er": "kommt",
+        "wir": "kommen",
+        "ihr": "kommt",
+        "sie": "kommen"
+      },
       "partizip1": "kommend",
       "partizip2": "gekommen",
       "aux": "sein"
-    }
+    },
+    "translation": "come",
+    "direction": true
   },
   {
     "id": "verb.gehen",
@@ -216,11 +333,20 @@
     "word": "gehen",
     "icon": "gehen.svg",
     "conjugation": {
-      "praesens": { "ich": "gehe", "du": "gehst", "er": "geht", "wir": "gehen", "ihr": "geht", "sie": "gehen" },
+      "praesens": {
+        "ich": "gehe",
+        "du": "gehst",
+        "er": "geht",
+        "wir": "gehen",
+        "ihr": "geht",
+        "sie": "gehen"
+      },
       "partizip1": "gehend",
       "partizip2": "gegangen",
       "aux": "sein"
-    }
+    },
+    "translation": "go",
+    "direction": true
   },
   {
     "id": "verb.machen",
@@ -229,11 +355,19 @@
     "word": "machen",
     "icon": "machen.svg",
     "conjugation": {
-      "praesens": { "ich": "mache", "du": "machst", "er": "macht", "wir": "machen", "ihr": "macht", "sie": "machen" },
+      "praesens": {
+        "ich": "mache",
+        "du": "machst",
+        "er": "macht",
+        "wir": "machen",
+        "ihr": "macht",
+        "sie": "machen"
+      },
       "partizip1": "machend",
       "partizip2": "gemacht",
       "aux": "haben"
-    }
+    },
+    "translation": "do"
   },
   {
     "id": "verb.spielen",
@@ -242,11 +376,19 @@
     "word": "spielen",
     "icon": "spielen.svg",
     "conjugation": {
-      "praesens": { "ich": "spiele", "du": "spielst", "er": "spielt", "wir": "spielen", "ihr": "spielt", "sie": "spielen" },
+      "praesens": {
+        "ich": "spiele",
+        "du": "spielst",
+        "er": "spielt",
+        "wir": "spielen",
+        "ihr": "spielt",
+        "sie": "spielen"
+      },
       "partizip1": "spielend",
       "partizip2": "gespielt",
       "aux": "haben"
-    }
+    },
+    "translation": "play"
   },
   {
     "id": "verb.lernen",
@@ -255,11 +397,19 @@
     "word": "lernen",
     "icon": "lernen.svg",
     "conjugation": {
-      "praesens": { "ich": "lerne", "du": "lernst", "er": "lernt", "wir": "lernen", "ihr": "lernt", "sie": "lernen" },
+      "praesens": {
+        "ich": "lerne",
+        "du": "lernst",
+        "er": "lernt",
+        "wir": "lernen",
+        "ihr": "lernt",
+        "sie": "lernen"
+      },
       "partizip1": "lernend",
       "partizip2": "gelernt",
       "aux": "haben"
-    }
+    },
+    "translation": "learn"
   },
   {
     "id": "verb.wohnen",
@@ -268,11 +418,19 @@
     "word": "wohnen",
     "icon": "wohnen.svg",
     "conjugation": {
-      "praesens": { "ich": "wohne", "du": "wohnst", "er": "wohnt", "wir": "wohnen", "ihr": "wohnt", "sie": "wohnen" },
+      "praesens": {
+        "ich": "wohne",
+        "du": "wohnst",
+        "er": "wohnt",
+        "wir": "wohnen",
+        "ihr": "wohnt",
+        "sie": "wohnen"
+      },
       "partizip1": "wohnend",
       "partizip2": "gewohnt",
       "aux": "haben"
-    }
+    },
+    "translation": "live"
   },
   {
     "id": "verb.essen",
@@ -281,11 +439,19 @@
     "word": "essen",
     "icon": "essen.svg",
     "conjugation": {
-      "praesens": { "ich": "esse", "du": "isst", "er": "isst", "wir": "essen", "ihr": "esst", "sie": "essen" },
+      "praesens": {
+        "ich": "esse",
+        "du": "isst",
+        "er": "isst",
+        "wir": "essen",
+        "ihr": "esst",
+        "sie": "essen"
+      },
       "partizip1": "essend",
       "partizip2": "gegessen",
       "aux": "haben"
-    }
+    },
+    "translation": "eat"
   },
   {
     "id": "modal.koennen",
@@ -294,11 +460,19 @@
     "word": "können",
     "icon": "koennen.svg",
     "conjugation": {
-      "praesens": { "ich": "kann", "du": "kannst", "er": "kann", "wir": "können", "ihr": "könnt", "sie": "können" },
+      "praesens": {
+        "ich": "kann",
+        "du": "kannst",
+        "er": "kann",
+        "wir": "können",
+        "ihr": "könnt",
+        "sie": "können"
+      },
       "partizip1": "könnend",
       "partizip2": "gekonnt",
       "aux": "haben"
-    }
+    },
+    "translation": "can"
   },
   {
     "id": "modal.muessen",
@@ -307,11 +481,19 @@
     "word": "müssen",
     "icon": "muessen.svg",
     "conjugation": {
-      "praesens": { "ich": "muss", "du": "musst", "er": "muss", "wir": "müssen", "ihr": "müsst", "sie": "müssen" },
+      "praesens": {
+        "ich": "muss",
+        "du": "musst",
+        "er": "muss",
+        "wir": "müssen",
+        "ihr": "müsst",
+        "sie": "müssen"
+      },
       "partizip1": "müssend",
       "partizip2": "gemusst",
       "aux": "haben"
-    }
+    },
+    "translation": "must"
   },
   {
     "id": "modal.wollen",
@@ -320,11 +502,19 @@
     "word": "wollen",
     "icon": "wollen.svg",
     "conjugation": {
-      "praesens": { "ich": "will", "du": "willst", "er": "will", "wir": "wollen", "ihr": "wollt", "sie": "wollen" },
+      "praesens": {
+        "ich": "will",
+        "du": "willst",
+        "er": "will",
+        "wir": "wollen",
+        "ihr": "wollt",
+        "sie": "wollen"
+      },
       "partizip1": "wollend",
       "partizip2": "gewollt",
       "aux": "haben"
-    }
+    },
+    "translation": "want"
   },
   {
     "id": "pron.ich",
@@ -332,7 +522,15 @@
     "rarity": "common",
     "word": "ich",
     "icon": "ich.svg",
-    "forms": ["ich"]
+    "translation": "I",
+    "person": "ich",
+    "pronouns": {
+      "ich": {
+        "Nominativ": "ich",
+        "Akkusativ": "mich",
+        "Dativ": "mir"
+      }
+    }
   },
   {
     "id": "pron.du",
@@ -340,7 +538,15 @@
     "rarity": "common",
     "word": "du",
     "icon": "du.svg",
-    "forms": ["du"]
+    "translation": "you",
+    "person": "du",
+    "pronouns": {
+      "du": {
+        "Nominativ": "du",
+        "Akkusativ": "dich",
+        "Dativ": "dir"
+      }
+    }
   },
   {
     "id": "pron.er_sie_es",
@@ -348,7 +554,25 @@
     "rarity": "common",
     "word": "er/sie/es",
     "icon": "er_sie_es.svg",
-    "forms": ["er", "sie", "es"]
+    "translation": "he / she / it",
+    "person": "er",
+    "pronouns": {
+      "er": {
+        "Nominativ": "er",
+        "Akkusativ": "ihn",
+        "Dativ": "ihm"
+      },
+      "sie": {
+        "Nominativ": "sie",
+        "Akkusativ": "sie",
+        "Dativ": "ihr"
+      },
+      "es": {
+        "Nominativ": "es",
+        "Akkusativ": "es",
+        "Dativ": "ihm"
+      }
+    }
   },
   {
     "id": "pron.wir",
@@ -356,7 +580,15 @@
     "rarity": "common",
     "word": "wir",
     "icon": "wir.svg",
-    "forms": ["wir"]
+    "translation": "we",
+    "person": "wir",
+    "pronouns": {
+      "wir": {
+        "Nominativ": "wir",
+        "Akkusativ": "uns",
+        "Dativ": "uns"
+      }
+    }
   },
   {
     "id": "pron.sie_pl",
@@ -364,7 +596,15 @@
     "rarity": "common",
     "word": "sie",
     "icon": "sie_pl.svg",
-    "forms": ["sie"]
+    "translation": "they",
+    "person": "sie",
+    "pronouns": {
+      "sie": {
+        "Nominativ": "sie",
+        "Akkusativ": "sie",
+        "Dativ": "ihnen"
+      }
+    }
   },
   {
     "id": "question.wie",
@@ -372,7 +612,8 @@
     "rarity": "common",
     "word": "wie",
     "icon": "wie.svg",
-    "explanation": "Fragt nach Art und Weise oder nach dem Namen. Beispiel: „Wie heißt du?“"
+    "explanation": "Fragt nach Art und Weise oder nach dem Namen. Beispiel: „Wie heißt du?“",
+    "translation": "how"
   },
   {
     "id": "question.woher",
@@ -380,7 +621,8 @@
     "rarity": "uncommon",
     "word": "woher",
     "icon": "woher.svg",
-    "explanation": "Fragt nach Herkunft oder Richtung. Beispiel: „Woher kommst du?“"
+    "explanation": "Fragt nach Herkunft oder Richtung. Beispiel: „Woher kommst du?“",
+    "translation": "from where"
   },
   {
     "id": "question.wo",
@@ -388,7 +630,8 @@
     "rarity": "uncommon",
     "word": "wo",
     "icon": "wo.svg",
-    "explanation": "Fragt nach einem Ort oder einer Position. Beispiel: „Wo wohnst du?“"
+    "explanation": "Fragt nach einem Ort oder einer Position. Beispiel: „Wo wohnst du?“",
+    "translation": "where"
   },
   {
     "id": "question.was",
@@ -396,7 +639,8 @@
     "rarity": "common",
     "word": "was",
     "icon": "was.svg",
-    "explanation": "Fragt nach einer Sache oder Tätigkeit. Beispiel: „Was machst du?“"
+    "explanation": "Fragt nach einer Sache oder Tätigkeit. Beispiel: „Was machst du?“",
+    "translation": "what"
   },
   {
     "id": "question.wer",
@@ -404,7 +648,8 @@
     "rarity": "common",
     "word": "wer",
     "icon": "wer.svg",
-    "explanation": "Fragt nach einer Person. Beispiel: „Wer bist du?“"
+    "explanation": "Fragt nach einer Person. Beispiel: „Wer bist du?“",
+    "translation": "who"
   },
   {
     "id": "prep.in",
@@ -412,7 +657,8 @@
     "rarity": "common",
     "word": "in",
     "icon": "in.svg",
-    "case": "Wechselpräposition"
+    "case": "Wechselpräposition",
+    "translation": "in / into"
   },
   {
     "id": "prep.auf",
@@ -420,7 +666,8 @@
     "rarity": "common",
     "word": "auf",
     "icon": "auf.svg",
-    "case": "Wechselpräposition"
+    "case": "Wechselpräposition",
+    "translation": "on / onto"
   },
   {
     "id": "prep.unter",
@@ -428,7 +675,8 @@
     "rarity": "rare",
     "word": "unter",
     "icon": "unter.svg",
-    "case": "Wechselpräposition"
+    "case": "Wechselpräposition",
+    "translation": "under"
   },
   {
     "id": "prep.neben",
@@ -436,7 +684,8 @@
     "rarity": "rare",
     "word": "neben",
     "icon": "neben.svg",
-    "case": "Wechselpräposition"
+    "case": "Wechselpräposition",
+    "translation": "next to"
   },
   {
     "id": "prep.aus",
@@ -444,7 +693,8 @@
     "rarity": "uncommon",
     "word": "aus",
     "icon": "aus.svg",
-    "case": "Dativ"
+    "case": "Dativ",
+    "translation": "from"
   },
   {
     "id": "prep.mit",
@@ -452,48 +702,212 @@
     "rarity": "common",
     "word": "mit",
     "icon": "mit.svg",
-    "case": "Dativ"
+    "case": "Dativ",
+    "translation": "with"
   },
   {
     "id": "adj.hoch",
     "type": "adjective",
     "rarity": "common",
     "word": "hoch",
-    "icon": "hoch.svg"
+    "icon": "hoch.svg",
+    "translation": "high",
+    "comparison": [
+      "höher",
+      "am höchsten"
+    ]
   },
   {
     "id": "adj.gross",
     "type": "adjective",
     "rarity": "common",
     "word": "groß",
-    "icon": "gross.svg"
+    "icon": "gross.svg",
+    "translation": "big",
+    "comparison": [
+      "größer",
+      "am größten"
+    ]
   },
   {
     "id": "adj.klein",
     "type": "adjective",
     "rarity": "common",
     "word": "klein",
-    "icon": "klein.svg"
+    "icon": "klein.svg",
+    "translation": "small",
+    "comparison": [
+      "kleiner",
+      "am kleinsten"
+    ]
   },
   {
     "id": "adj.schoen",
     "type": "adjective",
     "rarity": "common",
     "word": "schön",
-    "icon": "schoen.svg"
+    "icon": "schoen.svg",
+    "translation": "beautiful",
+    "comparison": [
+      "schöner",
+      "am schönsten"
+    ]
   },
   {
     "id": "adj.neu",
     "type": "adjective",
     "rarity": "uncommon",
     "word": "neu",
-    "icon": "neu.svg"
+    "icon": "neu.svg",
+    "translation": "new",
+    "comparison": [
+      "neuer",
+      "am neuesten"
+    ]
   },
   {
     "id": "adj.alt",
     "type": "adjective",
     "rarity": "common",
     "word": "alt",
-    "icon": "alt.svg"
+    "icon": "alt.svg",
+    "translation": "old",
+    "comparison": [
+      "älter",
+      "am ältesten"
+    ]
+  },
+  {
+    "id": "pron.ihr",
+    "type": "pronoun",
+    "rarity": "common",
+    "word": "ihr",
+    "icon": "wir.svg",
+    "translation": "you (plural)",
+    "person": "ihr",
+    "pronouns": {
+      "ihr": {
+        "Nominativ": "ihr",
+        "Akkusativ": "euch",
+        "Dativ": "euch"
+      }
+    }
+  },
+  {
+    "id": "pron.sie_formal",
+    "type": "pronoun",
+    "rarity": "common",
+    "word": "Sie",
+    "icon": "sie_pl.svg",
+    "translation": "you (formal)",
+    "person": "sie",
+    "pronouns": {
+      "Sie": {
+        "Nominativ": "Sie",
+        "Akkusativ": "Sie",
+        "Dativ": "Ihnen"
+      }
+    }
+  },
+  {
+    "id": "verb.helfen",
+    "type": "verb",
+    "rarity": "common",
+    "word": "helfen",
+    "icon": "helfen.svg",
+    "translation": "help",
+    "conjugation": {
+      "praesens": {
+        "ich": "helfe",
+        "du": "hilfst",
+        "er": "hilft",
+        "wir": "helfen",
+        "ihr": "helft",
+        "sie": "helfen"
+      },
+      "partizip1": "helfend",
+      "partizip2": "geholfen",
+      "aux": "haben"
+    },
+    "objectCase": "Dativ"
+  },
+  {
+    "id": "verb.einkaufen",
+    "type": "verb",
+    "rarity": "common",
+    "word": "einkaufen",
+    "icon": "einkaufen.svg",
+    "translation": "shop",
+    "conjugation": {
+      "praesens": {
+        "ich": "kaufe",
+        "du": "kaufst",
+        "er": "kauft",
+        "wir": "kaufen",
+        "ihr": "kauft",
+        "sie": "kaufen"
+      },
+      "partizip1": "einkaufend",
+      "partizip2": "eingekauft",
+      "aux": "haben",
+      "prefix": "ein"
+    }
+  },
+  {
+    "id": "verb.trinken",
+    "type": "verb",
+    "rarity": "common",
+    "word": "trinken",
+    "icon": "wasser.svg",
+    "translation": "drink",
+    "conjugation": {
+      "praesens": {
+        "ich": "trinke",
+        "du": "trinkst",
+        "er": "trinkt",
+        "wir": "trinken",
+        "ihr": "trinkt",
+        "sie": "trinken"
+      },
+      "partizip1": "trinkend",
+      "partizip2": "getrunken",
+      "aux": "haben"
+    }
+  },
+  {
+    "id": "adv.heute",
+    "type": "adverb",
+    "rarity": "common",
+    "word": "heute",
+    "icon": "heute.svg",
+    "translation": "today",
+    "explanation": "Gibt an, wann etwas passiert."
+  },
+  {
+    "id": "adv.gestern",
+    "type": "adverb",
+    "rarity": "common",
+    "word": "gestern",
+    "icon": "gestern.svg",
+    "translation": "yesterday",
+    "explanation": "Gibt an, wann etwas passiert."
+  },
+  {
+    "id": "adv.nicht",
+    "type": "adverb",
+    "rarity": "common",
+    "word": "nicht",
+    "icon": "nicht.svg",
+    "translation": "not",
+    "explanation": "Verneint einen Satz oder einen Satzteil."
+  },
+  {
+    "id": "particle.ein",
+    "type": "particle",
+    "rarity": "common",
+    "word": "ein",
+    "icon": "einkaufen.svg",
+    "translation": "prefix in einkaufen",
+    "explanation": "Steht im Hauptsatz am Ende. Beispiel „Ich kaufe ein.“"
   }
 ]

@@ -1,17 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1050" width="750" height="1050">
-<!-- SatzMeister-Karte: verb.lernen (lernen) -->
-<g id="card-frame"><rect x="5" y="5" width="740" height="1040" rx="36" ry="36" fill="#ffffff" stroke="#1f2937" stroke-width="10"/></g>
-<g id="background"><rect x="22" y="22" width="706" height="1006" rx="26" ry="26" fill="#8b5cf6"/><path d="M22 300 L728 22 L728 200 L22 480 Z" fill="#ffffff" opacity="0.08"/></g>
-<g id="name-banner"><rect x="45" y="45" width="660" height="100" rx="20" ry="20" fill="#ffffff" stroke="#1f2937" stroke-width="6"/><text x="375" y="112" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="52" font-weight="bold" fill="#1f2937">lernen</text></g>
-<g id="rarity-star"><circle cx="672" cy="62" r="34" fill="#9ca3af" stroke="#1f2937" stroke-width="5"/><path d="M672 40 L679 55 L695 56 L682 66 L686 82 L672 73 L658 82 L662 66 L649 56 L665 55 Z" fill="#ffffff" stroke="#1f2937" stroke-width="3" stroke-linejoin="round"/></g>
-<g id="type-badge"><rect x="45" y="165" width="104" height="46" rx="23" ry="23" fill="#1f2937"/><text x="97" y="196" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="26" font-weight="bold" fill="#ffffff">Verb</text></g>
-<g id="icon-area"><rect x="195" y="235" width="360" height="360" rx="28" ry="28" fill="#ffffff" stroke="#1f2937" stroke-width="6"/><g id="icon" transform="translate(225 265) scale(1.5)" fill="none" stroke="#1f2937" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+  <rect id="card-frame" width="750" height="1050" rx="38" fill="#18263b"/>
+  <rect x="12" y="12" width="726" height="1026" rx="28" fill="#f7f6ee"/>
+  <g id="card-heading" font-family="Helvetica, Arial, sans-serif">
+    <rect x="27" y="27" width="696" height="280" rx="22" fill="#edf0ec"/>
+    <rect x="43" y="47" width="8" height="236" rx="4" fill="#ef4444"/>
+    <text x="68" y="91" font-size="28" font-weight="bold" fill="#3d4b60">Verb</text>
+    <text x="68" y="174" font-size="60" font-weight="bold" fill="#17233a">lernen</text>
+    <text x="68" y="227" font-size="31" fill="#41526a">learn</text>
+    <g id="icon" transform="translate(500 69)" fill="none" stroke="#1f2937" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
 <path d="M92 76 C78 64 54 62 42 70 L42 134 C54 126 78 128 92 140 C106 128 130 126 142 134 L142 70 C130 62 106 64 92 76 Z" fill="#ffffff"/>
 <line x1="92" y1="76" x2="92" y2="140"/>
 <line x1="128" y1="52" x2="164" y2="88" stroke="#f59e0b" stroke-width="12"/>
 <path d="M164 88 L170 100 L156 96 Z" fill="#1f2937" stroke-width="4"/>
-</g></g>
-<g id="text-area"><rect x="45" y="625" width="660" height="360" rx="24" ry="24" fill="#ffffff" stroke="#1f2937" stroke-width="6"/><text x="75" y="678" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="24" font-weight="bold" fill="#8b5cf6">Konjugation (Präsens)</text><text x="75" y="725" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="30" fill="#1f2937">ich lerne</text><text x="400" y="725" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="30" fill="#1f2937">wir lernen</text><text x="75" y="770" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="30" fill="#1f2937">du lernst</text><text x="400" y="770" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="30" fill="#1f2937">ihr lernt</text><text x="75" y="815" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="30" fill="#1f2937">er/sie/es lernt</text><text x="400" y="815" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="30" fill="#1f2937">sie lernen</text><text x="75" y="878" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="28" fill="#1f2937">Partizip I:  lernend</text><text x="75" y="923" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="28" fill="#1f2937">Partizip II:  gelernt   ·   Perfekt mit:  haben</text></g>
-<g id="footer-strip"><text x="375" y="1012" text-anchor="middle" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="20" fill="#ffffff" opacity="0.9">SatzMeister · verb.lernen</text></g>
+</g>
+  </g>
+  <g id="grammar" font-family="Helvetica, Arial, sans-serif">
+    <text x="52" y="379" font-size="35" font-weight="bold" fill="#17233a">Konjugation · Präsens</text>
+    <rect x="38" y="399" width="674" height="58" rx="11" fill="#e9ede9"/><text x="52" y="438" font-size="30" font-weight="normal" fill="#26354b">ich  lerne</text><text x="408" y="438" font-size="30" font-weight="normal" fill="#26354b">wir  lernen</text><text x="52" y="504" font-size="30" font-weight="normal" fill="#26354b">du  lernst</text><text x="408" y="504" font-size="30" font-weight="normal" fill="#26354b">ihr  lernt</text><rect x="38" y="531" width="674" height="58" rx="11" fill="#e9ede9"/><text x="52" y="570" font-size="30" font-weight="normal" fill="#26354b">er/sie/es  lernt</text><text x="408" y="570" font-size="30" font-weight="normal" fill="#26354b">sie/Sie  lernen</text><text x="52" y="636" font-size="30" font-weight="normal" fill="#26354b">Infinitiv</text><text x="408" y="636" font-size="30" font-weight="normal" fill="#26354b">lernen</text><rect x="38" y="663" width="674" height="58" rx="11" fill="#e9ede9"/><text x="52" y="702" font-size="30" font-weight="normal" fill="#26354b">Partizip I</text><text x="408" y="702" font-size="30" font-weight="normal" fill="#26354b">lernend</text><text x="52" y="768" font-size="30" font-weight="normal" fill="#26354b">Partizip II</text><text x="408" y="768" font-size="30" font-weight="normal" fill="#26354b">gelernt</text><rect x="38" y="795" width="674" height="58" rx="11" fill="#e9ede9"/><text x="52" y="834" font-size="30" font-weight="normal" fill="#26354b">Perfekt mit</text><text x="408" y="834" font-size="30" font-weight="normal" fill="#26354b">haben</text>
+  </g>
+  <path d="M52 960H698" stroke="#d3dbda" stroke-width="2"/>
+  <g id="footer" font-family="Helvetica, Arial, sans-serif" font-size="25" fill="#41526a">
+    <text x="52" y="1006" font-weight="bold">SatzMeister</text>
+    <circle cx="679" cy="997" r="13" fill="#8796a7"/>
+  </g>
 </svg>

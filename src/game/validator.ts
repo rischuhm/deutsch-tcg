@@ -1,72 +1,14 @@
-/**
- * SatzMeister — Satz-Validator (A1-lenient).
- * Prüft die Validierungsregeln 1–7 aus der SPEC und sammelt Features
- * für das Scoring. Fehlermeldungen sind auf Deutsch und freundlich
- * formuliert (Lernkontext).
- */
-
-import type { CardDef, CardInstance, Feature, GermanCase, Person, ValidationResult } from './types';
+import type { CardDef, CardInstance, Feature, GermanCase, ValidationResult } from './types';
 import { POOL_BY_ID } from './cards';
+import { cardWord, nounForm, pronounForm, verbWord } from './forms';
 
-interface PlayedCard {
-  def: CardDef;
-  instance: CardInstance;
-  isPlural: boolean;
-}
-
-/** Kanonische Reihenfolge der Features im Ergebnis. */
 const FEATURE_ORDER: Feature[] = [
-  'aussagesatz',
-  'frage',
-  'modal',
-  'perfekt',
-  'praeposition',
-  'plural',
-  'adjektiv',
-  'pronomen',
+  'aussagesatz', 'frage', 'modal', 'perfekt', 'praeposition', 'plural', 'adjektiv', 'pronomen',
 ];
+const isVerb = (def: CardDef) => def.type === 'verb' || def.type === 'modal';
+const isNominal = (def: CardDef) => def.type === 'noun' || def.type === 'pronoun';
 
-function isVerbLike(def: CardDef): boolean {
-  return def.type === 'verb' || def.type === 'modal';
-}
-
-/** Bewegungsverben im A1-Pool: steuern bei Wechselpräpositionen den Akkusativ. */
-const MOVEMENT_VERBS = new Set(['gehen', 'kommen']);
-
-/** Welche Person verlangt ein Subjekt am Verb? */
-function subjectPerson(subject: PlayedCard): Person {
-  if (subject.def.type === 'pronoun') {
-    const id = subject.def.id;
-    if (id.endsWith('ich')) return 'ich';
-    if (id.endsWith('du')) return 'du';
-    if (id.endsWith('wir')) return 'wir';
-    if (id.endsWith('sie_pl')) return 'sie';
-    return 'er'; // er/sie/es
-  }
-  // Nomen als Subjekt: 3. Person, Plural ⇒ 'sie'
-  return subject.isPlural ? 'sie' : 'er';
-}
-
-const CASE_KEY: Record<GermanCase, 'nom' | 'akk' | 'dat' | 'gen'> = {
-  Nominativ: 'nom',
-  Akkusativ: 'akk',
-  Dativ: 'dat',
-  Genitiv: 'gen',
-};
-
-/** Deklinierte Form für Fehlermeldungen, z. B. „den Tisch“. */
-function declinedForm(card: PlayedCard, germanCase: GermanCase): string {
-  const decl = card.def.declension;
-  if (!decl) return card.def.word;
-  const key = `${CASE_KEY[germanCase]}_${card.isPlural ? 'pl' : 'sg'}` as const;
-  return decl[key] ?? card.def.word;
-}
-
-/**
- * Validiert die auf der Satzleiste liegenden Karten.
- * @param played Karten in Spielreihenfolge.
- * @param pool   Kartenpool zum Auflösen der defIds (Standard: echter Pool).
- */
+/** Prüft die Satzmuster, die mit den Karten im Spiel gebaut werden können. */
 export function validateSentence(
   played: CardInstance[],
   pool: ReadonlyMap<string, CardDef> = POOL_BY_ID,
@@ -74,225 +16,143 @@ export function validateSentence(
   const errors: string[] = [];
   const features = new Set<Feature>();
   let correctChips = 0;
-
   const finish = (): ValidationResult => ({
     valid: errors.length === 0,
     errors,
-    features: FEATURE_ORDER.filter((f) => features.has(f)),
+    features: FEATURE_ORDER.filter((feature) => features.has(feature)),
     correctChips,
   });
 
-  if (played.length === 0) {
+  if (!played.length) {
     errors.push('Lege zuerst Karten auf die Satzleiste.');
     return finish();
   }
 
-  // defIds auflösen
-  const cards: PlayedCard[] = [];
-  for (const instance of played) {
+  const cards = played.flatMap((instance) => {
     const def = pool.get(instance.defId);
-    if (!def) {
-      errors.push('Eine dieser Karten kenne ich noch nicht.');
-      return finish();
-    }
-    cards.push({ def, instance, isPlural: instance.isPlural === true });
-  }
-
-  const lastIndex = cards.length - 1;
-  const hasQuestionAtStart = cards[0]?.def.type === 'question';
-  if (hasQuestionAtStart) {
-    features.add('frage');
-  }
-
-  // Regel 1: Fragewort nur an Position 0
-  for (let i = 1; i < cards.length; i++) {
-    if (cards[i]?.def.type === 'question') {
-      errors.push('Das Fragewort steht nur ganz am Anfang des Satzes.');
-      break;
-    }
-  }
-
-  // Verbpositionen bestimmen: ein Verb am Satzende wird als
-  // Infinitiv bzw. Partizip II gewertet, wenn es ein weiteres Verb gibt.
-  const verbIndices: number[] = [];
-  cards.forEach((card, index) => {
-    if (isVerbLike(card.def)) {
-      verbIndices.push(index);
-    }
+    return def ? [{ def, instance }] : [];
   });
-
-  let endVerbIndex = -1;
-  if (verbIndices.length >= 2 && cards[lastIndex]?.def.type === 'verb') {
-    endVerbIndex = lastIndex;
-  }
-  const finiteCandidates = verbIndices.filter((i) => i !== endVerbIndex);
-  const finiteIndex = finiteCandidates.length > 0 ? (finiteCandidates[0] as number) : -1;
-
-  // Regel 2/6: finites Verb vorhanden und an der richtigen Position
-  if (finiteIndex === -1) {
-    errors.push('Dem Satz fehlt ein finites Verb (z. B. „ist“ oder „komme“).');
-  } else {
-    if (hasQuestionAtStart && finiteIndex !== 1) {
-      errors.push('Nach dem Fragewort muss das Verb an zweiter Stelle stehen.');
-    } else if (!hasQuestionAtStart && finiteIndex !== 0 && finiteIndex !== 1) {
-      errors.push('Das Verb muss an zweiter Stelle stehen.');
-    }
-    if (!hasQuestionAtStart && finiteIndex === 0) {
-      // Ja/Nein-Frage: finites Verb ganz vorne erlaubt
-      features.add('frage');
-    } else if (!hasQuestionAtStart) {
-      features.add('aussagesatz');
-    }
+  if (cards.length !== played.length) {
+    errors.push('Eine dieser Karten kenne ich noch nicht.');
+    return finish();
   }
 
-  // Regel 3: Modalverb ⇒ genau ein weiteres Verb als Infinitiv am Satzende
-  const hasModal = cards.some((card) => card.def.type === 'modal');
-  if (hasModal) {
-    const nonModalVerbIndices = verbIndices.filter(
-      (i) => cards[i]?.def.type === 'verb',
-    );
-    if (nonModalVerbIndices.length === 1 && nonModalVerbIndices[0] === lastIndex) {
+  const first = cards[0]!;
+  const last = cards.at(-1)!;
+  const question = first.def.type === 'question' || isVerb(first.def);
+  features.add(question ? 'frage' : 'aussagesatz');
+  if (cards.slice(1).some(({ def }) => def.type === 'question')) {
+    errors.push('Lege das Fragewort an den Satzanfang.');
+  }
+
+  const finiteIndex = isVerb(first.def) ? 0 : 1;
+  const finite = cards[finiteIndex];
+  if (!finite || !isVerb(finite.def) || finite.instance.chosenVerbForm) {
+    errors.push(question && first.def.type === 'question'
+      ? 'Direkt nach dem Fragewort brauchst du ein konjugiertes Verb.'
+      : 'Die konjugierte Verbform steht an erster Stelle in Ja/Nein-Fragen und sonst an zweiter Stelle.');
+    return finish();
+  }
+
+  const tail = cards.slice(finiteIndex + 1).filter(({ def }) => isVerb(def));
+  const end = tail[0];
+  const prefix = finite.def.conjugation?.prefix;
+  const particles = cards.filter(({ def }) => def.type === 'particle');
+  if (prefix && (last.def.word !== prefix || last.def.type !== 'particle' || particles.length !== 1)) {
+    errors.push(`Lege den Verbzusatz „${prefix}“ ans Satzende.`);
+  } else if (!prefix && particles.length) {
+    errors.push('Der Verbzusatz braucht ein passendes trennbares Verb.');
+  }
+
+  if (tail.length > 1 || (end && end !== last)) {
+    errors.push('Lege höchstens eine zweite Verbkarte und setze sie ans Satzende.');
+  } else if (finite.def.type === 'modal') {
+    if (end?.def.type !== 'verb' || end.instance.chosenVerbForm !== 'infinitive') {
+      errors.push('Wähle am Satzende das Infinitiv-Steinchen zum Modalverb.');
+    } else {
       features.add('modal');
-    } else {
-      errors.push(
-        'Nach dem Modalverb brauchst du genau ein Verb im Infinitiv am Satzende.',
-      );
+      correctChips++;
     }
-  }
-
-  // Regel 4: Hilfsverb (haben/sein) + Partizip II am Satzende ⇒ perfekt
-  if (finiteIndex >= 0 && endVerbIndex >= 0) {
-    const finiteDef = cards[finiteIndex]?.def;
-    const endDef = cards[endVerbIndex]?.def;
-    if (
-      finiteDef &&
-      endDef &&
-      finiteDef.canBeAuxiliary === true &&
-      endDef.conjugation?.aux !== undefined &&
-      endDef.conjugation.aux === finiteDef.word
-    ) {
+  } else if (end) {
+    if (end.instance.chosenVerbForm !== 'participle2') {
+      errors.push('Wähle für das Perfekt das Partizip-II-Steinchen am Satzende.');
+    } else if (!finite.def.canBeAuxiliary || end.def.conjugation?.aux !== finite.def.word) {
+      const aux = end.def.conjugation?.aux;
+      errors.push(`„${verbWord(end.def, 'participle2')}“ braucht im Perfekt das Hilfsverb „${aux ?? 'haben oder sein'}“.`);
+    } else {
       features.add('perfekt');
+      correctChips++;
     }
   }
 
-  // Regel 5: Präposition muss direkt von Nomen oder Pronomen gefolgt werden
-  let prepositionOk = false;
-  let prepositionFailed = false;
-  cards.forEach((card, index) => {
-    if (card.def.type !== 'preposition') {
-      return;
-    }
-    const next = cards[index + 1];
-    if (next && (next.def.type === 'noun' || next.def.type === 'pronoun')) {
-      prepositionOk = true;
+  const subjectIndex = isNominal(first.def) ? 0 : finiteIndex + 1;
+  const subject = cards[subjectIndex];
+  const hasSubject = subject !== undefined && isNominal(subject.def);
+  const subjectQuestion = !hasSubject && first.def.type === 'question' && ['wer', 'was'].includes(first.def.word);
+  if (subjectQuestion || hasSubject) {
+    const legacyPerson = subject?.def.forms?.length === 1 ? subject.def.forms[0] : undefined;
+    const required = subjectQuestion ? 'er' : subject.def.person
+      ?? (legacyPerson === 'ich' || legacyPerson === 'du' || legacyPerson === 'wir' ? legacyPerson : undefined)
+      ?? (subject.instance.isPlural ? 'sie' : 'er');
+    const form = finite.def.conjugation?.praesens[required] ?? finite.def.word;
+    if (!finite.instance.chosenPerson) {
+      errors.push(`Lege ein Person-Steinchen auf „${finite.def.word}“. Welche Präsensform passt zum Subjekt?`);
+    } else if (finite.instance.chosenPerson !== required) {
+      errors.push(`Zum Subjekt passt die Präsensform „${form}“. Verschiebe das Steinchen auf „${finite.def.word}“.`);
     } else {
-      prepositionFailed = true;
+      correctChips++;
     }
-  });
-  if (prepositionFailed) {
-    errors.push(
-      'Nach einer Präposition muss direkt ein Nomen oder Pronomen stehen (z. B. „in der Schule“).',
-    );
-  } else if (prepositionOk) {
-    features.add('praeposition');
+  } else {
+    errors.push('Ergänze ein Subjekt direkt vor oder direkt nach dem konjugierten Verb.');
   }
 
-  // Regel 6: Subjekt vorhanden (vor dem finiten Verb; bei Fragen auch dahinter)
-  const subjectIndex = cards.findIndex(
-    (card) => card.def.type === 'pronoun' || card.def.type === 'noun',
-  );
-  if (finiteIndex >= 0) {
-    const isQuestion = hasQuestionAtStart || finiteIndex === 0;
-    const hasSubject =
-      subjectIndex >= 0 && (subjectIndex < finiteIndex || isQuestion);
-    if (!hasSubject) {
-      errors.push(
-        'Dem Satz fehlt ein Subjekt (z. B. „ich“, „du“ oder ein Nomen).',
-      );
-    }
+  if (cards.some(({ def }, index) => def.type === 'preposition' && !isNominal(cards[index + 1]?.def ?? def))) {
+    errors.push('Lege nach der Präposition direkt ein Nomen oder Pronomen.');
   }
 
-  // Regel 7 + weitere Features
-  if (cards.some((card) => card.def.type === 'adjective')) {
-    features.add('adjektiv');
-  }
-  if (cards.some((card) => card.def.type === 'pronoun')) {
-    features.add('pronomen');
-  }
-  if (cards.some((card) => card.def.type === 'noun' && card.isPlural)) {
-    features.add('plural');
-  }
-
-  // Regel 8: Steinchen — richtige Formen wählen
-  // 8a) Person-Steinchen am finiten Verb (nur wenn ein Subjekt im Satz liegt)
-  const subject = subjectIndex >= 0 ? cards[subjectIndex] : undefined;
-  if (finiteIndex >= 0 && subject !== undefined) {
-    const finiteCard = cards[finiteIndex] as PlayedCard;
-    const required = subjectPerson(subject);
-    const chosen = finiteCard.instance.chosenPerson;
-    const forms = finiteCard.def.conjugation?.praesens;
-    const subjectWord = subject.def.word;
-    if (chosen === undefined) {
-      errors.push(
-        `Lege ein Person-Steinchen auf das Verb „${finiteCard.def.word}“: Welche Form passt zu „${subjectWord}“?`,
-      );
-    } else if (chosen !== required) {
-      const expected = forms?.[required] ?? required;
-      const chosenForm = forms?.[chosen] ?? chosen;
-      errors.push(
-        `Zu „${subjectWord}“ passt die Form „${expected}“ – nicht „${chosenForm}“. Verschiebe das Steinchen!`,
-      );
-    } else {
-      correctChips += 1;
-    }
-  }
-
-  // 8b) Kasus-Steinchen an Nomen
-  cards.forEach((card, index) => {
-    if (card.def.type !== 'noun') {
-      return;
-    }
-    let expected: GermanCase;
-    if (index === subjectIndex && finiteIndex >= 0) {
-      expected = 'Nominativ';
-    } else {
-      // Steht das Nomen (ggf. nach Adjektiven) hinter einer Präposition?
-      let prep: CardDef | undefined;
-      for (let j = index - 1; j >= 0; j--) {
-        const t = cards[j]?.def.type;
-        if (t === 'preposition') {
-          prep = cards[j]?.def;
-          break;
-        }
-        if (t !== 'adjective') {
-          break;
-        }
-      }
-      if (prep !== undefined) {
-        if (prep.case === 'Wechselpräposition') {
-          const movement = cards.some(
-            (c) => isVerbLike(c.def) && MOVEMENT_VERBS.has(c.def.word),
-          );
-          expected = movement ? 'Akkusativ' : 'Dativ';
-        } else {
-          expected = prep.case ?? 'Akkusativ';
-        }
-      } else {
-        // Objekt hinter dem Verb: A1-lenient Akkusativ
-        expected = 'Akkusativ';
+  cards.forEach(({ def, instance }, index) => {
+    if (def.type === 'adjective') {
+      features.add('adjektiv');
+      if (isNominal(cards[index + 1]?.def ?? def)) {
+        errors.push('Spiele Adjektive hier als Beschreibung nach „sein“, zum Beispiel „Der Tisch ist hoch“.');
       }
     }
-    const chosen = card.instance.chosenCase;
-    if (chosen === undefined) {
-      errors.push(
-        `Lege ein Kasus-Steinchen auf „${card.def.word}“: Welcher Fall passt hier (z. B. Nominativ „${declinedForm(card, 'Nominativ')}“ oder Akkusativ „${declinedForm(card, 'Akkusativ')}“)?`,
-      );
-    } else if (chosen !== expected) {
-      errors.push(
-        `„${card.def.word}“ braucht hier den ${expected} (z. B. „${declinedForm(card, expected)}“) – nicht den ${chosen}. Verschiebe das Steinchen!`,
-      );
+    if (def.type === 'preposition') features.add('praeposition');
+    if (!isNominal(def)) return;
+    if (def.type === 'pronoun') features.add('pronomen');
+    if (instance.isPlural) features.add('plural');
+
+    const prep = cards[index - 1]?.def;
+    const mainVerb = end?.def ?? finite.def;
+    const subjectOrPredicate = (index === subjectIndex && !subjectQuestion) || mainVerb.word === 'sein';
+    const expected: GermanCase = prep?.type === 'preposition'
+      ? prep.case === 'Wechselpräposition'
+        ? mainVerb.direction || ['gehen', 'kommen'].includes(mainVerb.word)
+          ? instance.chosenCase === 'Dativ' ? 'Dativ' : 'Akkusativ'
+          : 'Dativ'
+        : prep.case ?? 'Akkusativ'
+      : subjectOrPredicate
+        ? 'Nominativ'
+        : mainVerb.objectCase ?? 'Akkusativ';
+
+    // Alte Kartendefinitionen ohne Pronomenparadigma bleiben lesbar.
+    if (def.type === 'pronoun' && !def.pronouns && !instance.chosenCase) return;
+
+    const variants = Object.keys(def.pronouns ?? {});
+    const variant = instance.chosenPronoun ?? (variants.length === 1 ? variants[0] : undefined);
+    if (variants.length && (!variant || !variants.includes(variant))) {
+      errors.push(`Wähle auf „${def.word}“ ein Steinchen für das passende Pronomen.`);
+      return;
+    }
+    const form = def.type === 'pronoun'
+      ? pronounForm(def, expected, variant)
+      : nounForm(def, expected, !!instance.isPlural);
+    if (!instance.chosenCase) {
+      errors.push(`Lege ein Kasus-Steinchen auf „${def.word}“. Welcher Fall passt hier?`);
+    } else if (instance.chosenCase !== expected) {
+      errors.push(`Wähle auf „${cardWord(def, instance)}“ den Fall ${expected} („${form}“).`);
     } else {
-      correctChips += 1;
+      correctChips++;
     }
   });
 

@@ -29,12 +29,12 @@ export function StoryScreen({
   const activeLesson = activeLessonId ? getLesson(activeLessonId) : undefined;
 
   if (activeLesson) {
-    const index = STORY_LESSONS.findIndex((l) => l.id === activeLesson.id);
-    const following = STORY_LESSONS[index + 1];
+    const following = nextLesson(new Set([...completedSet, activeLesson.id]));
     return (
       <LessonRunner
         key={activeLesson.id}
         lesson={activeLesson}
+        completed={completedSet.has(activeLesson.id)}
         onComplete={onComplete}
         onExit={() => setActiveLessonId(null)}
         onNext={following ? () => setActiveLessonId(following.id) : null}
@@ -47,15 +47,20 @@ export function StoryScreen({
 
   return (
     <div className="story-screen">
+      <header className="story-intro">
+        <p>DEUTSCH · A1</p>
+        <h1>Dein erster Tag</h1>
+        <p>Stell dich vor, finde dich im Alltag zurecht und erzähle, was gestern passiert ist.</p>
+      </header>
       <p className="story-progress">
         {completedSet.size} / {STORY_LESSONS.length} Lektionen abgeschlossen
       </p>
       {STORY_CHAPTERS.map((chapter) => (
         <section key={chapter.id} className="story-chapter">
           <h2 className="story-chapter-title">
-            Kapitel {chapter.id}: {chapter.title}
+            <span className="story-chapter-number">{chapter.id}</span> <span lang="en">{chapter.title}</span>
           </h2>
-          <p className="story-chapter-sub">{chapter.subtitle}</p>
+          <p className="story-chapter-sub" lang="en">{chapter.subtitle}</p>
           <div className="story-lessons">
             {STORY_LESSONS.filter(
               (lesson) => lesson.chapter === chapter.id,
@@ -75,7 +80,7 @@ export function StoryScreen({
                   <span className="story-lesson-status">
                     {done ? '✅' : unlocked ? '▶' : '🔒'}
                   </span>
-                  <span className="story-lesson-text">
+                  <span className="story-lesson-text" lang="en">
                     <span className="story-lesson-title">{lesson.title}</span>
                     <span className="story-lesson-goal">{lesson.goal}</span>
                   </span>

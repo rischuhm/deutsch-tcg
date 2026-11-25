@@ -3,13 +3,8 @@ import { useFrame } from '@react-three/fiber';
 import { RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 import type { CardInstance } from '../../game';
-import { getCard } from '../../game';
-import {
-  CARD_H,
-  CARD_W,
-  declinedFormLabel,
-  personFormLabel,
-} from '../../lib/ui';
+import { cardWord, getCard, hasFormChip } from '../../game';
+import { CARD_H, CARD_W } from '../../lib/ui';
 import { useCardTexture } from '../../hooks/useCardTexture';
 import { useChipTexture } from '../../hooks/useChipTexture';
 
@@ -42,19 +37,8 @@ export function PlayingCard({
   const [hovered, setHovered] = useState(false);
   const texture = useCardTexture(instance.defId);
 
-  // Steinchen-Label: Person am Verb → konkrete Verbform („kommst"),
-  // Kasus am Nomen → deklinierte Form („den Tisch").
   const def = getCard(instance.defId);
-  let chipLabel: string | null = null;
-  if (instance.chosenPerson !== undefined && def?.conjugation) {
-    chipLabel = personFormLabel(def, instance.chosenPerson);
-  } else if (instance.chosenCase !== undefined && def) {
-    chipLabel = declinedFormLabel(
-      def,
-      instance.chosenCase,
-      instance.isPlural === true,
-    );
-  }
+  const chipLabel = def && hasFormChip(instance) ? cardWord(def, instance) : null;
   const chipTexture = useChipTexture(chipLabel);
 
   useFrame(({ clock }, delta) => {

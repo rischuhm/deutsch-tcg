@@ -1,6 +1,6 @@
 /**
  * SatzMeister — zentrale Typen des Spielkerns.
- * Source of Truth für das Datenmodell: SPEC.md / src/game/data/cards.json
+ * Kartendaten: src/game/data/cards.json
  */
 
 export type CardType =
@@ -10,7 +10,9 @@ export type CardType =
   | 'pronoun'
   | 'question'
   | 'preposition'
-  | 'adjective';
+  | 'adjective'
+  | 'adverb'
+  | 'particle';
 
 export type Rarity = 'common' | 'uncommon' | 'rare';
 
@@ -43,7 +45,7 @@ export interface CardConjugation {
   partizip1: string;
   partizip2: string;
   aux?: Auxiliary;
-  separable?: boolean;
+  prefix?: string;
 }
 
 export type PrepositionCase = 'Akkusativ' | 'Dativ' | 'Wechselpräposition';
@@ -60,14 +62,20 @@ export interface CardDef {
   conjugation?: CardConjugation; // verb + modal
   canBeAuxiliary?: boolean; // haben/sein: Vollverb ODER Hilfsverb
   case?: PrepositionCase; // preposition
-  explanation?: string; // Fragewort: kurze Erklärung
-  forms?: string[]; // pronoun: z. B. ["er","sie","es"]
+  explanation?: string; // Gebrauchshinweis
+  forms?: string[]; // ältere Kartendefinitionen
+  person?: Person;
+  pronouns?: Record<string, Partial<Record<GermanCase, string>>>;
+  translation?: string;
+  comparison?: [string, string];
+  objectCase?: 'Akkusativ' | 'Dativ';
+  direction?: boolean;
 }
 
 export interface CardInstance {
   instanceId: string;
   defId: string;
-  /** true, wenn die Karte über die Plural-Schmiede als Pluralform gespielt wird. */
+  /** Pluralform aus der Sammlung oder aus einer Lektionshand. */
   isPlural?: boolean;
   /**
    * Person-Steinchen auf einer Verb-/Modalverbkarte: die gewählte
@@ -76,11 +84,15 @@ export interface CardInstance {
    */
   chosenPerson?: Person;
   /**
-   * Kasus-Steinchen auf einer Nomenkarte: der gewählte Fall
+   * Kasus-Steinchen auf einem Nomen oder Pronomen: der gewählte Fall
    * (z. B. Akkusativ ⇒ „den Tisch“).
    */
   chosenCase?: GermanCase;
+  chosenPronoun?: string;
+  chosenVerbForm?: VerbForm;
 }
+
+export type VerbForm = 'infinitive' | 'participle1' | 'participle2';
 
 /** Personen für das Person-Steinchen (Verbkonjugation). */
 export type Person = 'ich' | 'du' | 'er' | 'wir' | 'ihr' | 'sie';
@@ -103,8 +115,7 @@ export interface ValidationResult {
   errors: string[];
   features: Feature[];
   /**
-   * Anzahl korrekt platzierter Steinchen (Person am finiten Verb,
-   * Kasus an Nomen). Grundlage für den Steinchen-Bonus im Scoring.
+   * Anzahl korrekt platzierter Form-Steinchen. Grundlage für den Bonus.
    */
   correctChips: number;
 }

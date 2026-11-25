@@ -256,7 +256,7 @@ describe('validateSentence', () => {
       [
         inst('pron.ich'),
         inst('modal.koennen', false, { chosenPerson: 'ich' }),
-        inst('verb.kommen'),
+        { ...inst('verb.kommen'), chosenVerbForm: 'infinitive' },
       ],
       FIXTURE_POOL,
     );
@@ -270,7 +270,7 @@ describe('validateSentence', () => {
       [
         inst('pron.ich'),
         inst('verb.sein', false, { chosenPerson: 'ich' }),
-        inst('verb.kommen'),
+        { ...inst('verb.kommen'), chosenVerbForm: 'participle2' },
       ],
       FIXTURE_POOL,
     );
@@ -278,18 +278,38 @@ describe('validateSentence', () => {
     expect(result.features).toContain('perfekt');
   });
 
-  it('gibt kein perfekt, wenn das Hilfsverb nicht zum Partizip passt', () => {
+  it('lehnt ein unpassendes Perfekt-Hilfsverb ab', () => {
     // „Ich habe gekommen“ — kommen braucht sein, nicht haben
     const result = validateSentence(
       [
         inst('pron.ich'),
         inst('verb.haben', false, { chosenPerson: 'ich' }),
-        inst('verb.kommen'),
+        { ...inst('verb.kommen'), chosenVerbForm: 'participle2' },
       ],
       FIXTURE_POOL,
     );
-    expect(result.valid).toBe(true);
+    expect(result.valid).toBe(false);
+    expect(result.errors.join(' ')).toContain('„sein“');
     expect(result.features).not.toContain('perfekt');
+  });
+
+  it('verlangt Partizip II auch bei passendem Hilfsverb', () => {
+    const result = validateSentence([
+      inst('pron.ich', false, { chosenCase: 'Nominativ' }),
+      inst('verb.sein', false, { chosenPerson: 'ich' }),
+      { ...inst('verb.kommen'), chosenVerbForm: 'participle1' },
+    ]);
+    expect(result.valid).toBe(false);
+    expect(result.errors.join(' ')).toContain('Partizip-II-Steinchen');
+  });
+
+  it('ordnet „wer“ in „Wer bist du?“ dem Fragesatz mit Subjekt „du“ zu', () => {
+    const result = validateSentence([
+      inst('question.wer'),
+      inst('verb.sein', false, { chosenPerson: 'du' }),
+      inst('pron.du', false, { chosenCase: 'Nominativ' }),
+    ]);
+    expect(result.errors).toEqual([]);
   });
 
   it('lehnt Präposition ohne folgendes Nomen/Pronomen ab', () => {
@@ -393,7 +413,7 @@ describe('validateSentence', () => {
     expect(result.errors.some((e) => e.includes('Nominativ'))).toBe(true);
   });
 
-  it('Wechselpräposition ohne Bewegung ⇒ Dativ, mit Bewegung ⇒ Akkusativ', () => {
+  it('Wechselpräposition unterscheidet Orte und mögliche Richtungsangaben', () => {
     const dativ = validateSentence(
       [
         inst('pron.ich'),
@@ -417,8 +437,8 @@ describe('validateSentence', () => {
     );
     expect(akkusativ.valid, JSON.stringify(akkusativ.errors)).toBe(true);
 
-    // Dativ trotz Bewegung ⇒ Fehler
-    const falsch = validateSentence(
+    // Bewegung kann innerhalb eines Ortes stattfinden.
+    const bewegungAmOrt = validateSentence(
       [
         inst('pron.ich'),
         inst('verb.kommen', false, { chosenPerson: 'ich' }),
@@ -427,8 +447,7 @@ describe('validateSentence', () => {
       ],
       FIXTURE_POOL,
     );
-    expect(falsch.valid).toBe(false);
-    expect(falsch.errors.some((e) => e.includes('Akkusativ'))).toBe(true);
+    expect(bewegungAmOrt.valid).toBe(true);
   });
 
   it('zählt korrekte Steinchen in correctChips', () => {
@@ -622,7 +641,7 @@ describe('scoreSentence', () => {
       [
         inst('pron.ich'),
         inst('modal.koennen', false, { chosenPerson: 'ich' }),
-        inst('verb.kommen'),
+        { ...inst('verb.kommen'), chosenVerbForm: 'infinitive' },
       ],
       FIXTURE_POOL,
     );
@@ -644,12 +663,12 @@ describe('scoreSentence', () => {
       [
         inst('pron.ich'),
         inst('verb.sein', false, { chosenPerson: 'ich' }),
-        inst('verb.kommen'),
+        { ...inst('verb.kommen'), chosenVerbForm: 'participle2' },
       ],
       FIXTURE_POOL,
     );
-    // Basis 10 + Länge 2 + perfekt 10 + pronomen 2 + 1 Steinchen × 3 = 27
-    expect(scoreSentence(perfekt, 3).total).toBe(27);
+    // Basis 10 + Länge 2 + perfekt 10 + pronomen 2 + 2 Steinchen × 3 = 30
+    expect(scoreSentence(perfekt, 3).total).toBe(30);
   });
 
   it('Längenbonus wächst ab der 3. Karte um 2 pro Karte', () => {

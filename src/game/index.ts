@@ -11,3 +11,5 @@ export * from './validator';
 export * from './scoring';
 export * from './suggest';
 export * from './story';
+
+export * from './forms';

@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
-import type { CardDef, CardType, Collection } from '../game';
+import type { CardDef, CardInstance, CardType, Collection } from '../game';
 import { canCraftPlural, getCard } from '../game';
-import { RARITY_LABELS, TYPE_LABELS } from '../lib/ui';
+import { displayWord, RARITY_LABELS, TYPE_LABELS } from '../lib/ui';
 import { CardImage } from './CardImage';
+import { InspectOverlay } from './InspectOverlay';
 
 interface CollectionScreenProps {
   collection: Collection;
@@ -21,6 +22,8 @@ const FILTER_ORDER: Filter[] = [
   'question',
   'preposition',
   'adjective',
+  'adverb',
+  'particle',
 ];
 
 interface OwnedEntry {
@@ -34,6 +37,7 @@ export function CollectionScreen({
   onCraftPlural,
 }: CollectionScreenProps) {
   const [filter, setFilter] = useState<Filter>('alle');
+  const [inspect, setInspect] = useState<CardInstance | null>(null);
 
   const owned = useMemo<OwnedEntry[]>(() => {
     const entries: OwnedEntry[] = [];
@@ -102,8 +106,10 @@ export function CollectionScreen({
             {filtered.map(({ def, count }) => (
               <div className="collection-card" key={def.id}>
                 <span className="count-badge">×{count}</span>
-                <CardImage defId={def.id} />
-                <span className="card-word">{def.word}</span>
+                <button className="collection-inspect" onClick={() => setInspect({ instanceId: def.id, defId: def.id })}>
+                  <CardImage defId={def.id} decorative />
+                  <span className="card-word">{displayWord({ instanceId: def.id, defId: def.id })}</span>
+                </button>
                 <span className="card-type">
                   {TYPE_LABELS[def.type]} · {RARITY_LABELS[def.rarity]}
                 </span>
@@ -121,8 +127,10 @@ export function CollectionScreen({
               <div className="collection-card plural" key={`plural:${def.id}`}>
                 <span className="plural-badge">Plural</span>
                 <span className="count-badge">×{count}</span>
-                <CardImage defId={def.id} />
-                <span className="card-word">{def.plural ?? def.word}</span>
+                <button className="collection-inspect" onClick={() => setInspect({ instanceId: def.id, defId: def.id, isPlural: true })}>
+                  <CardImage defId={def.id} decorative />
+                  <span className="card-word">die {def.plural ?? def.word}</span>
+                </button>
                 <span className="card-type">
                   {TYPE_LABELS[def.type]} · geschmiedet
                 </span>
@@ -131,6 +139,7 @@ export function CollectionScreen({
           </div>
         </>
       )}
+      {inspect && <InspectOverlay instance={inspect} source="collection" onClose={() => setInspect(null)} />}
     </div>
   );
 }

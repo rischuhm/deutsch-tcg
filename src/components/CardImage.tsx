@@ -4,17 +4,18 @@ import { TYPE_COLORS, cardFaceUrl } from '../lib/ui';
 
 interface CardImageProps {
   defId: string;
+  decorative?: boolean;
 }
 
 /** Kartenbild mit Fallback-Kachel, falls das PNG (noch) fehlt. */
-export function CardImage({ defId }: CardImageProps) {
+export function CardImage({ defId, decorative = false }: CardImageProps) {
   const [failed, setFailed] = useState(false);
   const def = getCard(defId);
 
   if (failed || !def) {
     const color = def ? TYPE_COLORS[def.type] : '#334155';
     return (
-      <div className="card-img-fallback" style={{ backgroundColor: color }}>
+      <div className="card-img-fallback" aria-hidden={decorative || undefined} style={{ backgroundColor: color }}>
         {def?.word ?? defId}
       </div>
     );
@@ -23,7 +24,7 @@ export function CardImage({ defId }: CardImageProps) {
   return (
     <img
       src={cardFaceUrl(defId)}
-      alt={def.word}
+      alt={decorative ? '' : def.word}
       loading="lazy"
       draggable={false}
       onError={() => setFailed(true)}

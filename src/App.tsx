@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import type { Collection } from './game';
 import {
   addStarterDeck,
@@ -11,14 +11,13 @@ import { STORAGE_KEYS } from './lib/ui';
 import { TabBar } from './components/TabBar';
 import type { TabId } from './components/TabBar';
 import { TableScreen } from './components/TableScreen';
-import { BoosterScreen } from './components/BoosterScreen';
 import { CollectionScreen } from './components/CollectionScreen';
 import { StoryScreen } from './components/StoryScreen';
 import { Onboarding } from './components/Onboarding';
 
-export default function App() {
-  const [tab, setTab] = useState<TabId>('tisch');
+const BoosterScreen = lazy(() => import('./components/BoosterScreen').then(({ BoosterScreen }) => ({ default: BoosterScreen })));
 
+export default function App() {
   // Beim ersten Start (kein gespeicherter Wert) wird das Starter-Deck gegeben.
   const [collection, setCollection] = usePersistentState<Collection>(
     STORAGE_KEYS.collection,
@@ -40,6 +39,7 @@ export default function App() {
     STORAGE_KEYS.onboarded,
     () => false,
   );
+  const [tab, setTab] = useState<TabId>(() => onboarded ? 'tisch' : 'story');
   const [storyCompleted, setStoryCompleted] = usePersistentState<string[]>(
     STORAGE_KEYS.storyCompleted,
     () => [],
@@ -87,10 +87,9 @@ export default function App() {
           />
         )}
         {tab === 'booster' && (
-          <BoosterScreen
-            lastBooster={lastBooster}
-            onCollect={handleCollectBooster}
-          />
+          <Suspense fallback={<p className="empty-hint">Booster lädt …</p>}>
+            <BoosterScreen lastBooster={lastBooster} onCollect={handleCollectBooster} />
+          </Suspense>
         )}
         {tab === 'sammlung' && (
           <CollectionScreen

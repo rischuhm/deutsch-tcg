@@ -9,6 +9,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html}', 'icons/*.{svg,png}', 'cards/png/*.png'],
+      },
       manifest: {
         name: 'SatzMeister — Deutsch-TCG',
         short_name: 'SatzMeister',
