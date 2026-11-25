@@ -18,9 +18,10 @@ interface LessonRunnerProps {
   onNext: (() => void) | null;
   onAddPoints: (points: number) => void;
   completed: boolean;
+  completesLevel: boolean;
 }
 
-export function LessonRunner({ lesson, onComplete, onExit, onNext, onAddPoints, completed }: LessonRunnerProps) {
+export function LessonRunner({ lesson, onComplete, onExit, onNext, onAddPoints, completed, completesLevel }: LessonRunnerProps) {
   const cards = useSentenceCards(lesson.handCards.map((defId, index) => ({
     instanceId: `${lesson.id}#${index}`,
     defId,
@@ -75,7 +76,7 @@ export function LessonRunner({ lesson, onComplete, onExit, onNext, onAddPoints, 
               {points > 0 && <p className="breakdown-total">+{points} Punkte</p>}
               {onNext
                 ? <button className="btn result-close" onClick={onNext} autoFocus>Nächste Lektion</button>
-                : <p className="lesson-done-note">Du hast den A1-Lernpfad geschafft!</p>}
+                : completesLevel && <p className="lesson-done-note">Du hast den A1-Lernpfad geschafft!</p>}
               <button className="btn btn-secondary result-close" onClick={onExit} autoFocus={!onNext}>Zur Übersicht</button>
             </>
           ) : (

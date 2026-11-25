@@ -1,5 +1,5 @@
 import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { PointerEvent, ReactNode } from 'react';
 import type { CardInstance, CardType } from '../game';
 import { getCard, hasFormChip } from '../game';
 import type { useSentenceCards } from '../hooks/useSentenceCards';
@@ -21,6 +21,8 @@ export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3
   const [draggedId, setDraggedId] = useState<string | null>(null);
   const [dropTarget, setDropTarget] = useState<string | null>(null);
   const focusAfterMove = useRef<HTMLButtonElement | null>(null);
+  const touchDrag = useRef<{ pointer: number; id: string; x: number; y: number; active: boolean } | null>(null);
+  const suppressTouchClick = useRef(false);
   const { hand, played, inspect, setInspect } = cards;
 
   useLayoutEffect(() => {
@@ -31,6 +33,24 @@ export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3
   const endDrag = () => {
     setDraggedId(null);
     setDropTarget(null);
+  };
+
+  const targetAt = (event: PointerEvent) =>
+    document.elementFromPoint(event.clientX, event.clientY)
+      ?.closest<HTMLElement>('.played-card-slot')?.dataset.cardId;
+
+  const endTouchDrag = (event: PointerEvent<HTMLDivElement>, drop: boolean) => {
+    const drag = touchDrag.current;
+    if (!drag || drag.pointer !== event.pointerId) return;
+    touchDrag.current = null;
+    if (!drag.active) return;
+    suppressTouchClick.current = true;
+    event.currentTarget.style.removeProperty('--touch-x');
+    event.currentTarget.style.removeProperty('--touch-y');
+    delete event.currentTarget.dataset.touchDragging;
+    const target = drop ? targetAt(event) : undefined;
+    if (target) cards.movePlayed(drag.id, target);
+    endDrag();
   };
 
   const renderCard = (instance: CardInstance, source: 'hand' | 'played') => {
@@ -67,7 +87,8 @@ export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3
               const id = instance.instanceId;
               const word = displayWord(instance);
               return (
-                <li key={id} className="played-card-slot" data-drop-target={dropTarget === id || undefined}
+                <li key={id} className="played-card-slot" data-card-id={id}
+                  data-drop-target={dropTarget === id || undefined} data-dragging={draggedId === id || undefined}
                   onDragOver={(event) => {
                     if (!draggedId || draggedId === id) return;
                     event.preventDefault();
@@ -86,7 +107,40 @@ export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3
                     endDrag();
                   }}>
                   <div className="played-card-face" draggable={played.length > 1}
+                    onPointerDown={(event) => {
+                      suppressTouchClick.current = false;
+                      if (event.pointerType !== 'touch' || !event.isPrimary || played.length < 2) return;
+                      touchDrag.current = { pointer: event.pointerId, id, x: event.clientX, y: event.clientY, active: false };
+                    }}
+                    onPointerMove={(event) => {
+                      const drag = touchDrag.current;
+                      if (!drag || drag.pointer !== event.pointerId) return;
+                      const dx = event.clientX - drag.x;
+                      const dy = event.clientY - drag.y;
+                      if (!drag.active) {
+                        if (Math.hypot(dx, dy) < 9) return;
+                        drag.active = true;
+                        event.currentTarget.dataset.touchDragging = 'true';
+                        setDraggedId(id);
+                      }
+                      event.currentTarget.style.setProperty('--touch-x', `${dx}px`);
+                      event.currentTarget.style.setProperty('--touch-y', `${dy}px`);
+                      const target = targetAt(event);
+                      setDropTarget(target !== id ? target ?? null : null);
+                    }}
+                    onPointerUp={(event) => endTouchDrag(event, true)}
+                    onPointerCancel={(event) => endTouchDrag(event, false)}
+                    onLostPointerCapture={(event) => endTouchDrag(event, false)}
+                    onClickCapture={(event) => {
+                      if (!suppressTouchClick.current || event.detail === 0) return;
+                      suppressTouchClick.current = false;
+                      event.stopPropagation();
+                    }}
                     onDragStart={(event) => {
+                      if (touchDrag.current) {
+                        event.preventDefault();
+                        return;
+                      }
                       event.dataTransfer.setData('text/plain', word);
                       event.dataTransfer.effectAllowed = 'move';
                       setDraggedId(id);
