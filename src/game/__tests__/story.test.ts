@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { CardInstance } from '../index';
-import { validateSentence } from '../index';
+import { hasFormChip, validateSentence } from '../index';
 import {
   STORY_CHAPTERS,
   STORY_LESSONS,
@@ -24,6 +24,7 @@ function solvedPlayed(lessonId: string): CardInstance[] {
       isPlural: lesson.pluralCards?.includes(defId),
       chosenPronoun: chip?.pronoun,
       chosenVerbForm: chip?.verbForm,
+      chosenAdjectiveDegree: chip?.adjectiveDegree,
       ...(chip?.person ? { chosenPerson: chip.person } : {}),
       ...(chip?.case ? { chosenCase: chip.case } : {}),
     };
@@ -74,6 +75,22 @@ describe('checkLesson', () => {
     const result = validateSentence(solvedPlayed(lessonId));
     expect(result.errors, result.errors.join(' | ')).toHaveLength(0);
     expect(result.valid).toBe(true);
+  });
+
+  it.each([
+    ['comparative', 'Der Tisch ist höher.'],
+    ['superlative', 'Der Tisch ist am höchsten.'],
+  ] as const)('zeigt %s im Satz, zählt den Chip und prüft die geforderte Steigerungsform', (degree, sentence) => {
+    const lesson = getLesson('l09-adjectives')!;
+    const played = solvedPlayed(lesson.id);
+    played[2] = { ...played[2]!, chosenAdjectiveDegree: degree };
+    expect(hasFormChip(played[2])).toBe(true);
+    expect(sentenceText(played)).toBe(sentence);
+    expect(validateSentence(played)).toMatchObject({ valid: true, correctChips: 3 });
+    expect(checkLesson(lesson, played)).toEqual({
+      complete: false,
+      problems: ['Setze das Steinchen auf „hoch“ bei „Grundform“.'],
+    });
   });
 
   it('falsches Person-Steinchen → nicht komplett', () => {

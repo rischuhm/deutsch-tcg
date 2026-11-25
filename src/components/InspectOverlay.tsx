@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { CardInstance, GermanCase, Person, VerbForm } from '../game';
+import type { AdjectiveDegree, CardInstance, GermanCase, Person, VerbForm } from '../game';
 import {
-  CASE_ORDER, PERSON_LABELS, PERSON_ORDER, VERB_FORMS, getCard, nounForm, pronounForm, verbWord,
+  ADJECTIVE_DEGREES, adjectiveWord, CASE_ORDER, PERSON_LABELS, PERSON_ORDER, VERB_FORMS, getCard, nounForm, pronounForm, verbWord,
 } from '../game';
 import { TYPE_COLORS, TYPE_LABELS, displayWord, iconUrl } from '../lib/ui';
 
@@ -120,11 +120,13 @@ export function InspectOverlay({ instance, source, playedFull, onPlay, onReturn,
     </section>;
   } else if (def.comparison) {
     details = <>
-      <h3>Steigerung</h3>
+      <h3>{isReference ? 'Steigerung' : 'Steigerung · Form-Steinchen'}</h3>
       <div className="chip-grid">
-        <FormOption label="Grundform" word={def.word} active={false} />
-        <FormOption label="Komparativ" word={def.comparison[0]} active={false} />
-        <FormOption label="Superlativ" word={def.comparison[1]} active={false} />
+        {(Object.keys(ADJECTIVE_DEGREES) as AdjectiveDegree[]).map((degree) =>
+          showForm(ADJECTIVE_DEGREES[degree], adjectiveWord(def, degree),
+            draft.chosenAdjectiveDegree === degree, () => update({
+              chosenAdjectiveDegree: draft.chosenAdjectiveDegree === degree ? undefined : degree,
+            })))}
       </div>
     </>;
   } else {

@@ -115,6 +115,8 @@ export function validateSentence(
       features.add('adjektiv');
       if (isNominal(cards[index + 1]?.def ?? def)) {
         errors.push('Spiele Adjektive hier als Beschreibung nach „sein“, zum Beispiel „Der Tisch ist hoch“.');
+      } else if (def.comparison && instance.chosenAdjectiveDegree) {
+        correctChips++;
       }
     }
     if (def.type === 'preposition') features.add('praeposition');

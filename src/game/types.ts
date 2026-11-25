@@ -90,7 +90,10 @@ export interface CardInstance {
   chosenCase?: GermanCase;
   chosenPronoun?: string;
   chosenVerbForm?: VerbForm;
+  chosenAdjectiveDegree?: AdjectiveDegree;
 }
+
+export type AdjectiveDegree = 'positive' | 'comparative' | 'superlative';
 
 export type VerbForm = 'infinitive' | 'participle1' | 'participle2';
 

@@ -314,7 +314,7 @@
       "title": "Describe what you see",
       "goal": "You are looking at classroom furniture. Say “The table is high”.",
       "explanation": [
-        "After «sein», an adjective stays in its base form. Compare «Das Buch ist neu.» and «Die Bücher sind neu.»"
+        "After «sein», an adjective needs no ending for gender or number. Compare «Das Buch ist neu.» and «Die Bücher sind neu.» For a description without a comparison, place the chip on «Grundform»."
       ],
       "handCards": [
         "noun.tisch",
@@ -333,6 +333,9 @@
         },
         "1": {
           "person": "er"
+        },
+        "2": {
+          "adjectiveDegree": "positive"
         }
       },
       "requireValidSentence": true,
@@ -345,7 +348,7 @@
       "goal": "The classroom has new books. Say “The books are new”.",
       "explanation": [
         "The nominative plural article is «die». Learn each noun with its plural: «das Kind» becomes «die Kinder».",
-        "A plural subject takes the «sie / Sie» line on the verb card. Your hand contains a ready-made plural card."
+        "A plural subject takes the «sie / Sie» line on the verb card. Your hand contains a ready-made plural card. Choose «Grundform» on the adjective."
       ],
       "handCards": [
         "adj.klein",
@@ -366,6 +369,9 @@
         },
         "1": {
           "person": "sie"
+        },
+        "2": {
+          "adjectiveDegree": "positive"
         }
       },
       "requireValidSentence": true,

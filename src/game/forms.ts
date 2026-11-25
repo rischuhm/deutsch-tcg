@@ -1,4 +1,4 @@
-import type { CardDef, CardInstance, GermanCase, Person, VerbForm } from './types';
+import type { AdjectiveDegree, CardDef, CardInstance, GermanCase, Person, VerbForm } from './types';
 
 export const PERSON_ORDER: Person[] = ['ich', 'du', 'er', 'wir', 'ihr', 'sie'];
 export const PERSON_LABELS: Record<Person, string> = {
@@ -7,6 +7,9 @@ export const PERSON_LABELS: Record<Person, string> = {
 export const CASE_ORDER: GermanCase[] = ['Nominativ', 'Akkusativ', 'Dativ', 'Genitiv'];
 export const VERB_FORMS: Record<VerbForm, string> = {
   infinitive: 'Infinitiv', participle1: 'Partizip I', participle2: 'Partizip II',
+};
+export const ADJECTIVE_DEGREES: Record<AdjectiveDegree, string> = {
+  positive: 'Grundform', comparative: 'Komparativ', superlative: 'Superlativ',
 };
 const CASE_PREFIX = { Nominativ: 'nom', Akkusativ: 'akk', Dativ: 'dat', Genitiv: 'gen' } as const;
 
@@ -25,6 +28,12 @@ export function verbWord(def: CardDef, form: VerbForm): string {
   return def.word;
 }
 
+export function adjectiveWord(def: CardDef, degree: AdjectiveDegree): string {
+  if (degree === 'comparative') return def.comparison?.[0] ?? def.word;
+  if (degree === 'superlative') return def.comparison?.[1] ?? def.word;
+  return def.word;
+}
+
 /** Die tatsächlich gelegte Form, für Satzleiste, Steinchen und Rückmeldung. */
 export function cardWord(def: CardDef, instance: CardInstance): string {
   if (def.type === 'noun') return nounForm(def, instance.chosenCase ?? 'Nominativ', !!instance.isPlural);
@@ -32,10 +41,13 @@ export function cardWord(def: CardDef, instance: CardInstance): string {
     return pronounForm(def, instance.chosenCase, instance.chosenPronoun);
   }
   if (instance.chosenPerson && def.conjugation) return def.conjugation.praesens[instance.chosenPerson];
+  if (def.type === 'adjective' && instance.chosenAdjectiveDegree) {
+    return adjectiveWord(def, instance.chosenAdjectiveDegree);
+  }
   if (instance.chosenVerbForm) return verbWord(def, instance.chosenVerbForm);
   return def.word;
 }
 
 export function hasFormChip(instance: CardInstance): boolean {
-  return !!(instance.chosenCase || instance.chosenPerson || instance.chosenVerbForm);
+  return !!(instance.chosenCase || instance.chosenPerson || instance.chosenVerbForm || instance.chosenAdjectiveDegree);
 }

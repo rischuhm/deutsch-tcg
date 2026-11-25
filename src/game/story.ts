@@ -1,6 +1,6 @@
-import type { CardInstance, GermanCase, Person, VerbForm } from './types';
+import type { AdjectiveDegree, CardInstance, GermanCase, Person, VerbForm } from './types';
 import { POOL_BY_ID } from './cards';
-import { PERSON_LABELS, VERB_FORMS } from './forms';
+import { ADJECTIVE_DEGREES, PERSON_LABELS, VERB_FORMS } from './forms';
 import { validateSentence } from './validator';
 import storyData from './data/story.json';
 
@@ -15,6 +15,7 @@ export interface StoryChipRequirement {
   case?: GermanCase;
   pronoun?: string;
   verbForm?: VerbForm;
+  adjectiveDegree?: AdjectiveDegree;
 }
 
 export interface StoryLesson {
@@ -82,6 +83,9 @@ export function checkLesson(lesson: StoryLesson, played: CardInstance[]): StoryC
     }
     if (chip.verbForm && chip.verbForm !== card.chosenVerbForm) {
       problems.push(`Setze das Steinchen auf „${word}“ bei „${VERB_FORMS[chip.verbForm]}“.`);
+    }
+    if (chip.adjectiveDegree && chip.adjectiveDegree !== card.chosenAdjectiveDegree) {
+      problems.push(`Setze das Steinchen auf „${word}“ bei „${ADJECTIVE_DEGREES[chip.adjectiveDegree]}“.`);
     }
   }
 
