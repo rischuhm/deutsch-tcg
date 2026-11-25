@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { CardInstance, CardType } from '../game';
 import { getCard, hasFormChip } from '../game';
@@ -18,7 +18,20 @@ interface SentenceBoardProps {
 
 export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3D = false }: SentenceBoardProps) {
   const [show3D, setShow3D] = useState(false);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dropTarget, setDropTarget] = useState<string | null>(null);
+  const focusAfterMove = useRef<HTMLButtonElement | null>(null);
   const { hand, played, inspect, setInspect } = cards;
+
+  useLayoutEffect(() => {
+    focusAfterMove.current?.focus({ preventScroll: true });
+    focusAfterMove.current = null;
+  }, [played]);
+
+  const endDrag = () => {
+    setDraggedId(null);
+    setDropTarget(null);
+  };
 
   const renderCard = (instance: CardInstance, source: 'hand' | 'played') => {
     const def = getCard(instance.defId);
@@ -48,9 +61,58 @@ export function SentenceBoard({ cards, actions, hint, isSentence = true, enable3
           </button>}
         </div>
         <p className="board-preview" aria-live="polite">{sentenceText(played, isSentence) || 'Wähle eine Karte aus deiner Hand.'}</p>
-        {played.length > 0 && <div className="board-row" aria-label="Gelegte Karten">
-          {played.map((instance) => renderCard(instance, 'played'))}
-        </div>}
+        {played.length > 0 && (
+          <ol className="board-row played-cards" aria-label="Gelegte Karten">
+            {played.map((instance, index) => {
+              const id = instance.instanceId;
+              const word = displayWord(instance);
+              return (
+                <li key={id} className="played-card-slot" data-drop-target={dropTarget === id || undefined}
+                  onDragOver={(event) => {
+                    if (!draggedId || draggedId === id) return;
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = 'move';
+                    setDropTarget(id);
+                  }}
+                  onDragLeave={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                      setDropTarget((target) => target === id ? null : target);
+                    }
+                  }}
+                  onDrop={(event) => {
+                    if (!draggedId) return;
+                    event.preventDefault();
+                    cards.movePlayed(draggedId, id);
+                    endDrag();
+                  }}>
+                  <div className="played-card-face" draggable={played.length > 1}
+                    onDragStart={(event) => {
+                      event.dataTransfer.setData('text/plain', word);
+                      event.dataTransfer.effectAllowed = 'move';
+                      setDraggedId(id);
+                    }}
+                    onDragEnd={endDrag}>
+                    {renderCard(instance, 'played')}
+                  </div>
+                  {played.length > 1 && <div className="played-card-controls">
+                    {([-1, 1] as const).map((offset) => {
+                      const neighbor = played[index + offset];
+                      const label = offset < 0 ? 'nach vorne' : 'nach hinten';
+                      return <button key={offset} type="button" className="played-card-move"
+                        aria-disabled={!neighbor} aria-label={`Karte ${index + 1}: „${word}“ ${label} verschieben`}
+                        title={`Karte ${label} verschieben`}
+                        onClick={(event) => {
+                          if (!neighbor) return;
+                          focusAfterMove.current = event.currentTarget;
+                          cards.movePlayed(id, neighbor.instanceId);
+                        }}>{offset < 0 ? '←' : '→'}</button>;
+                    })}
+                  </div>}
+                </li>
+              );
+            })}
+          </ol>
+        )}
       </div>
       {show3D ? (
         <div className="board-three">

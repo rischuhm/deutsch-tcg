@@ -690,6 +690,22 @@ button {
 .board-played .board-card { padding-bottom: 17px; }
 .board-played .board-card strong { font-size: .91rem; }
 
+.played-cards { list-style: none; }
+.played-card-slot { min-width: 0; border-radius: 12px; }
+.played-card-face .board-card { width: 100%; }
+.played-card-face[draggable="true"] .board-card { cursor: grab; }
+.played-card-slot[data-drop-target="true"] { outline: 2px solid #5eead4; outline-offset: 3px; }
+.played-card-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; margin-top: 4px; }
+.played-card-move {
+  min-height: 36px;
+  border: 1px solid #38635c;
+  border-radius: 7px;
+  background: #153b39;
+  color: #e4f7f3;
+}
+.played-card-move:not([aria-disabled="true"]):hover { background: #22554f; }
+.played-card-move[aria-disabled="true"] { opacity: .55; cursor: default; }
+
 .form-stone {
   position: absolute;
   inset: auto 5px 4px auto;

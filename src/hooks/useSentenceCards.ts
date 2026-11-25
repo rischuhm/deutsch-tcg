@@ -21,11 +21,24 @@ export function useSentenceCards(initialHand: CardInstance[]) {
   const update = (instance: CardInstance) => {
     setPlayed((cards) => cards.map((card) => card.instanceId === instance.instanceId ? instance : card));
   };
+  const movePlayed = (instanceId: string, targetId: string) => {
+    if (instanceId === targetId) return;
+    setPlayed((cards) => {
+      const from = cards.findIndex((card) => card.instanceId === instanceId);
+      const to = cards.findIndex((card) => card.instanceId === targetId);
+      if (from < 0 || to < 0) return cards;
+
+      const reordered = [...cards];
+      const [card] = reordered.splice(from, 1);
+      reordered.splice(to, 0, card!);
+      return reordered;
+    });
+  };
   const reset = (nextHand = initialHand) => {
     setHand(nextHand);
     setPlayed([]);
     setInspect(null);
   };
 
-  return { hand, played, inspect, setInspect, play, returnToHand, update, reset };
+  return { hand, played, inspect, setInspect, play, returnToHand, update, movePlayed, reset };
 }
