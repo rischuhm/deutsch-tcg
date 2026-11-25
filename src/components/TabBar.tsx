@@ -1,4 +1,4 @@
-export type TabId = 'tisch' | 'booster' | 'sammlung';
+export type TabId = 'tisch' | 'story' | 'booster' | 'sammlung';
 
 interface TabBarProps {
   tab: TabId;
@@ -7,6 +7,7 @@ interface TabBarProps {
 
 const TABS: { id: TabId; icon: string; label: string }[] = [
   { id: 'tisch', icon: '🃏', label: 'Spieltisch' },
+  { id: 'story', icon: '📖', label: 'Story' },
   { id: 'booster', icon: '🎁', label: 'Booster' },
   { id: 'sammlung', icon: '🗂️', label: 'Sammlung' },
 ];

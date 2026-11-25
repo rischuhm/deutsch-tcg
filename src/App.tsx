@@ -13,6 +13,7 @@ import type { TabId } from './components/TabBar';
 import { TableScreen } from './components/TableScreen';
 import { BoosterScreen } from './components/BoosterScreen';
 import { CollectionScreen } from './components/CollectionScreen';
+import { StoryScreen } from './components/StoryScreen';
 import { Onboarding } from './components/Onboarding';
 
 export default function App() {
@@ -38,6 +39,10 @@ export default function App() {
   const [onboarded, setOnboarded] = usePersistentState<boolean>(
     STORAGE_KEYS.onboarded,
     () => false,
+  );
+  const [storyCompleted, setStoryCompleted] = usePersistentState<string[]>(
+    STORAGE_KEYS.storyCompleted,
+    () => [],
   );
 
   const handleCollectBooster = (defIds: string[], openedAtISO: string) => {
@@ -67,6 +72,17 @@ export default function App() {
           <TableScreen
             collection={collection}
             plurals={plurals}
+            onAddPoints={(p) => setPoints((total) => total + p)}
+          />
+        )}
+        {tab === 'story' && (
+          <StoryScreen
+            completed={storyCompleted}
+            onComplete={(lessonId) =>
+              setStoryCompleted((prev) =>
+                prev.includes(lessonId) ? prev : [...prev, lessonId],
+              )
+            }
             onAddPoints={(p) => setPoints((total) => total + p)}
           />
         )}

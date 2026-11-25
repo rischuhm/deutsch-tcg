@@ -23,6 +23,7 @@ export const STORAGE_KEYS = {
   points: 'satzmeister.points',
   lastBooster: 'satzmeister.lastBooster',
   onboarded: 'satzmeister.onboarded',
+  storyCompleted: 'satzmeister.story.completed',
 } as const;
 
 export const TYPE_LABELS: Record<CardType, string> = {

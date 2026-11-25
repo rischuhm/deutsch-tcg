@@ -7,21 +7,15 @@ import type {
   ScoreResult,
   ValidationResult,
 } from '../game';
-import { getCard, scoreSentence, suggestNext, validateSentence } from '../game';
+import { scoreSentence, suggestNext, validateSentence } from '../game';
 import {
-  CASE_ORDER,
   MAX_HAND,
   MAX_SENTENCE,
-  PERSON_LABELS,
-  PERSON_ORDER,
-  TYPE_LABELS,
   buildInstances,
-  declinedFormLabel,
   displayWord,
-  personFormLabel,
   selectHand,
 } from '../lib/ui';
-import { CardImage } from './CardImage';
+import { InspectOverlay } from './InspectOverlay';
 import { TableScene } from './three/TableScene';
 
 interface TableScreenProps {
@@ -140,13 +134,6 @@ export function TableScreen({
 
   const sentencePreview = played.map(displayWord).join(' ');
   const hint = suggestNext(played);
-  const inspectDef = inspect ? getCard(inspect.instance.defId) : undefined;
-  const showPersonChips =
-    inspect?.source === 'played' &&
-    (inspectDef?.type === 'verb' || inspectDef?.type === 'modal') &&
-    inspectDef.conjugation !== undefined;
-  const showCaseChips =
-    inspect?.source === 'played' && inspectDef?.type === 'noun';
 
   return (
     <div className="table-screen">
@@ -198,103 +185,16 @@ export function TableScreen({
       </div>
 
       {inspect && (
-        <div className="result-overlay" onClick={() => setInspect(null)}>
-          <div
-            className="inspect-card"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <div className="inspect-image">
-              <CardImage defId={inspect.instance.defId} />
-            </div>
-            <div className="inspect-title">
-              {displayWord(inspect.instance)}
-              <span className="inspect-type">
-                {TYPE_LABELS[getCard(inspect.instance.defId)?.type ?? 'noun']}
-                {inspect.instance.isPlural === true ? ' · Plural' : ''}
-              </span>
-            </div>
-            {showPersonChips && inspectDef && (
-              <div className="chip-section">
-                <p className="chip-title">
-                  Person-Steinchen: Welche Form passt zum Subjekt?
-                </p>
-                <div className="chip-grid">
-                  {PERSON_ORDER.map((person) => (
-                    <button
-                      key={person}
-                      className={`chip-btn ${
-                        inspect.instance.chosenPerson === person
-                          ? 'chip-active'
-                          : ''
-                      }`}
-                      onClick={() => togglePersonChip(person)}
-                    >
-                      <span className="chip-btn-label">
-                        {PERSON_LABELS[person]}
-                      </span>
-                      <span className="chip-btn-sub">
-                        {personFormLabel(inspectDef, person)}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            {showCaseChips && inspectDef && (
-              <div className="chip-section">
-                <p className="chip-title">
-                  Kasus-Steinchen: Welcher Fall passt hier?
-                </p>
-                <div className="chip-grid chip-grid-cases">
-                  {CASE_ORDER.map((germanCase) => (
-                    <button
-                      key={germanCase}
-                      className={`chip-btn ${
-                        inspect.instance.chosenCase === germanCase
-                          ? 'chip-active'
-                          : ''
-                      }`}
-                      onClick={() => toggleCaseChip(germanCase)}
-                    >
-                      <span className="chip-btn-label">{germanCase}</span>
-                      <span className="chip-btn-sub">
-                        {declinedFormLabel(
-                          inspectDef,
-                          germanCase,
-                          inspect.instance.isPlural === true,
-                        )}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            {inspect.source === 'hand' ? (
-              <button
-                className="btn"
-                onClick={() => playCard(inspect.instance)}
-                disabled={played.length >= MAX_SENTENCE}
-              >
-                Auf die Satzleiste legen
-              </button>
-            ) : (
-              <button
-                className="btn"
-                onClick={() => returnCard(inspect.instance)}
-              >
-                Zurück auf die Hand
-              </button>
-            )}
-            <button
-              className="btn btn-secondary"
-              onClick={() => setInspect(null)}
-            >
-              Zurück
-            </button>
-          </div>
-        </div>
+        <InspectOverlay
+          instance={inspect.instance}
+          source={inspect.source}
+          playedFull={played.length >= MAX_SENTENCE}
+          onPlay={playCard}
+          onReturn={returnCard}
+          onTogglePerson={togglePersonChip}
+          onToggleCase={toggleCaseChip}
+          onClose={() => setInspect(null)}
+        />
       )}
 
       {result && (

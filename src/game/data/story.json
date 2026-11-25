@@ -1,0 +1,190 @@
+{
+  "chapters": [
+    {
+      "id": 1,
+      "title": "The Cards",
+      "subtitle": "Meet the word types: nouns, verbs and pronouns."
+    },
+    {
+      "id": 2,
+      "title": "First Sentences",
+      "subtitle": "Subject + verb + object — and why German nouns change their article."
+    },
+    {
+      "id": 3,
+      "title": "Into the World",
+      "subtitle": "Prepositions, adjectives and modal verbs: sentences with real meaning."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l01-nouns",
+      "chapter": 1,
+      "title": "Nouns — naming things",
+      "goal": "Place the card TISCH on the sentence bar and put a chip on the Nominativ form.",
+      "explanation": [
+        "Nouns name things, people and places: «Tisch» (table), «Frau» (woman), «Schule» (school). In German, nouns are ALWAYS capitalized — even in the middle of a sentence.",
+        "Every German noun has a grammatical gender: «der» (masculine), «die» (feminine) or «das» (neuter). You can see the gender in the colored banner on the card: blue = der, red = die, green = das.",
+        "The article changes depending on the noun's job in the sentence — these are the four CASES. When the noun is the subject (the doer), it uses the Nominativ: «der Tisch».",
+        "Try it: put the TISCH card on the bar and place a chip on the Nominativ form «der Tisch»."
+      ],
+      "handCards": ["noun.tisch", "noun.lampe", "verb.gehen"],
+      "target": ["noun.tisch"],
+      "chips": { "0": { "case": "Nominativ" } },
+      "requireValidSentence": false,
+      "targetSentence": "der Tisch"
+    },
+    {
+      "id": "l02-verbs",
+      "chapter": 1,
+      "title": "Verbs — action words",
+      "goal": "Place the card SEIN on the bar and put a chip on the ich-form «bin».",
+      "explanation": [
+        "Verbs describe actions and states: «gehen» (to go), «essen» (to eat), «sein» (to be). The form on the card's banner is the infinitive — the dictionary form.",
+        "In a real sentence the verb changes its ending to match the person: «ich bin» (I am), «du bist» (you are), «er/sie/es ist» (he/she/it is). This is called conjugation.",
+        "The six person chips are printed right on the verb card: ich, du, er/sie/es, wir, ihr, sie. Placing a chip picks the conjugated form.",
+        "Try it: place the verb SEIN and put the chip on the ich-form — «bin»."
+      ],
+      "handCards": ["verb.sein", "verb.haben", "noun.buch"],
+      "target": ["verb.sein"],
+      "chips": { "0": { "person": "ich" } },
+      "requireValidSentence": false,
+      "targetSentence": "ich → bin"
+    },
+    {
+      "id": "l03-pronouns",
+      "chapter": 1,
+      "title": "Pronouns — word doubles",
+      "goal": "Place the pronoun card DU on the sentence bar.",
+      "explanation": [
+        "Pronouns replace nouns: instead of «der Tisch» you can say «er» (it), instead of «die Frau» — «sie» (she). That is why the ER/SIE/ES card can stand in for any noun card.",
+        "The personal pronouns are: «ich» (I), «du» (you), «er/sie/es» (he/she/it), «wir» (we), «ihr» (you all), «sie» (they).",
+        "The pronoun decides which verb form you need — the chip on the verb must match the pronoun: «du» always pairs with the du-form, e.g. «du kommst».",
+        "Try it: place the DU card on the bar."
+      ],
+      "handCards": ["pron.ich", "pron.du", "pron.er_sie_es"],
+      "target": ["pron.du"],
+      "chips": {},
+      "requireValidSentence": false,
+      "targetSentence": "du"
+    },
+    {
+      "id": "l04-subject-verb",
+      "chapter": 2,
+      "title": "Your first sentence: subject + verb",
+      "goal": "Build the sentence «Ich komme.» — and don't forget the chip on the verb!",
+      "explanation": [
+        "Every German sentence needs a SUBJECT (who?) and a VERB (what happens?). The verb always sits in second position.",
+        "«Ich komme.» means «I come / I am coming.» The pronoun «ich» is the subject, so the verb «kommen» needs the ich-form «komme».",
+        "Place the ICH card, then the verb KOMMEN — and put the person chip on the ich-form. The chip proves you picked the right conjugation!"
+      ],
+      "handCards": ["pron.ich", "verb.kommen", "verb.gehen"],
+      "target": ["pron.ich", "verb.kommen"],
+      "chips": { "1": { "person": "ich" } },
+      "requireValidSentence": true,
+      "targetSentence": "Ich komme."
+    },
+    {
+      "id": "l05-cases",
+      "chapter": 2,
+      "title": "Subject + verb + object: the cases",
+      "goal": "Build «Der Mann isst den Apfel.» — with the correct case chip on each noun.",
+      "explanation": [
+        "Now we add an OBJECT: who eats? — «der Mann» (subject). What does he eat? — «den Apfel» (object).",
+        "This is where the German cases come in: the SUBJECT takes the Nominativ («der Mann»), the OBJECT takes the Akkusativ («den Apfel»). Watch how «der» changes to «den»!",
+        "You show the case by placing a chip on the noun card: Nominativ chip on MANN, Akkusativ chip on APFEL. The verb «essen» (to eat) needs the er-form «isst» to match «der Mann».",
+        "Build it: MANN + ESSEN + APFEL, chips on Nominativ, «isst», Akkusativ."
+      ],
+      "handCards": ["noun.mann", "verb.essen", "noun.apfel", "verb.haben"],
+      "target": ["noun.mann", "verb.essen", "noun.apfel"],
+      "chips": { "0": { "case": "Nominativ" }, "1": { "person": "er" }, "2": { "case": "Akkusativ" } },
+      "requireValidSentence": true,
+      "targetSentence": "Der Mann isst den Apfel."
+    },
+    {
+      "id": "l06-questions",
+      "chapter": 2,
+      "title": "Asking questions",
+      "goal": "Build the question «Wie heißt du?»",
+      "explanation": [
+        "Question words (Fragewörter) like «wie» (how), «wer» (who), «woher» (where from) always open the sentence — and the verb comes second, right after them.",
+        "«Wie heißt du?» means «What is your name?» — literally «How are you called?». Note the word order: question word → verb → subject.",
+        "«du» is the subject, so «heißen» takes the du-form «heißt». Question cards carry a small explanation right on the card — use it!",
+        "Build it: WIE + HEISSEN (chip on «heißt») + DU."
+      ],
+      "handCards": ["question.wie", "question.woher", "verb.heissen", "pron.du"],
+      "target": ["question.wie", "verb.heissen", "pron.du"],
+      "chips": { "1": { "person": "du" } },
+      "requireValidSentence": true,
+      "targetSentence": "Wie heißt du?"
+    },
+    {
+      "id": "l07-prepositions",
+      "chapter": 3,
+      "title": "Prepositions — little words, big cases",
+      "goal": "Build «Ich komme aus der Schule.»",
+      "explanation": [
+        "Prepositions connect places and people: «aus» (from), «mit» (with), «in» (in/into). The picture on each preposition card shows its meaning.",
+        "Important: the noun AFTER a preposition changes its case! «aus» and «mit» always take the Dativ: «aus der Schule», «mit dem Freund».",
+        "In «Ich komme aus der Schule.» (I come from school), «die Schule» follows «aus» — so put the Dativ chip on SCHULE. The verb chip is the ich-form «komme».",
+        "Build it: ICH + KOMMEN + AUS + SCHULE (Dativ chip!)."
+      ],
+      "handCards": ["pron.ich", "verb.kommen", "prep.aus", "prep.mit", "noun.schule"],
+      "target": ["pron.ich", "verb.kommen", "prep.aus", "noun.schule"],
+      "chips": { "1": { "person": "ich" }, "3": { "case": "Dativ" } },
+      "requireValidSentence": true,
+      "targetSentence": "Ich komme aus der Schule."
+    },
+    {
+      "id": "l08-wechselpraepositionen",
+      "chapter": 3,
+      "title": "Two-way prepositions: movement or place?",
+      "goal": "Build «Das Kind geht in die Schule.»",
+      "explanation": [
+        "Prepositions like «in», «auf», «unter», «neben» are two-way (Wechselpräpositionen): with MOVEMENT (where to?) they take the Akkusativ, with POSITION (where?) the Dativ.",
+        "«Das Kind geht in die Schule.» (The child goes to school) — «gehen» is movement, so «die Schule» takes the Akkusativ: «in die Schule». (With position it would be «in der Schule» — Dativ.)",
+        "The subject «das Kind» needs the Nominativ chip, and «gehen» takes the er-form «geht».",
+        "Build it: KIND + GEHEN + IN + SCHULE — chips: Nominativ, «geht», Akkusativ."
+      ],
+      "handCards": ["noun.kind", "verb.gehen", "verb.wohnen", "prep.in", "noun.schule"],
+      "target": ["noun.kind", "verb.gehen", "prep.in", "noun.schule"],
+      "chips": { "0": { "case": "Nominativ" }, "1": { "person": "er" }, "3": { "case": "Akkusativ" } },
+      "requireValidSentence": true,
+      "targetSentence": "Das Kind geht in die Schule."
+    },
+    {
+      "id": "l09-adjectives",
+      "chapter": 3,
+      "title": "Adjectives — describing things",
+      "goal": "Build «Der Tisch ist hoch.»",
+      "explanation": [
+        "Adjectives describe nouns: «hoch» (tall/high), «groß» (big), «klein» (small), «schön» (beautiful).",
+        "After the verb «sein» (to be), the adjective simply follows: «Der Tisch ist hoch.» (The table is tall.) No ending needed in this position!",
+        "The subject «der Tisch» still needs its Nominativ chip, and «sein» takes the er-form «ist».",
+        "Build it: TISCH + SEIN + HOCH — chips: Nominativ and «ist»."
+      ],
+      "handCards": ["noun.tisch", "verb.sein", "adj.hoch", "adj.klein"],
+      "target": ["noun.tisch", "verb.sein", "adj.hoch"],
+      "chips": { "0": { "case": "Nominativ" }, "1": { "person": "er" } },
+      "requireValidSentence": true,
+      "targetSentence": "Der Tisch ist hoch."
+    },
+    {
+      "id": "l10-modals",
+      "chapter": 3,
+      "title": "Modal verbs — wanting, musting, canning",
+      "goal": "Build «Ich will spielen.» — modal verb + infinitive at the end!",
+      "explanation": [
+        "Modal verbs express wishes and obligations: «wollen» (want), «müssen» (must), «können» (can). They are special cards: they NEVER play alone.",
+        "A modal verb always needs a partner: the main verb goes to the very END of the sentence in its infinitive form: «Ich will spielen.» (I want to play.)",
+        "The person chip goes on the MODAL verb — it is the conjugated one: «ich will». The main verb «spielen» stays untouched.",
+        "Build it: ICH + WOLLEN (chip «will») + SPIELEN."
+      ],
+      "handCards": ["pron.ich", "modal.wollen", "modal.muessen", "verb.spielen", "verb.lernen"],
+      "target": ["pron.ich", "modal.wollen", "verb.spielen"],
+      "chips": { "1": { "person": "ich" } },
+      "requireValidSentence": true,
+      "targetSentence": "Ich will spielen."
+    }
+  ]
+}
