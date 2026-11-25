@@ -13,9 +13,9 @@ export function useSentenceCards(initialHand: CardInstance[]) {
     setPlayed((cards) => [...cards, instance]);
     setInspect(null);
   };
-  const returnToHand = (instance: CardInstance) => {
-    setPlayed((cards) => cards.filter((card) => card.instanceId !== instance.instanceId));
-    setHand((cards) => [...cards, instance]);
+  const returnToHand = ({ instanceId, defId, isPlural }: CardInstance) => {
+    setPlayed((cards) => cards.filter((card) => card.instanceId !== instanceId));
+    setHand((cards) => [...cards, { instanceId, defId, isPlural }]);
     setInspect(null);
   };
   const update = (instance: CardInstance) => {
