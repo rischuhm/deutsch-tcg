@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { Collection } from './game';
 import {
   addStarterDeck,
@@ -14,6 +14,7 @@ import { TableScreen } from './components/TableScreen';
 import { CollectionScreen } from './components/CollectionScreen';
 import { StoryScreen } from './components/StoryScreen';
 import { Onboarding } from './components/Onboarding';
+import { MainMenu } from './components/MainMenu';
 
 const BoosterScreen = lazy(() => import('./components/BoosterScreen').then(({ BoosterScreen }) => ({ default: BoosterScreen })));
 
@@ -35,15 +36,17 @@ export default function App() {
     STORAGE_KEYS.lastBooster,
     () => null,
   );
-  const [onboarded, setOnboarded] = usePersistentState<boolean>(
-    STORAGE_KEYS.onboarded,
-    () => false,
-  );
-  const [tab, setTab] = useState<TabId>(() => onboarded ? 'tisch' : 'story');
+  const [tab, setTab] = useState<TabId>('menue');
+  const [showRules, setShowRules] = useState(false);
+  const main = useRef<HTMLElement>(null);
   const [storyCompleted, setStoryCompleted] = usePersistentState<string[]>(
     STORAGE_KEYS.storyCompleted,
     () => [],
   );
+
+  useEffect(() => {
+    main.current?.focus({ preventScroll: true });
+  }, [tab]);
 
   const handleCollectBooster = (defIds: string[], openedAtISO: string) => {
     setCollection((col) => addToCollection(col, defIds));
@@ -67,7 +70,8 @@ export default function App() {
         </div>
       </header>
 
-      <main className="app-main">
+      <main className="app-main" ref={main} tabIndex={-1}>
+        {tab === 'menue' && <MainMenu onChoose={setTab} onShowRules={() => setShowRules(true)} />}
         {tab === 'tisch' && (
           <TableScreen
             collection={collection}
@@ -101,9 +105,9 @@ export default function App() {
         )}
       </main>
 
-      <TabBar tab={tab} onChange={setTab} />
+      {tab !== 'menue' && <TabBar tab={tab} onChange={setTab} />}
 
-      {!onboarded && <Onboarding onClose={() => setOnboarded(true)} />}
+      {showRules && <Onboarding onClose={() => setShowRules(false)} />}
     </div>
   );
 }

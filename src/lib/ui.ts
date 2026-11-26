@@ -19,7 +19,6 @@ export const STORAGE_KEYS = {
   plurals: 'satzmeister.plurals',
   points: 'satzmeister.points',
   lastBooster: 'satzmeister.lastBooster',
-  onboarded: 'satzmeister.onboarded',
   storyCompleted: 'satzmeister.story.completed',
 } as const;
 

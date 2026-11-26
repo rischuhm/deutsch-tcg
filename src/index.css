@@ -422,64 +422,12 @@ button {
   line-height: 1.7;
 }
 
-/* ---------- Onboarding ---------- */
-
-.onboarding-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  background: rgba(2, 6, 23, 0.82);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.onboarding-card {
-  background: #111c30;
-  border: 1px solid #334155;
-  border-radius: 18px;
-  padding: 24px;
-  max-width: 400px;
-  width: 100%;
-  max-height: 85dvh;
-  overflow-y: auto;
-}
-
-.onboarding-card h2 {
-  margin-bottom: 6px;
-}
-
-.onboarding-card .subtitle {
-  color: #94a3b8;
-  font-size: 0.85rem;
-  margin-bottom: 14px;
-}
-
-.onboarding-card ul {
-  margin: 0 0 18px 18px;
-  display: flex;
-  flex-direction: column;
+.game-rules {
+  margin-left: 18px;
+  display: grid;
   gap: 8px;
-  font-size: 0.9rem;
-  line-height: 1.45;
-}
-
-.onboarding-card .btn {
-  width: 100%;
-}
-
-/* Steinchen-Erklärung im Onboarding */
-.chips-info {
-  background: rgba(216, 201, 168, 0.08);
-  border: 1px solid rgba(216, 201, 168, 0.3);
-  border-radius: 12px;
-  padding: 10px 12px;
-  font-size: 0.85rem;
+  font-size: .9rem;
   line-height: 1.5;
-  color: #e7dcc3;
-  margin-bottom: 18px;
 }
 
 /* ---------- Story-Modus ---------- */
@@ -981,3 +929,127 @@ button.chip-btn:hover { border-color: #9edacd; }
 .lesson-deck summary > span:first-child { color: #a9d8cd; margin-right: 6px; }
 .lesson-deck > .btn { margin-top: 8px; }
 .lesson-deck-cards { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+/* ---------- Hauptmenü ---------- */
+
+.app-main:focus { outline: none; }
+
+.main-menu {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background: radial-gradient(ellipse at top, #183841 0%, #0f172a 62%);
+  padding: clamp(18px, 5vw, 52px) clamp(14px, 4vw, 36px);
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+
+.main-menu-content {
+  width: min(100%, 760px);
+  margin-inline: auto;
+  display: grid;
+  gap: 16px;
+}
+
+.main-menu h2 { font-size: clamp(1.65rem, 5vw, 2.45rem); }
+
+.menu-modes {
+  display: grid;
+  gap: 12px;
+}
+
+.menu-mode {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  text-align: left;
+  color: #e8f1f4;
+  background: #152538;
+  border: 1px solid #43586c;
+  border-radius: 16px;
+  padding: 15px;
+}
+
+.menu-mode:hover { border-color: #9ae9d9; }
+.menu-mode strong { font-size: 1.05rem; }
+.menu-description {
+  color: #cad8e2;
+  font-size: .87rem;
+  line-height: 1.4;
+}
+
+.menu-story {
+  position: relative;
+  isolation: isolate;
+  min-height: 152px;
+  grid-template-columns: minmax(0, 1fr) clamp(82px, 20vw, 130px) auto;
+  align-items: center;
+  gap: 10px;
+  padding: clamp(14px, 3vw, 24px);
+  color: #f2fffb;
+  background: linear-gradient(120deg, #16413b, #173646);
+  border-color: #6bb6a4;
+  overflow: hidden;
+}
+
+.menu-story-copy { display: grid; gap: 7px; }
+.menu-story-copy strong { font-size: clamp(1.32rem, 4.4vw, 1.85rem); }
+.menu-arrow { color: #a9efdf; font-size: 1.55rem; }
+
+.menu-card-fan {
+  position: relative;
+  width: 100%;
+  height: 104px;
+  pointer-events: none;
+}
+
+.menu-card-fan > * {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 56%;
+  aspect-ratio: 5 / 7;
+  border-radius: 7px;
+  transform: rotate(-12deg);
+  box-shadow: 0 3px 12px #0008;
+}
+
+.menu-card-fan > :last-child {
+  top: 12%;
+  left: 34%;
+  transform: rotate(11deg);
+}
+
+.menu-secondary-modes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.menu-mode-icon { font-size: 1.25rem; }
+
+.menu-rules {
+  justify-self: start;
+  padding: 8px 2px;
+  color: #a9efdf;
+  background: transparent;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.menu-mode:focus-visible,
+.menu-rules:focus-visible,
+.tabbar button:focus-visible {
+  outline: 2px solid #a9efdf;
+  outline-offset: 3px;
+}
+
+@media (max-width: 540px) {
+  .menu-secondary-modes { grid-template-columns: 1fr; }
+  .menu-secondary-modes .menu-mode {
+    grid-template-columns: 30px minmax(0, 1fr);
+    column-gap: 9px;
+    row-gap: 2px;
+  }
+  .menu-mode-icon { grid-row: span 2; align-self: center; }
+}
