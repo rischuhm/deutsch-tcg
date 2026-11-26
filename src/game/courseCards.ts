@@ -76,3 +76,22 @@ export function checkCourseCards(played: CardInstance[], solution: CardInstance[
     ?? (expected.chosenAdjectiveDegree && ADJECTIVE_DEGREES[expected.chosenAdjectiveDegree]);
   return `Prüfe das Steinchen auf Karte ${index + 1} („${definition.word}“). Hier passt ${label ? `„${label}“ mit „${cardWord(definition, expected)}“` : 'die Grundform ohne Steinchen'}.`;
 }
+
+/** Kurze Kontrastübungen mit einer markierten Form und gezielten Alternativen. */
+export function drill(
+  question: string, model: string, feedback: string, position: number,
+  word: string, type: CardDef['type'], label: string, alternatives: Record<string, string>,
+): CardExercise {
+  const endMark = model.slice(-1);
+  const pieces = model.slice(0, -1).split(' | ');
+  const selected = pieces[position]!;
+  const punctuation = /[,;:]$/.test(selected) ? selected.slice(-1) : undefined;
+  const text = punctuation ? selected.slice(0, -1) : selected;
+  const formText = position === 0 && type !== 'noun' && text !== 'Sie'
+    ? text.charAt(0).toLocaleLowerCase('de') + text.slice(1)
+    : text;
+  const sentence = pieces.join(' ');
+  const target = sentence.charAt(0).toLocaleUpperCase('de') + sentence.slice(1) + endMark;
+  return cards(question, target, feedback, pieces.map((piece, index) =>
+    index === position ? form(word, type, label, { ...alternatives, [label]: formText }, punctuation) : piece));
+}

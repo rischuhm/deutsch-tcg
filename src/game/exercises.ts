@@ -1,32 +1,9 @@
-import type { CardExercise } from './courseCards';
 import type { CourseLesson } from './curriculum';
-
-interface Prompt {
-  question: string;
-  feedback: string;
-}
-
-export type Exercise =
-  | (Prompt & { kind: 'choice'; answer: string; alternatives: string[]; source?: string; listen?: boolean })
-  | CardExercise
-  | (Prompt & { kind: 'practice'; model: string; criteria: string[]; mode: 'write' | 'speak' });
 
 export interface Level {
   title: string;
   description: string;
   lessons: CourseLesson[];
-}
-
-export function choice(question: string, answer: string, alternatives: string[], feedback: string, source?: string): Exercise {
-  return { kind: 'choice', question, answer, alternatives, feedback, source };
-}
-
-export function listen(question: string, source: string, answer: string, alternatives: string[], feedback: string): Exercise {
-  return { kind: 'choice', question, source, answer, alternatives, feedback, listen: true };
-}
-
-export function practice(mode: 'write' | 'speak', question: string, model: string, criteria: string[], feedback: string): Exercise {
-  return { kind: 'practice', mode, question, model, criteria, feedback };
 }
 
 export function orderedOptions(values: string[], seed: string): string[] {
@@ -41,8 +18,4 @@ export function orderedOptions(values: string[], seed: string): string[] {
     options.push(options.shift()!);
   }
   return options;
-}
-
-export function matchesExercise(exercise: Extract<Exercise, { kind: 'choice' }>, response: string | null): boolean {
-  return response === exercise.answer;
 }

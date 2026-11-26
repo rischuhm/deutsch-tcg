@@ -96,6 +96,7 @@ export default function App() {
             collection={collection}
             plurals={plurals}
             onCraftPlural={handleCraftPlural}
+            completedLessons={storyCompleted}
           />
         )}
       </main>

@@ -12,9 +12,9 @@ export function Onboarding({ onClose }: OnboardingProps) {
         <ul>
           <li>
             Tippe auf eine Handkarte, wähle bei Bedarf eine Form und lege die Karte.
-            Auf der Satzleiste kannst du die Form ändern oder die Karte zurücknehmen.
+            Ziehe Karten auf der Satzleiste, um ihre Reihenfolge zu ändern.
           </li>
-          <li>Das Verb steht an Position 2 („Ich lerne Deutsch.“).</li>
+          <li>Im Aussagesatz steht das finite Verb auf Position zwei („Ich lerne Deutsch.“).</li>
           <li>Fragewörter stehen ganz am Anfang („Woher kommst du?“).</li>
           <li>
             Ein Modalverb (können, müssen, wollen) braucht einen Infinitiv am
@@ -24,7 +24,7 @@ export function Onboarding({ onClose }: OnboardingProps) {
             Komplexe Sätze geben mehr Punkte: Fragen, Perfekt, Präpositionen
             und Plurale lohnen sich!
           </li>
-          <li>Im Storymodus lernst du Schritt für Schritt mit festen Kartenhänden.</li>
+          <li>Spiele Story-Lektionen mit Grammatikerklärungen und sammle ihre Lektionsdecks.</li>
         </ul>
         <p className="chips-info">
           Lege <strong>Steinchen</strong> auf deine Karten: Am Verb wählst du

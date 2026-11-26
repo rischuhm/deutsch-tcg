@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import type { AdvancedLevel, CourseLesson } from '../game/curriculum';
-import { matchesExercise, orderedOptions } from '../game/exercises';
-import type { Exercise } from '../game/exercises';
 import { CourseCardStep } from './CourseCardStep';
 
 interface Props {
@@ -44,6 +42,7 @@ export function CourseLessonRunner({ level, lesson, completed, onComplete, onNex
         {finished ? (
           <div className="course-panel">
             <p>{lesson.title}</p>
+            <p>Das Lektionsdeck ist in deiner Sammlung spielbar.</p>
             <div className="course-actions">
               {onNext && <button className="btn" onClick={onNext}>Nächste Lektion</button>}
               <button className="btn btn-secondary" onClick={onExit}>Zur Übersicht</button>
@@ -52,141 +51,14 @@ export function CourseLessonRunner({ level, lesson, completed, onComplete, onNex
         ) : (
           <>
             <p className="course-scene">{lesson.scene}</p>
-            <details className="lesson-help">
-              <summary>Erklärung</summary>
+            <details className="lesson-help" open>
+              <summary>Grammatik</summary>
               <p>{lesson.rule}</p>
             </details>
-            <ExerciseStep key={step} exercise={lesson.exercises[step]!} onNext={advance} />
+            <CourseCardStep key={step} exercise={lesson.exercises[step]!} onNext={advance} />
           </>
         )}
       </div>
     </div>
-  );
-}
-
-function AudioSource({ source }: { source: string }) {
-  const [status, setStatus] = useState('');
-  const canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
-  const current = useRef<SpeechSynthesisUtterance | null>(null);
-
-  useEffect(() => () => {
-    if (current.current) {
-      current.current = null;
-      window.speechSynthesis.cancel();
-    }
-  }, []);
-
-  const speak = () => {
-    current.current = null;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(source);
-    current.current = utterance;
-    utterance.lang = 'de-DE';
-    utterance.rate = .9;
-    const german = window.speechSynthesis.getVoices().find((voice) => voice.lang.toLowerCase().startsWith('de'));
-    if (german) utterance.voice = german;
-    utterance.onerror = () => {
-      if (current.current !== utterance) return;
-      current.current = null;
-      setStatus('Vorlesen ist gerade nicht verfügbar. Du kannst den Hörtext lesen.');
-    };
-    utterance.onend = () => {
-      if (current.current !== utterance) return;
-      current.current = null;
-      setStatus('');
-    };
-    setStatus('Hörtext wird vorgelesen.');
-    window.speechSynthesis.speak(utterance);
-  };
-
-  return <div className="course-audio">
-    {canSpeak && <button className="btn btn-secondary" onClick={speak}>Hörtext abspielen</button>}
-    <p role="status">{status}</p>
-    <details><summary>Hörtext lesen</summary><p>{source}</p></details>
-  </div>;
-}
-
-function ExerciseStep({ exercise, onNext }: { exercise: Exercise; onNext: () => void }) {
-  if (exercise.kind === 'practice') return <PracticeStep exercise={exercise} onNext={onNext} />;
-  if (exercise.kind === 'cards') return <CourseCardStep exercise={exercise} onNext={onNext} />;
-  return <CheckedStep exercise={exercise} onNext={onNext} />;
-}
-
-function CheckedStep({ exercise, onNext }: {
-  exercise: Extract<Exercise, { kind: 'choice' }>;
-  onNext: () => void;
-}) {
-  const [answer, setAnswer] = useState<string | null>(null);
-  const [checked, setChecked] = useState<boolean | null>(null);
-  const options = orderedOptions([exercise.answer, ...exercise.alternatives], exercise.question);
-
-  return (
-    <section className="course-panel">
-      <h2>{exercise.question}</h2>
-      {exercise.source && (exercise.listen
-        ? <AudioSource source={exercise.source} />
-        : <blockquote>{exercise.source}</blockquote>)}
-      <div className="course-choices" aria-label="Antworten">
-        {options.map((option) => (
-          <button key={option} className="course-option" disabled={checked === true}
-            aria-pressed={answer === option}
-            onClick={() => { setAnswer(option); setChecked(null); }}>{option}</button>
-        ))}
-      </div>
-      <div className="course-feedback" role="status">
-        {checked === true && <p><strong>Richtig.</strong> {exercise.feedback}</p>}
-        {checked === false && <p>Diese Antwort passt hier noch nicht. Prüfe deine Auswahl.</p>}
-      </div>
-      {checked !== true && <details className="lesson-help">
-        <summary>Lösungshilfe</summary>
-        <p>{exercise.answer}</p>
-        <p>{exercise.feedback}</p>
-      </details>}
-      <div className="course-actions">
-        {checked === true
-          ? <button className="btn" onClick={onNext}>Weiter</button>
-          : <button className="btn" disabled={!answer}
-            onClick={() => setChecked(matchesExercise(exercise, answer))}>Antwort prüfen</button>}
-      </div>
-    </section>
-  );
-}
-
-function PracticeStep({ exercise, onNext }: {
-  exercise: Extract<Exercise, { kind: 'practice' }>;
-  onNext: () => void;
-}) {
-  const [text, setText] = useState('');
-  const [shown, setShown] = useState(false);
-  const [criteria, setCriteria] = useState<string[]>([]);
-
-  return (
-    <section className="course-panel">
-      <p className="course-tag">{exercise.mode === 'write' ? 'Schreiben' : 'Sprechen'} · Selbstcheck</p>
-      <h2 id="practice-question">{exercise.question}</h2>
-      {exercise.mode === 'write'
-        ? <textarea aria-labelledby="practice-question" value={text} onChange={(event) => setText(event.target.value)} rows={5} />
-        : <p>Sprich deine Antwort laut. Vergleiche sie danach mit der Musterantwort.</p>}
-      {shown ? (
-        <>
-          <blockquote>{exercise.model}</blockquote>
-          <p>{exercise.feedback}</p>
-          <fieldset>
-            <legend>Hast du diese Punkte berücksichtigt?</legend>
-            {exercise.criteria.map((criterion) => (
-              <label key={criterion}><input type="checkbox" checked={criteria.includes(criterion)}
-                onChange={(event) => setCriteria(event.target.checked
-                  ? [...criteria, criterion]
-                  : criteria.filter((item) => item !== criterion))} />{criterion}</label>
-            ))}
-          </fieldset>
-          <button className="btn" disabled={criteria.length !== exercise.criteria.length
-            || (exercise.mode === 'write' && !text.trim())} onClick={onNext}>Selbstcheck abschließen</button>
-        </>
-      ) : (
-        <button className="btn btn-secondary" disabled={exercise.mode === 'write' && !text.trim()}
-          onClick={() => setShown(true)}>Musterantwort vergleichen</button>
-      )}
-    </section>
   );
 }

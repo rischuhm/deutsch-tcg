@@ -21,9 +21,12 @@ export function CourseCardStep({ exercise, onNext }: { exercise: CardExercise; o
       <h2>{exercise.question}</h2>
       <p>Lege die Karten auf die Satzleiste und setze Steinchen auf die passenden Wortformen. Ziehe gelegte Karten, um die Reihenfolge zu ändern.</p>
       <details className="lesson-help">
+        <summary>Grammatik-Hinweis</summary>
+        <p>{exercise.feedback}</p>
+      </details>
+      <details className="lesson-help">
         <summary>Lösungshilfe</summary>
         <p>{exercise.model}</p>
-        <p>{exercise.feedback}</p>
       </details>
       <SentenceBoard cards={cards} definitions={definitions} endMark={exercise.endMark} actions={<>
         <button className="btn" disabled={!cards.played.length}

@@ -703,17 +703,6 @@ button {
 }
 .played-card-slot[data-dragging="true"] .board-card { opacity: .65; }
 .played-card-slot[data-drop-target="true"] { outline: 2px solid #5eead4; outline-offset: 3px; }
-.played-card-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; margin-top: 4px; }
-.played-card-move {
-  min-height: 36px;
-  border: 1px solid #38635c;
-  border-radius: 7px;
-  background: #153b39;
-  color: #e4f7f3;
-}
-.played-card-move:not([aria-disabled="true"]):hover { background: #22554f; }
-.played-card-move[aria-disabled="true"] { opacity: .55; cursor: default; }
-
 .form-stone {
   position: absolute;
   inset: auto 5px 4px auto;
@@ -961,7 +950,7 @@ button.chip-btn:hover { border-color: #9edacd; }
 }
 .course-header { display: grid; gap: 8px; }
 .course-header .btn { justify-self: start; }
-.course-header p, .course-tag { color: #a9d8cd; font-size: .85rem; }
+.course-header p { color: #a9d8cd; font-size: .85rem; }
 .course-header h1 { font-size: clamp(1.4rem, 4.5vw, 2.25rem); }
 .course-header h1:focus { outline: none; }
 .course-scene, .course-panel { line-height: 1.55; }
@@ -974,37 +963,21 @@ button.chip-btn:hover { border-color: #9edacd; }
   background: #122332;
 }
 .course-panel h2 { font-size: 1.1rem; }
-.course-panel blockquote {
-  padding: 10px 12px;
-  border-left: 3px solid #60a69b;
-  background: #18323b;
-  white-space: pre-line;
-}
-.course-panel textarea {
-  width: 100%;
-  font: inherit;
-  padding: 10px;
-  border: 1px solid #55757e;
-  border-radius: 8px;
-  resize: vertical;
-}
-.course-panel fieldset { display: grid; gap: 8px; border: 1px solid #55757e; padding: 10px; border-radius: 8px; }
-.course-panel fieldset label { display: flex; align-items: flex-start; gap: 8px; }
-.course-panel fieldset input { margin-top: 5px; }
 .course-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.course-choices { display: grid; gap: 8px; }
 .course-card-step { min-width: 0; }
 .course-card-step .sentence-board { min-width: 0; padding: 4px 0 0; }
 .course-card-step .board-actions { position: static; margin: 0; }
-.course-option {
-  padding: 9px 12px;
-  border: 1px solid #55757e;
-  border-radius: 9px;
-  background: #1c3443;
-  color: #e4f7f3;
-  text-align: left;
+
+.lesson-decks {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid #33545f;
+  border-radius: 12px;
 }
-.course-option[aria-pressed="true"] { border-color: #8de3d4; background: #174943; }
-.course-feedback:empty, .course-audio [role="status"]:empty { display: none; }
-.course-audio { display: grid; gap: 8px; justify-items: start; }
-.course-audio summary { cursor: pointer; }
+.lesson-decks summary { cursor: pointer; color: #a9d8cd; }
+.lesson-decks p { margin-top: 8px; font-size: .9rem; }
+.lesson-deck-list { display: grid; gap: 6px; margin-top: 8px; }
+.lesson-deck { padding: 8px; border: 1px solid #33545f; border-radius: 8px; }
+.lesson-deck summary > span:first-child { color: #a9d8cd; margin-right: 6px; }
+.lesson-deck > .btn { margin-top: 8px; }
+.lesson-deck-cards { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }

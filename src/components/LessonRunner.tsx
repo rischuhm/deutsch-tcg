@@ -73,6 +73,7 @@ export function LessonRunner({ lesson, onComplete, onExit, onNext, onAddPoints, 
           {result.complete ? (
             <>
               <p className="result-sentence" lang="de">{lesson.targetSentence}</p>
+              <p>Das Lektionsdeck ist in deiner Sammlung spielbar.</p>
               {points > 0 && <p className="breakdown-total">+{points} Punkte</p>}
               {onNext
                 ? <button className="btn result-close" onClick={onNext} autoFocus>Nächste Lektion</button>
