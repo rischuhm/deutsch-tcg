@@ -1,0 +1,21 @@
+export const comparisons: Record<string, [comparative: string, superlative: string]> = {
+  "breit": ["breiter", "am breitesten"],
+  "dunkel": ["dunkler", "am dunkelsten"],
+  "entlegen": ["entlegener", "am entlegensten"],
+  "fest": ["fester", "am festesten"],
+  "flexibel": ["flexibler", "am flexibelsten"],
+  "frei": ["freier", "am freiesten"],
+  "groß": ["größer", "am größten"],
+  "gut": ["besser", "am besten"],
+  "hilfreich": ["hilfreicher", "am hilfreichsten"],
+  "intensiv": ["intensiver", "am intensivsten"],
+  "klein": ["kleiner", "am kleinsten"],
+  "kühl": ["kühler", "am kühlsten"],
+  "lang": ["länger", "am längsten"],
+  "schnell": ["schneller", "am schnellsten"],
+  "schwierig": ["schwieriger", "am schwierigsten"],
+  "spät": ["später", "am spätesten"],
+  "selbstständig": ["selbstständiger", "am selbstständigsten"],
+  "sicher": ["sicherer", "am sichersten"],
+  "unklar": ["unklarer", "am unklarsten"]
+};

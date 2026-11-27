@@ -53,10 +53,12 @@ export function InspectOverlay({ instance, definitions, source, playedFull, onPl
   const choosePerson = (person: Person) => update({
     chosenPerson: draft.chosenPerson === person ? undefined : person,
     chosenVerbForm: undefined,
+    chosenLessonForm: undefined,
   });
   const chooseVerbForm = (form: VerbForm) => update({
     chosenVerbForm: draft.chosenVerbForm === form ? undefined : form,
     chosenPerson: undefined,
+    chosenLessonForm: undefined,
   });
   const chooseCase = (germanCase: GermanCase, variant?: string) => {
     const selected = draft.chosenCase === germanCase && draft.chosenPronoun === variant;
@@ -67,17 +69,22 @@ export function InspectOverlay({ instance, definitions, source, playedFull, onPl
   );
   let details: ReactNode;
 
-  if (def.lessonForms) {
-    details = <>
-      <h3>Form-Steinchen</h3>
+  const extraForms = def.lessonForms && (
+    <section>
+      <h3>{conjugation ? 'Weitere Verbformen' : def.type === 'adjective' ? 'Adjektivendungen' : 'Form-Steinchen'}</h3>
       <div className="chip-grid chip-grid-cases">
         {Object.entries(def.lessonForms).map(([label, word]) => showForm(label, word,
           draft.chosenLessonForm === label, () => update({
             chosenLessonForm: draft.chosenLessonForm === label ? undefined : label,
+            chosenPerson: undefined,
+            chosenVerbForm: undefined,
+            chosenAdjectiveDegree: undefined,
           })))}
       </div>
-    </>;
-  } else if (def.type === 'noun') {
+    </section>
+  );
+
+  if (def.type === 'noun') {
     const plural = !!draft.isPlural;
     details = <>
       <h3>{isReference ? 'Deklination' : 'Kasus-Steinchen'} · {plural ? 'Plural' : 'Singular'}</h3>
@@ -85,7 +92,9 @@ export function InspectOverlay({ instance, definitions, source, playedFull, onPl
         {CASE_ORDER.map((germanCase) => showForm(germanCase, nounForm(def, germanCase, plural),
           draft.chosenCase === germanCase, () => chooseCase(germanCase)))}
       </div>
-      {def.plural && (
+      {def.detachedArticle && <p className="form-note">Wenn ein Artikel gebraucht wird, liegt er auf einer eigenen Karte.</p>}
+      {def.explanation && <p className="form-note">{def.explanation}</p>}
+      {def.declension?.[plural ? 'nom_sg' : 'nom_pl'] && (
         <details className="form-reference">
           <summary>{plural ? 'Singular' : 'Plural'} ansehen</summary>
           <dl>{CASE_ORDER.map((germanCase) => (
@@ -122,12 +131,13 @@ export function InspectOverlay({ instance, definitions, source, playedFull, onPl
       {conjugation.aux && <p className="form-note">Perfekt mit <strong>{conjugation.aux}</strong></p>}
       {conjugation.prefix && <p className="form-note">Verbzusatz im Präsens: <strong>{conjugation.prefix}</strong></p>}
     </>;
-  } else if (def.type === 'preposition') {
+  } else if (def.type === 'preposition' && def.case) {
     details = <section>
       <h3>{def.case}</h3>
       <p className="form-note">{def.case === 'Wechselpräposition'
         ? 'Wo? → Dativ. Wohin? → Akkusativ.'
-        : `Das folgende Nomen oder Pronomen steht im ${def.case}.`}</p>
+        : `Das folgende Nomen oder Pronomen steht hier im ${def.case}.`}</p>
+      {def.explanation && <p className="form-note">{def.explanation}</p>}
     </section>;
   } else if (def.comparison) {
     details = <>
@@ -137,6 +147,7 @@ export function InspectOverlay({ instance, definitions, source, playedFull, onPl
           showForm(ADJECTIVE_DEGREES[degree], adjectiveWord(def, degree),
             draft.chosenAdjectiveDegree === degree, () => update({
               chosenAdjectiveDegree: draft.chosenAdjectiveDegree === degree ? undefined : degree,
+              chosenLessonForm: undefined,
             })))}
       </div>
     </>;
@@ -152,12 +163,12 @@ export function InspectOverlay({ instance, definitions, source, playedFull, onPl
         <header className="inspect-heading" style={{ borderColor: TYPE_COLORS[def.type] }}>
           <div>
             <p className="inspect-type">{TYPE_LABELS[def.type]}{instance.isPlural && ' · Plural'}</p>
-            <h2 id="inspect-word">{displayWord(draft, definitions)}</h2>
+            <h2 id="inspect-word">{displayWord(draft, definitions, true)}</h2>
             {def.translation && <p className="form-note" lang="en">{def.translation}</p>}
           </div>
           {def.icon && <img src={iconUrl(def.icon)} alt="" />}
         </header>
-        <div className="inspect-forms">{details}</div>
+        <div className="inspect-forms">{extraForms}{details}</div>
         <footer className="inspect-actions">
           <button className="btn btn-secondary" onClick={onClose}>{source === 'played' ? 'Fertig' : 'Schließen'}</button>
           {source === 'hand' && <button className="btn" disabled={playedFull} onClick={() => onPlay?.(draft)}>Karte legen</button>}

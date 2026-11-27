@@ -2,13 +2,13 @@ import { useState } from 'react';
 import type { CardInstance } from '../game';
 import { MAX_SENTENCE } from '../lib/ui';
 
-export function useSentenceCards(initialHand: CardInstance[]) {
+export function useSentenceCards(initialHand: CardInstance[], maxPlayed = MAX_SENTENCE) {
   const [hand, setHand] = useState(initialHand);
   const [played, setPlayed] = useState<CardInstance[]>([]);
   const [inspect, setInspect] = useState<{ instance: CardInstance; source: 'hand' | 'played' } | null>(null);
 
   const play = (instance: CardInstance) => {
-    if (played.length >= MAX_SENTENCE) return;
+    if (played.length >= maxPlayed) return;
     setHand((cards) => cards.filter((card) => card.instanceId !== instance.instanceId));
     setPlayed((cards) => [...cards, instance]);
     setInspect(null);
@@ -40,5 +40,5 @@ export function useSentenceCards(initialHand: CardInstance[]) {
     setInspect(null);
   };
 
-  return { hand, played, inspect, setInspect, play, returnToHand, update, movePlayed, reset };
+  return { maxPlayed, hand, played, inspect, setInspect, play, returnToHand, update, movePlayed, reset };
 }

@@ -1,6 +1,7 @@
 import { getCard } from './cards';
-import { ADJECTIVE_DEGREES, cardWord, PERSON_LABELS, VERB_FORMS } from './forms';
-import type { CardDef, CardInstance } from './types';
+import { lexicalCard } from './courseLexicon';
+import { ADJECTIVE_DEGREES, cardWord, nounForm, PERSON_LABELS, VERB_FORMS } from './forms';
+import type { AdjectiveDegree, CardDef, CardInstance, CardType, GermanCase, Person, VerbForm } from './types';
 
 type Chip = Partial<Pick<CardInstance, 'chosenPerson' | 'chosenCase' | 'chosenPronoun'
   | 'chosenVerbForm' | 'chosenAdjectiveDegree' | 'chosenLessonForm'>>;
@@ -21,27 +22,88 @@ export interface CardExercise {
   model: string;
 }
 
-export function pool(id: string, chip: Chip, { plural, punctuation }: { plural?: boolean; punctuation?: string } = {}): CoursePiece {
-  const definition = getCard(id);
-  if (!definition) throw new Error(`Unbekannte Lektionskarte: ${id}`);
-  return { definition, chip, plural, punctuation };
-}
+const CASES: Record<string, GermanCase | undefined> = {
+  N: 'Nominativ', A: 'Akkusativ', D: 'Dativ', G: 'Genitiv',
+};
+const personalPronouns: Record<string, [string, string, GermanCase] | undefined> = {
+  ich: ['pron.ich', 'ich', 'Nominativ'],
+  mich: ['pron.ich', 'ich', 'Akkusativ'],
+  mir: ['pron.ich', 'ich', 'Dativ'],
+  du: ['pron.du', 'du', 'Nominativ'],
+  wir: ['pron.wir', 'wir', 'Nominativ'],
+  uns: ['pron.wir', 'wir', 'Akkusativ'],
+  er: ['pron.er_sie_es', 'er', 'Nominativ'],
+  es: ['pron.er_sie_es', 'es', 'Nominativ'],
+  Sie: ['pron.sie_formal', 'Sie', 'Nominativ'],
+};
 
-export function form(word: string, type: CardDef['type'], selected: string, forms: Record<string, string>, punctuation?: string): CoursePiece {
+function pronounPiece(surface: string, selection?: string): CoursePiece {
+  const person = personalPronouns[surface];
+  if (person) {
+    const [id, variant, defaultCase] = person;
+    return {
+      definition: getCard(id)!,
+      chip: { chosenPronoun: variant, chosenCase: CASES[selection ?? ''] ?? defaultCase },
+    };
+  }
+
+  const base = lexicalCard('pronoun', surface);
+  if (surface === 'sich') {
+    return { definition: { ...base, explanation: 'Reflexivpronomen der dritten Person. Dativ und Akkusativ lauten „sich“.' } };
+  }
+  if (surface === 'alle') {
+    return { definition: { ...base, pronouns: { alle: {
+      Nominativ: 'alle', Akkusativ: 'alle', Dativ: 'allen', Genitiv: 'aller',
+    } } }, chip: { chosenPronoun: 'alle', chosenCase: 'Nominativ' } };
+  }
+  if (surface === 'etwas') {
+    return { definition: { ...base, explanation: 'Unveränderliches Indefinitpronomen.' } };
+  }
+
+  const gender = surface === 'die' ? selection === 'pl' ? 'Plural' : 'Femininum'
+    : surface === 'das' ? 'Neutrum' : 'Maskulinum';
+  const forms = {
+    Maskulinum: { Nominativ: 'der', Akkusativ: 'den', Dativ: 'dem', Genitiv: 'dessen' },
+    Femininum: { Nominativ: 'die', Akkusativ: 'die', Dativ: 'der', Genitiv: 'deren' },
+    Neutrum: { Nominativ: 'das', Akkusativ: 'das', Dativ: 'dem', Genitiv: 'dessen' },
+    Plural: { Nominativ: 'die', Akkusativ: 'die', Dativ: 'denen', Genitiv: 'deren' },
+  }[gender];
+  const chosenCase = surface === 'den' ? 'Akkusativ' : surface === 'dem' ? 'Dativ' : 'Nominativ';
+  const variant = forms.Nominativ;
   return {
-    definition: { id: `lesson.form.${word}`, word, type, lessonForms: forms, rarity: 'common' },
-    chip: { chosenLessonForm: selected },
-    punctuation,
+    definition: { ...base, word: variant, id: `lesson.pronoun.${variant}.${gender}`, pronouns: { [variant]: forms },
+      translation: undefined },
+    chip: { chosenPronoun: variant, chosenCase },
   };
 }
 
-export function cards(question: string, model: string, feedback: string, pieces: (string | CoursePiece)[]): CardExercise {
-  return {
-    kind: 'cards', question, model, feedback, endMark: model.slice(-1),
-    pieces: pieces.map((piece) => typeof piece === 'string' ? {
-      definition: { id: `lesson.phrase.${piece}`, word: piece, type: 'phrase', rarity: 'common' },
-    } : piece),
-  };
+/** Eine Karte pro Wort. Bei Nomen bezeichnen N/A/D/G den Singular, n/a/d/g den Plural. */
+export function word(type: CardType, lemma: string, selection?: string, punctuation?: string): CoursePiece {
+  if (type === 'pronoun') return { ...pronounPiece(lemma, selection), punctuation };
+
+  const definition = lexicalCard(type, lemma);
+  if (type === 'noun' && selection) {
+    const chosenCase = CASES[selection.toUpperCase()];
+    if (!chosenCase) throw new Error(`Unbekannter Kasus für „${lemma}“: ${selection}.`);
+    return { definition, plural: selection === selection.toLowerCase(), chip: { chosenCase }, punctuation };
+  }
+  if (definition.conjugation && selection) {
+    const chip: Chip = selection in PERSON_LABELS ? { chosenPerson: selection as Person }
+      : selection in VERB_FORMS ? { chosenVerbForm: selection as VerbForm }
+      : { chosenLessonForm: selection };
+    return { definition, chip, punctuation };
+  }
+  if (type === 'adjective' && selection) {
+    const chip: Chip = definition.comparison && selection in ADJECTIVE_DEGREES
+      ? { chosenAdjectiveDegree: selection as AdjectiveDegree }
+      : { chosenLessonForm: selection === 'positive' ? 'Grundform' : selection };
+    return { definition, chip, punctuation };
+  }
+  return { definition, punctuation };
+}
+
+export function cards(question: string, model: string, feedback: string, pieces: CoursePiece[]): CardExercise {
+  return { kind: 'cards', question, model, feedback, endMark: model.slice(-1), pieces };
 }
 
 export function prepareCourseCards(exercise: CardExercise) {
@@ -74,24 +136,5 @@ export function checkCourseCards(played: CardInstance[], solution: CardInstance[
     ?? (expected.chosenPerson && PERSON_LABELS[expected.chosenPerson])
     ?? (expected.chosenVerbForm && VERB_FORMS[expected.chosenVerbForm])
     ?? (expected.chosenAdjectiveDegree && ADJECTIVE_DEGREES[expected.chosenAdjectiveDegree]);
-  return `Prüfe das Steinchen auf Karte ${index + 1} („${definition.word}“). Hier passt ${label ? `„${label}“ mit „${cardWord(definition, expected)}“` : 'die Grundform ohne Steinchen'}.`;
-}
-
-/** Kurze Kontrastübungen mit einer markierten Form und gezielten Alternativen. */
-export function drill(
-  question: string, model: string, feedback: string, position: number,
-  word: string, type: CardDef['type'], label: string, alternatives: Record<string, string>,
-): CardExercise {
-  const endMark = model.slice(-1);
-  const pieces = model.slice(0, -1).split(' | ');
-  const selected = pieces[position]!;
-  const punctuation = /[,;:]$/.test(selected) ? selected.slice(-1) : undefined;
-  const text = punctuation ? selected.slice(0, -1) : selected;
-  const formText = position === 0 && type !== 'noun' && text !== 'Sie'
-    ? text.charAt(0).toLocaleLowerCase('de') + text.slice(1)
-    : text;
-  const sentence = pieces.join(' ');
-  const target = sentence.charAt(0).toLocaleUpperCase('de') + sentence.slice(1) + endMark;
-  return cards(question, target, feedback, pieces.map((piece, index) =>
-    index === position ? form(word, type, label, { ...alternatives, [label]: formText }, punctuation) : piece));
+  return `Prüfe das Steinchen auf Karte ${index + 1} („${definition.word}“). Hier passt ${label ? `„${label}“ mit „${definition.type === 'noun' ? nounForm(definition, expected.chosenCase ?? 'Nominativ', !!expected.isPlural) : cardWord(definition, expected)}“` : 'die Grundform ohne Steinchen'}.`;
 }

@@ -13,9 +13,11 @@ export const ADJECTIVE_DEGREES: Record<AdjectiveDegree, string> = {
 };
 const CASE_PREFIX = { Nominativ: 'nom', Akkusativ: 'akk', Dativ: 'dat', Genitiv: 'gen' } as const;
 
-export function nounForm(def: CardDef, germanCase: GermanCase, plural: boolean): string {
+export function nounForm(def: CardDef, germanCase: GermanCase, plural: boolean, bare = false): string {
   const key = `${CASE_PREFIX[germanCase]}_${plural ? 'pl' : 'sg'}` as const;
-  return def.declension?.[key] ?? (plural ? def.plural : def.word) ?? def.word;
+  const withArticle = def.declension?.[key];
+  if (bare) return def.bareDeclension?.[key] ?? withArticle?.replace(/^\S+ /, '') ?? def.word;
+  return withArticle ?? (plural ? def.plural : def.word) ?? def.word;
 }
 
 export function pronounForm(def: CardDef, germanCase: GermanCase, variant?: string) {
@@ -37,7 +39,9 @@ export function adjectiveWord(def: CardDef, degree: AdjectiveDegree): string {
 /** Die tatsächlich gelegte Form, für Satzleiste, Steinchen und Rückmeldung. */
 export function cardWord(def: CardDef, instance: CardInstance): string {
   if (instance.chosenLessonForm && def.lessonForms) return def.lessonForms[instance.chosenLessonForm] ?? def.word;
-  if (def.type === 'noun') return nounForm(def, instance.chosenCase ?? 'Nominativ', !!instance.isPlural);
+  if (def.type === 'noun') {
+    return nounForm(def, instance.chosenCase ?? 'Nominativ', !!instance.isPlural, def.detachedArticle);
+  }
   if (def.type === 'pronoun' && instance.chosenCase) {
     return pronounForm(def, instance.chosenCase, instance.chosenPronoun);
   }

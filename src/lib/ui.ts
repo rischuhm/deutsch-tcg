@@ -5,7 +5,7 @@ import type {
   Collection,
   Rarity,
 } from '../game';
-import { cardWord, getCard } from '../game';
+import { cardWord, getCard, nounForm } from '../game';
 
 /** 3D-Kartenmaße (Seitenverhältnis 750×1050). */
 export const CARD_W = 0.75;
@@ -32,7 +32,10 @@ export const TYPE_LABELS: Record<CardType, string> = {
   adjective: 'Adjektiv',
   adverb: 'Adverb',
   particle: 'Verbzusatz',
-  phrase: 'Satzbaustein',
+  article: 'Artikel',
+  conjunction: 'Konjunktion',
+  number: 'Zahlwort',
+  properNoun: 'Eigenname',
 };
 
 export const TYPE_COLORS: Record<CardType, string> = {
@@ -45,7 +48,10 @@ export const TYPE_COLORS: Record<CardType, string> = {
   adjective: '#ec4899',
   adverb: '#818cf8',
   particle: '#f97316',
-  phrase: '#8795ac',
+  article: '#22a4b6',
+  conjunction: '#a38edf',
+  number: '#d29955',
+  properNoun: '#8795ac',
 };
 
 export const RARITY_LABELS: Record<Rarity, string> = {
@@ -135,12 +141,15 @@ export function selectHand(
 }
 
 /** Aktuell gewählte Wortform einer Karteninstanz. */
-export function displayWord(instance: CardInstance, definitions?: ReadonlyMap<string, CardDef>): string {
+export function displayWord(instance: CardInstance, definitions?: ReadonlyMap<string, CardDef>, withArticle = false): string {
   const def = definitions?.get(instance.defId) ?? getCard(instance.defId);
   if (!def) {
     return instance.defId;
   }
-  return cardWord(def, instance) + (def.punctuation ?? '');
+  const word = withArticle && def.detachedArticle
+    ? nounForm(def, instance.chosenCase ?? 'Nominativ', !!instance.isPlural)
+    : cardWord(def, instance);
+  return word + (def.punctuation ?? '');
 }
 
 /** Textur-URL für ein Kartenface. */
@@ -150,7 +159,14 @@ export function cardFaceUrl(defId: string): string {
 
 
 export function sentenceText(played: CardInstance[], isSentence = true, definitions?: ReadonlyMap<string, CardDef>, endMark?: string): string {
-  const words = played.map((instance) => displayWord(instance, definitions));
+  const words = played.map((instance, index) => {
+    const word = displayWord(instance, definitions);
+    const previous = played[index - 1];
+    if (previous && /[.!?]$/.test(displayWord(previous, definitions))) {
+      return word.charAt(0).toLocaleUpperCase('de') + word.slice(1);
+    }
+    return word;
+  });
   const text = words.join(' ');
   if (!isSentence || !text) return text;
   const firstType = getCard(played[0]!.defId)?.type;

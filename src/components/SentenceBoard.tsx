@@ -3,7 +3,7 @@ import type { PointerEvent, ReactNode } from 'react';
 import type { CardDef, CardInstance, CardType } from '../game';
 import { getCard, hasFormChip } from '../game';
 import type { useSentenceCards } from '../hooks/useSentenceCards';
-import { displayWord, iconUrl, MAX_SENTENCE, sentenceText, TYPE_COLORS, TYPE_LABELS } from '../lib/ui';
+import { displayWord, iconUrl, sentenceText, TYPE_COLORS, TYPE_LABELS } from '../lib/ui';
 import { InspectOverlay } from './InspectOverlay';
 
 const TableScene = lazy(() => import('./three/TableScene').then(({ TableScene }) => ({ default: TableScene })));
@@ -61,7 +61,7 @@ export function SentenceBoard({ cards, actions, definitions, endMark, hint, isSe
         onClick={() => setInspect({ source, instance })}>
         <span className="board-card-type">{TYPE_LABELS[def.type]}</span>
         {source === 'hand' && def.icon && <img src={iconUrl(def.icon)} alt="" />}
-        <strong>{displayWord(instance, definitions)}</strong>
+        <strong>{displayWord(instance, definitions, source === 'hand')}</strong>
         {source === 'hand' && def.translation && <span className="board-card-translation" lang="en">{def.translation}</span>}
         {marked && <span className="form-stone" aria-label="Steinchen gesetzt" />}
       </button>
@@ -173,7 +173,7 @@ export function SentenceBoard({ cards, actions, definitions, endMark, hint, isSe
         key={`${inspect.source}:${inspect.instance.instanceId}`}
         {...inspect}
         definitions={definitions}
-        playedFull={played.length >= MAX_SENTENCE}
+        playedFull={played.length >= cards.maxPlayed}
         onPlay={cards.play}
         onReturn={cards.returnToHand}
         onChange={cards.update}

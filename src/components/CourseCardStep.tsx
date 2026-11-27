@@ -12,14 +12,14 @@ export function CourseCardStep({ exercise, onNext }: { exercise: CardExercise; o
     const order = orderedOptions(prepared.hand.map(({ instanceId }) => instanceId), exercise.question);
     return { ...prepared, hand: order.map((id) => prepared.hand.find(({ instanceId }) => id === instanceId)!) };
   });
-  const cards = useSentenceCards(hand);
+  const cards = useSentenceCards(hand, solution.length);
   const [result, setResult] = useState<string | null>(null);
   const correct = result === '';
 
   return (
     <section className="course-panel course-card-step">
       <h2>{exercise.question}</h2>
-      <p>Lege die Karten auf die Satzleiste und setze Steinchen auf die passenden Wortformen. Ziehe gelegte Karten, um die Reihenfolge zu ändern.</p>
+      <p>Lege die Wörter einzeln auf die Satzleiste. Wähle Kasus und Wortformen mit Steinchen. Ziehe gelegte Karten, um die Reihenfolge zu ändern.</p>
       <details className="lesson-help">
         <summary>Grammatik-Hinweis</summary>
         <p>{exercise.feedback}</p>

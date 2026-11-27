@@ -122,7 +122,7 @@ export function CollectionScreen({
                     const { hand, definitions } = prepareCourseCards(exercise);
                     return <div className="lesson-deck-cards" key={exercise.question} aria-label={`Aufgabe ${index + 1}`}>
                       {hand.map((instance) => <button className="chip" key={instance.instanceId}
-                        onClick={() => setInspect({ instance, definitions })}>{displayWord(instance, definitions)}</button>)}
+                        onClick={() => setInspect({ instance, definitions })}>{displayWord(instance, definitions, true)}</button>)}
                     </div>;
                   })
                 )}

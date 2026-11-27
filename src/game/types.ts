@@ -13,7 +13,10 @@ export type CardType =
   | 'adjective'
   | 'adverb'
   | 'particle'
-  | 'phrase';
+  | 'article'
+  | 'conjunction'
+  | 'number'
+  | 'properNoun';
 
 export type Rarity = 'common' | 'uncommon' | 'rare';
 
@@ -49,7 +52,7 @@ export interface CardConjugation {
   prefix?: string;
 }
 
-export type PrepositionCase = 'Akkusativ' | 'Dativ' | 'Wechselpräposition';
+export type PrepositionCase = 'Akkusativ' | 'Dativ' | 'Genitiv' | 'Wechselpräposition';
 
 export interface CardDef {
   id: string; // z. B. "noun.tisch"
@@ -59,7 +62,7 @@ export interface CardDef {
   icon?: string; // Dateiname in assets/icons/, z. B. "tisch.svg"
   gender?: Gender; // noun
   plural?: string; // noun, z. B. "Tische"
-  declension?: CardDeclension; // noun: bestimmter Artikel
+  declension?: Partial<CardDeclension>; // noun: bestimmter Artikel
   conjugation?: CardConjugation; // verb + modal
   canBeAuxiliary?: boolean; // haben/sein: Vollverb ODER Hilfsverb
   case?: PrepositionCase; // preposition
@@ -71,6 +74,8 @@ export interface CardDef {
   comparison?: [string, string];
   objectCase?: 'Akkusativ' | 'Dativ';
   direction?: boolean;
+  detachedArticle?: boolean;
+  bareDeclension?: Partial<CardDeclension>;
   lessonForms?: Record<string, string>;
   punctuation?: string;
 }
